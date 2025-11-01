@@ -1,0 +1,19 @@
+{
+    "files.encoding": "gb2312",
+    "files.associations": {
+        "soft_timer.h": "c",
+        "main.h": "c",
+        "adc.h": "c",
+        "gpio.h": "c",
+        "tim.h": "c",
+        "foc.h": "c",
+        "math.h": "c",
+        "onebutton.h": "c",
+        "onebuttontiny.h": "c",
+        "task.h": "c",
+        "stm32g4xx_hal.h": "c",
+        "mt6816.h": "c",
+        "spi.h": "c"
+    },
+    "idf.pythonInstallPath": "d:\\document\\code\\ESP_IDF\\.esptool\\tools\\idf-python\\3.11.2\\python.exe"
+}
