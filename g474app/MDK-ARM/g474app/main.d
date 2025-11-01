@@ -50,6 +50,14 @@
 .\g474app\main.o: ../My_Lib/Def/Def.h
 .\g474app\main.o: ../Core/Inc/dma.h
 .\g474app\main.o: ../Core/Inc/usart.h
+.\g474app\main.o: ../My_Lib/sfunction/vf_ctrl.h
+.\g474app\main.o: ../My_Lib/sfunction/rtwtypes.h
+.\g474app\main.o: ../My_Lib/sfunction/em_sincos.h
+.\g474app\main.o: ../My_Lib/sfunction/data_type.h
+.\g474app\main.o: ../My_Lib/sfunction/em_svpwm.h
+.\g474app\main.o: ../My_Lib/sfunction/vf_ctrl_types.h
+.\g474app\main.o: ../My_Lib/sfunction/VFControler.h
+.\g474app\main.o: ../My_Lib/sfunction/model_param.h
 .\g474app\main.o: ../My_Lib/mt6816ct/mt6816.h
 .\g474app\main.o: D:\App\Keil\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\g474app\main.o: D:\App\Keil\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

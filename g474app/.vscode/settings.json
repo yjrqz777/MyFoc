@@ -13,7 +13,8 @@
         "task.h": "c",
         "stm32g4xx_hal.h": "c",
         "mt6816.h": "c",
-        "spi.h": "c"
+        "spi.h": "c",
+        "dma.h": "c"
     },
     "idf.pythonInstallPath": "d:\\document\\code\\ESP_IDF\\.esptool\\tools\\idf-python\\3.11.2\\python.exe"
 }

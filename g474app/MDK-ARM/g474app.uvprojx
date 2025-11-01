@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32G474xx,__CC_ARM,__TARGET_FPU_VFP,__FPU_PRESENT = 1U,__FPU_USED = 1U</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G4xx/Include;../Drivers/CMSIS/Include;../My_Lib</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G4xx/Include;../Drivers/CMSIS/Include;../My_Lib;../My_Lib/sfunction</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -877,6 +877,41 @@
               <FileName>mt6816.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\My_Lib\mt6816ct\mt6816.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>sfunction</GroupName>
+          <Files>
+            <File>
+              <FileName>AntiPark.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\My_Lib\sfunction\AntiPark.c</FilePath>
+            </File>
+            <File>
+              <FileName>em_sincos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\My_Lib\sfunction\em_sincos.c</FilePath>
+            </File>
+            <File>
+              <FileName>em_svpwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\My_Lib\sfunction\em_svpwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>vf_ctrl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\My_Lib\sfunction\vf_ctrl.c</FilePath>
+            </File>
+            <File>
+              <FileName>vf_ctrl_data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\My_Lib\sfunction\vf_ctrl_data.c</FilePath>
+            </File>
+            <File>
+              <FileName>VFControler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\My_Lib\sfunction\VFControler.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -38,6 +38,12 @@
 ".\g474app\tasktest.o"
 ".\g474app\onebuttontiny.o"
 ".\g474app\mt6816.o"
+".\g474app\antipark.o"
+".\g474app\em_sincos.o"
+".\g474app\em_svpwm.o"
+".\g474app\vf_ctrl.o"
+".\g474app\vf_ctrl_data.o"
+".\g474app\vfcontroler.o"
 --library_type=microlib --strict --scatter ".\g474app\g474app.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

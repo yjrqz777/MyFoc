@@ -28,6 +28,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "Task.h"
+#include "vf_ctrl.h"
 // #include "st7789v/st7789v.h"
 #include "mt6816ct/mt6816.h"
 /***************************************************************************************************
@@ -42,7 +43,8 @@
 int fputc(int ch, FILE *f)
 {
     uint8_t temp[1] = {ch};
-    HAL_UART_Transmit(&huart3, temp, 1, 0xffff);
+    // HAL_UART_Transmit(&huart3, temp, 1, 0xffff);
+    HAL_UART_Transmit_IT(&huart3, temp, 1);
     return ch;
 }
 /***************************************************************************************************
@@ -175,9 +177,13 @@ int main(void)
   MX_TIM7_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-
-    HAL_ADCEx_Calibration_Start(&hadc1,ADC_SINGLE_ENDED);
-    HAL_ADCEx_Calibration_SetValue(&hadc1,ADC_SINGLE_ENDED,HAL_ADCEx_Calibration_GetValue(&hadc1,ADC_SINGLE_ENDED));
+	
+	vf_ctrl_initialize();
+	
+	
+	
+    // HAL_ADCEx_Calibration_Start(&hadc1,ADC_SINGLE_ENDED);
+    // HAL_ADCEx_Calibration_SetValue(&hadc1,ADC_SINGLE_ENDED,HAL_ADCEx_Calibration_GetValue(&hadc1,ADC_SINGLE_ENDED));
     
 
     // soft_timer_repeat_init(SOFT_TIMER_0, 100);
@@ -192,10 +198,11 @@ int main(void)
     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
     HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
 
+    HAL_TIM_Base_Start_IT(&htim1);
     HAL_TIM_Base_Start_IT(&htim6); /* 此  100us 定时器用于  */
     HAL_TIM_Base_Start_IT(&htim7); /* 此  10ms  定时器用于  PT TASK */
 
-    HAL_ADCEx_InjectedStart_IT(&hadc1);  
+    // HAL_ADCEx_InjectedStart_IT(&hadc1);  
 
     // __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, 0.5*4250);
     // __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_2, 0.5*4250);
@@ -215,7 +222,7 @@ int main(void)
 
         PT_TASK_REG(2, PT_TASK_Test);
  
-        PT_TASK_REG(3, PT_TASK_mt6816);
+        // PT_TASK_REG(3, PT_TASK_mt6816);
 
         // printf("In APP 22!\n");
         // HAL_Delay(100);
@@ -240,7 +247,7 @@ int main(void)
         // {
         //   // LCD_Clear(YELLOW);
         // }
-
+        printf("%d,%d,%d\n",mcu_ccrx[0],mcu_ccrx[1],mcu_ccrx[2]);
         // printf("%d,%d,%d,%d,%d,%d,%d,%f,%d\n",adc1_value[0],adc1_value[1],adc1_value[2],adc1_value[3],adc1_value[4],adc1_value[5],adc1_value[6],(adc2_value[0]/4096.0)*3.3,adc2_value[1]);
         // LCD_ShowIntNum(0, 0, adc1_value[0], 4, WHITE, BLACK, 24);
         // LCD_ShowIntNum(0, 24, adc1_value[1], 4, WHITE, BLACK, 24);
@@ -317,7 +324,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if (htim->Instance == TIM6)
     {
         // 处理 TIM6 的触发事件
-        velocityOpenloop(1);
+//        velocityOpenloop(1);
+			vf_ctrl_step();
+
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, mcu_ccrx[0]);
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_2, mcu_ccrx[1]);
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, mcu_ccrx[2]);
+
     }
     if (htim->Instance == TIM7)
     {
