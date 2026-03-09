@@ -1,1 +1,5 @@
 /MDK-ARM/Lib_i
+
+MDK-ARM/g474app/*.o
+MDK-ARM/g474app/*.d
+MDK-ARM/g474app/*.crf

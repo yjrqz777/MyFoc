@@ -1,9 +1,0 @@
-.\g474app\vf_ctrl_data.o: ..\My_Lib\sfunction\vf_ctrl_data.c
-.\g474app\vf_ctrl_data.o: ..\My_Lib\sfunction\vf_ctrl.h
-.\g474app\vf_ctrl_data.o: ..\My_Lib\sfunction\rtwtypes.h
-.\g474app\vf_ctrl_data.o: ..\My_Lib\sfunction\em_sincos.h
-.\g474app\vf_ctrl_data.o: ..\My_Lib\sfunction\data_type.h
-.\g474app\vf_ctrl_data.o: ..\My_Lib\sfunction\em_svpwm.h
-.\g474app\vf_ctrl_data.o: ..\My_Lib\sfunction\vf_ctrl_types.h
-.\g474app\vf_ctrl_data.o: ..\My_Lib\sfunction\VFControler.h
-.\g474app\vf_ctrl_data.o: ..\My_Lib\sfunction\model_param.h

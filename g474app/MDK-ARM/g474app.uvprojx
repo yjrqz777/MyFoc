@@ -881,41 +881,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>sfunction</GroupName>
-          <Files>
-            <File>
-              <FileName>AntiPark.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\My_Lib\sfunction\AntiPark.c</FilePath>
-            </File>
-            <File>
-              <FileName>em_sincos.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\My_Lib\sfunction\em_sincos.c</FilePath>
-            </File>
-            <File>
-              <FileName>em_svpwm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\My_Lib\sfunction\em_svpwm.c</FilePath>
-            </File>
-            <File>
-              <FileName>vf_ctrl.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\My_Lib\sfunction\vf_ctrl.c</FilePath>
-            </File>
-            <File>
-              <FileName>vf_ctrl_data.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\My_Lib\sfunction\vf_ctrl_data.c</FilePath>
-            </File>
-            <File>
-              <FileName>VFControler.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\My_Lib\sfunction\VFControler.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
