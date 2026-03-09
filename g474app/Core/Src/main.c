@@ -178,7 +178,6 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 	
-	vf_ctrl_initialize();
 	
 	
 	
@@ -247,7 +246,7 @@ int main(void)
         // {
         //   // LCD_Clear(YELLOW);
         // }
-        printf("%d,%d,%d\n",mcu_ccrx[0],mcu_ccrx[1],mcu_ccrx[2]);
+        // printf("%d,%d,%d\n",mcu_ccrx[0],mcu_ccrx[1],mcu_ccrx[2]);
         // printf("%d,%d,%d,%d,%d,%d,%d,%f,%d\n",adc1_value[0],adc1_value[1],adc1_value[2],adc1_value[3],adc1_value[4],adc1_value[5],adc1_value[6],(adc2_value[0]/4096.0)*3.3,adc2_value[1]);
         // LCD_ShowIntNum(0, 0, adc1_value[0], 4, WHITE, BLACK, 24);
         // LCD_ShowIntNum(0, 24, adc1_value[1], 4, WHITE, BLACK, 24);
@@ -324,12 +323,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if (htim->Instance == TIM6)
     {
         // 处理 TIM6 的触发事件
-//        velocityOpenloop(1);
-			vf_ctrl_step();
-
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, mcu_ccrx[0]);
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_2, mcu_ccrx[1]);
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, mcu_ccrx[2]);
 
     }
     if (htim->Instance == TIM7)
