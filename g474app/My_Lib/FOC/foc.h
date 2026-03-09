@@ -1,4 +1,4 @@
-#ifndef __FOC_H
+ï»¿#ifndef __FOC_H
 #define __FOC_H
 
 #include "main.h"
@@ -11,10 +11,10 @@ typedef struct Foc_DataDef
 {
     struct
     {
-        uint32_t Ia;  // AÏàµçÁ÷
-        uint32_t Ib;  // BÏàµçÁ÷
-        uint32_t Ic;  // CÏàµçÁ÷
-        uint32_t Ibus; // ×ÜÏßµçÁ÷
+        uint32_t Ia;  // Aç›¸ç”µæµ
+        uint32_t Ib;  // Bç›¸ç”µæµ
+        uint32_t Ic;  // Cç›¸ç”µæµ
+        uint32_t Ibus; // æ€»çº¿ç”µæµ
     }I_Def;
     
 }Foc_DataDef;
@@ -25,10 +25,10 @@ extern Foc_DataDef Foc_Data;
 
 
 uint16_t ADC_Read(ADC_HandleTypeDef AdcNum, uint32_t Channel);
-int PT_TASK_Test();
+int PT_TASK_Test(void);
 
-int PT_TASK_FOC();
+int PT_TASK_FOC(void);
 
-extern float velocityOpenloop(float target_velocity);
+float velocityOpenloop(float target_velocity);
 // void FocLoop(void);
 #endif

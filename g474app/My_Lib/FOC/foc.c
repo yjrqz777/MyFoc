@@ -1,271 +1,226 @@
-/***************************************************************************************************
+ï»¿/***************************************************************************************************
  * Author: yjrqz777 3210551161@qq.com
  * Date: 2025-05-11 15:37:03
- * LastEditTime: 2025-10-08 18:40:28
+ * LastEditTime: 2026-03-09
  * LastEditors: yjrqz777 3210551161@qq.com
- * Description: 
+ * Description:
  * FilePath: \g474app\My_Lib\FOC\foc.c
  * @YJRQZ777
 ***************************************************************************************************/
 
 #include "foc.h"
+#include <math.h>
+
+#define FOC_ADC_AVG_SAMPLES      (10U)
+#define FOC_POLE_PAIRS           (7)
+#define FOC_FALLBACK_TS_S        (1e-4f)
+#define FOC_MAX_TS_S             (0.5f)
+#define FOC_MIN_SUPPLY_VOLTAGE   (1e-3f)
+#define FOC_TWO_PI               (2.0f * PI)
+#define FOC_SQRT3                (1.7320508075688772f)
 
 Foc_DataDef Foc_Data = {0};
-/***************************************************************************************************
- * ¹¦ÄÜÃèÊö: 
- * ÊäÈë²ÎÊı: 
- * Êä³ö²ÎÊı: 
- * ·µ »Ø Öµ: 
- * ÆäËüËµÃ÷: 
- * param {ADC_HandleTypeDef} *hadc
-***************************************************************************************************/
+
+float voltage_power_supply = 5.0f;
+float shaft_angle = 0.0f;
+float zero_electric_angle = 0.0f;
+float Ualpha = 0.0f;
+float Ubeta = 0.0f;
+float Ua = 0.0f;
+float Ub = 0.0f;
+float Uc = 0.0f;
+float dc_a = 0.0f;
+float dc_b = 0.0f;
+float dc_c = 0.0f;
+
+static uint32_t s_open_loop_timestamp_ms = 0U;
+
+static inline float clampf(float value, float min_value, float max_value)
+{
+    if (value < min_value) {
+        return min_value;
+    }
+    if (value > max_value) {
+        return max_value;
+    }
+    return value;
+}
+
+static inline float electricalAngle(float mech_angle, int pole_pairs)
+{
+    return mech_angle * (float)pole_pairs;
+}
+
+static inline float normalizeAngle(float angle)
+{
+    float wrapped = fmodf(angle, FOC_TWO_PI);
+    return (wrapped >= 0.0f) ? wrapped : (wrapped + FOC_TWO_PI);
+}
+
+static void setPwm(float ua, float ub, float uc)
+{
+    const float safe_supply = (voltage_power_supply > FOC_MIN_SUPPLY_VOLTAGE)
+                                  ? voltage_power_supply
+                                  : FOC_MIN_SUPPLY_VOLTAGE;
+    const float inv_supply = 1.0f / safe_supply;
+    const uint32_t pwm_period = __HAL_TIM_GET_AUTORELOAD(&htim1);
+
+    dc_a = clampf(ua * inv_supply, 0.0f, 1.0f);
+    dc_b = clampf(ub * inv_supply, 0.0f, 1.0f);
+    dc_c = clampf(uc * inv_supply, 0.0f, 1.0f);
+
+    uint32_t ccr1 = (uint32_t)(dc_a * (float)pwm_period + 0.5f);
+    uint32_t ccr2 = (uint32_t)(dc_b * (float)pwm_period + 0.5f);
+    uint32_t ccr3 = (uint32_t)(dc_c * (float)pwm_period + 0.5f);
+
+    if (ccr1 > pwm_period) {
+        ccr1 = pwm_period;
+    }
+    if (ccr2 > pwm_period) {
+        ccr2 = pwm_period;
+    }
+    if (ccr3 > pwm_period) {
+        ccr3 = pwm_period;
+    }
+
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, ccr1);
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_2, ccr2);
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, ccr3);
+}
+
+static void setPhaseVoltage(float uq, float ud, float angle_el)
+{
+    const float half_bus = voltage_power_supply * 0.5f;
+    float sin_a;
+    float cos_a;
+
+    angle_el = normalizeAngle(angle_el + zero_electric_angle);
+    sin_a = sinf(angle_el);
+    cos_a = cosf(angle_el);
+
+    Ualpha = ud * cos_a - uq * sin_a;
+    Ubeta = uq * cos_a + ud * sin_a;
+
+    Ua = Ualpha + half_bus;
+    Ub = (FOC_SQRT3 * Ubeta - Ualpha) * 0.5f + half_bus;
+    Uc = (-Ualpha - FOC_SQRT3 * Ubeta) * 0.5f + half_bus;
+
+    setPwm(Ua, Ub, Uc);
+}
+
 void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
-  static uint32_t u32Ia = 0, u32Ib = 0, u32Ic = 0, u32Ibus = 0;
-  static uint8_t u8count = 0;
-    if (hadc->Instance == ADC1)
-    {
-        u8count++;
-        u32Ia += HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_1);
-        u32Ib += HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_2);
-        u32Ic += HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_3);
-        u32Ibus += HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_4);
-        if (u8count >= 10)
-        {
-          HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET); // µãÁÁLEDÖ¸Ê¾ADC×ª»»Íê³É
-          Foc_Data.I_Def.Ia   = (uint32_t)(u32Ia * 1.0f / 10.0f); // Æ½¾ùÖµ
-          Foc_Data.I_Def.Ib   = (uint32_t)(u32Ib * 1.0f / 10.0f); // Æ½¾ùÖµ
-          Foc_Data.I_Def.Ic   = (uint32_t)(u32Ic * 1.0f / 10.0f); // Æ½¾ùÖµ
-          Foc_Data.I_Def.Ibus = (uint32_t)(u32Ibus * 1.0f / 10.0f); // Æ½¾ùÖµ
-          u32Ia = 0;
-          u32Ib = 0;
-          u32Ic = 0;
-          u32Ibus = 0;
-          u8count = 0; // ÖØÖÃ¼ÆÊıÆ÷
-        }
+    static uint32_t u32Ia = 0U;
+    static uint32_t u32Ib = 0U;
+    static uint32_t u32Ic = 0U;
+    static uint32_t u32Ibus = 0U;
+    static uint8_t u8count = 0U;
+
+    if ((hadc == NULL) || (hadc->Instance != ADC1)) {
+        return;
+    }
+
+    u32Ia += HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_1);
+    u32Ib += HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_2);
+    u32Ic += HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_3);
+    u32Ibus += HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_4);
+    u8count++;
+
+    if (u8count >= FOC_ADC_AVG_SAMPLES) {
+        Foc_Data.I_Def.Ia = u32Ia / FOC_ADC_AVG_SAMPLES;
+        Foc_Data.I_Def.Ib = u32Ib / FOC_ADC_AVG_SAMPLES;
+        Foc_Data.I_Def.Ic = u32Ic / FOC_ADC_AVG_SAMPLES;
+        Foc_Data.I_Def.Ibus = u32Ibus / FOC_ADC_AVG_SAMPLES;
+
+        u32Ia = 0U;
+        u32Ib = 0U;
+        u32Ic = 0U;
+        u32Ibus = 0U;
+        u8count = 0U;
+
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
     }
 }
 
-/***************************************************************************************************
- * ¹¦ÄÜÃèÊö: 
- * ÊäÈë²ÎÊı: 
- * Êä³ö²ÎÊı: 
- * ·µ »Ø Öµ: 
- * ÆäËüËµÃ÷: 
-***************************************************************************************************/
-int PT_TASK_Test()
+int PT_TASK_Test(void)
 {
     PT_BEGIN()
     {
-        // st7789v_init();
     }
     while (1)
     {
-        PT_WAIT_UNTIL(10/TIME_ms); // Ã¿10msÖ´ĞĞÒ»´Î
+        PT_WAIT_UNTIL(10 / TIME_ms);
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-        // printf("%d,%d,%d,%d\n",
-        // Foc_Data.I_Def.Ia,
-        // Foc_Data.I_Def.Ib,
-        // Foc_Data.I_Def.Ic,
-        // Foc_Data.I_Def.Ibus
-        // );
     }
     PT_END();
 }
 
-
-
-
-/***************************************************************************************************
- * ¹¦ÄÜÃèÊö: 
- * ÊäÈë²ÎÊı: 
- * Êä³ö²ÎÊı: 
- * ·µ »Ø Öµ: 
- * ÆäËüËµÃ÷: 
- * param {ADC_HandleTypeDef} AdcNum
- * param {uint32_t} Channel
-***************************************************************************************************/
 uint16_t ADC_Read(ADC_HandleTypeDef AdcNum, uint32_t Channel)
 {
-    static ADC_ChannelConfTypeDef sConfig = {0};
-    uint16_t u16adcValue = 0;
+    ADC_ChannelConfTypeDef sConfig = {0};
+    uint16_t u16adcValue = 0U;
+
     sConfig.Channel = Channel;
-    // sConfig.Channel = ADC_CHANNEL_5;
     sConfig.Rank = ADC_REGULAR_RANK_1;
     sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
     sConfig.SingleDiff = ADC_SINGLE_ENDED;
     sConfig.OffsetNumber = ADC_OFFSET_NONE;
     sConfig.Offset = 0;
-    if (HAL_ADC_ConfigChannel(&AdcNum, &sConfig) != HAL_OK)
-    {
+
+    if (HAL_ADC_ConfigChannel(&AdcNum, &sConfig) != HAL_OK) {
         Error_Handler();
     }
 
-    HAL_ADC_Start(&AdcNum);
-    HAL_ADC_PollForConversion(&AdcNum, HAL_MAX_DELAY);
+    if (HAL_ADC_Start(&AdcNum) != HAL_OK) {
+        Error_Handler();
+    }
+    if (HAL_ADC_PollForConversion(&AdcNum, HAL_MAX_DELAY) != HAL_OK) {
+        Error_Handler();
+    }
+
     u16adcValue = (uint16_t)HAL_ADC_GetValue(&AdcNum);
-    HAL_ADC_Stop(&AdcNum);
+    (void)HAL_ADC_Stop(&AdcNum);
+
     return u16adcValue;
 }
-//³õÊ¼±äÁ¿¼°º¯Êı¶¨Òå
-#define _constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
-//ºê¶¨ÒåÊµÏÖµÄÒ»¸öÔ¼Êøº¯Êı,ÓÃÓÚÏŞÖÆÒ»¸öÖµµÄ·¶Î§¡£
-//¾ßÌåÀ´Ëµ£¬¸Ãºê¶¨ÒåµÄÃû³ÆÎª _constrain£¬½ÓÊÜÈı¸ö²ÎÊı amt¡¢low ºÍ high£¬·Ö±ğ±íÊ¾ÒªÏŞÖÆµÄÖµ¡¢×îĞ¡ÖµºÍ×î´óÖµ¡£¸Ãºê¶¨ÒåµÄÊµÏÖÊ¹ÓÃÁËÈıÔªÔËËã·û£¬¸ù¾İ amt ÊÇ·ñĞ¡ÓÚ low »ò´óÓÚ high£¬·µ»ØÆäÖĞµÄ×î´ó»ò×îĞ¡Öµ£¬»òÕß·µ»ØÔ­Öµ¡£
-//»»¾ä»°Ëµ£¬Èç¹û amt Ğ¡ÓÚ low£¬Ôò·µ»Ø low£»Èç¹û amt ´óÓÚ high£¬Ôò·µ»Ø high£»·ñÔò·µ»Ø amt¡£ÕâÑù£¬_constrain(amt, low, high) ¾Í»á½« amt Ô¼ÊøÔÚ [low, high] µÄ·¶Î§ÄÚ¡£
-float voltage_power_supply=5.0;
-float shaft_angle=0,open_loop_timestamp=0;
-float zero_electric_angle=0,Ualpha,Ubeta=0,Ua=0,Ub=0,Uc=0,dc_a=0,dc_b=0,dc_c=0;
-// µç½Ç¶ÈÇó½â
-float _electricalAngle(float shaft_angle, int pole_pairs) {
-  return (shaft_angle * pole_pairs);
+
+float velocityOpenloop(float target_velocity)
+{
+    const uint32_t now_ms = HAL_GetTick();
+    float Ts = FOC_FALLBACK_TS_S;
+
+    if (s_open_loop_timestamp_ms != 0U) {
+        Ts = (float)(now_ms - s_open_loop_timestamp_ms) * 1e-3f;
+        if ((Ts <= 0.0f) || (Ts > FOC_MAX_TS_S)) {
+            Ts = FOC_FALLBACK_TS_S;
+        }
+    }
+    s_open_loop_timestamp_ms = now_ms;
+
+    shaft_angle = normalizeAngle(shaft_angle + target_velocity * Ts);
+
+    const float Uq = voltage_power_supply * (1.0f / 3.0f);
+    setPhaseVoltage(Uq, 0.0f, electricalAngle(shaft_angle, FOC_POLE_PAIRS));
+
+    return Uq;
 }
 
-
-#include <math.h>
-
-float my_fmod_basic(float x, float y) {
-    // Ê¹ÓÃ±ê×¼Ëã·¨£¬ÊÊºÏÈÕ³£Ê¹ÓÃ
-    float div = x / y;
-    float integer_part = (div > 0) ? floor(div) : ceil(div);
-    return x - integer_part * y;
-}
-
-
-
-
-
-
-
-// ¹éÒ»»¯½Ç¶Èµ½ [0,2PI]
-float _normalizeAngle(float angle){
-  float a = fmodf(angle, 2*PI);   //È¡ÓàÔËËã¿ÉÒÔÓÃÓÚ¹éÒ»»¯£¬ÁĞ³öÌØÊâÖµÀı×ÓËã±ãÖª
-  return a >= 0 ? a : (a + 2*PI);  
-  //ÈıÄ¿ÔËËã·û¡£¸ñÊ½£ºcondition ? expr1 : expr2 
-  //ÆäÖĞ£¬condition ÊÇÒªÇóÖµµÄÌõ¼ş±í´ïÊ½£¬Èç¹ûÌõ¼ş³ÉÁ¢£¬Ôò·µ»Ø expr1 µÄÖµ£¬·ñÔò·µ»Ø expr2 µÄÖµ¡£¿ÉÒÔ½«ÈıÄ¿ÔËËã·ûÊÓÎª if-else Óï¾äµÄ¼ò»¯ĞÎÊ½¡£
-  //fmod º¯ÊıµÄÓàÊıµÄ·ûºÅÓë³ıÊıÏàÍ¬¡£Òò´Ë£¬µ± angle µÄÖµÎª¸ºÊıÊ±£¬ÓàÊıµÄ·ûºÅ½«Óë _2PI µÄ·ûºÅÏà·´¡£Ò²¾ÍÊÇËµ£¬Èç¹û angle µÄÖµĞ¡ÓÚ 0 ÇÒ _2PI µÄÖµÎªÕıÊı£¬Ôò fmod(angle, _2PI) µÄÓàÊı½«Îª¸ºÊı¡£
-  //ÀıÈç£¬µ± angle µÄÖµÎª -PI/2£¬_2PI µÄÖµÎª 2PI Ê±£¬fmod(angle, _2PI) ½«·µ»ØÒ»¸ö¸ºÊı¡£ÔÚÕâÖÖÇé¿öÏÂ£¬¿ÉÒÔÍ¨¹ı½«¸ºÊıµÄÓàÊı¼ÓÉÏ _2PI À´½«½Ç¶È¹éÒ»»¯µ½ [0, 2PI] µÄ·¶Î§ÄÚ£¬ÒÔÈ·±£½Ç¶ÈµÄÖµÊ¼ÖÕÎªÕıÊı¡£
-}
-// static float angle_remainder = 0.0f; 
-
-// float _normalizeAngle(float angle){
-//     angle += angle_remainder; // ²¹³¥ÉÏ´ÎÓàÊı
-//     float normalized = fmodf(angle, 2*PI);
-//     angle_remainder = angle - normalized; // ¼ÇÂ¼³¬³ö²¿·Ö
-//     return normalized >= 0 ? normalized : (normalized + 2*PI);
-// }
-
-// ÉèÖÃPWMµ½¿ØÖÆÆ÷Êä³ö
-void setPwm(float Ua, float Ub, float Uc) {
-
-  // ¼ÆËãÕ¼¿Õ±È
-  // ÏŞÖÆÕ¼¿Õ±È´Ó0µ½1
-  dc_a = _constrain(Ua / voltage_power_supply, 0.0f , 1.0f );
-  dc_b = _constrain(Ub / voltage_power_supply, 0.0f , 1.0f );
-  dc_c = _constrain(Uc / voltage_power_supply, 0.0f , 1.0f );
-
-  //Ğ´ÈëPWMµ½PWM 0 1 2 Í¨µÀ
-//   ledcWrite(0, dc_a*255);
-//   ledcWrite(1, dc_b*255);
-//   ledcWrite(2, dc_c*255);
-
-    //   TIM1->CCR1 = dc_a*4250;
-    //   TIM1->CCR2 = dc_b*4250;
-    //   TIM1->CCR3 = dc_c*4250;
-
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, dc_a*4250);
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_2, dc_b*4250);
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, dc_c*4250);
-    //Êä³öÕ¼¿Õ±È
-    // HAL_Delay(20);
-
-    // printf("%f,%f,%f\n",dc_a,dc_b,dc_c);
-
-
-}
-
-void setPhaseVoltage(float Uq,float Ud, float angle_el) {
-  angle_el = _normalizeAngle(angle_el + zero_electric_angle);
-  // ÅÁ¿ËÄæ±ä»»
-  Ualpha =  -Uq*sin(angle_el); 
-  Ubeta =   Uq*cos(angle_el); 
-// Ualpha = Uq * cos(angle_el);
-// Ubeta = Uq * sin(angle_el);
-  // ¿ËÀ­¿ËÄæ±ä»»
-  Ua = Ualpha + voltage_power_supply/2;
-  Ub = (sqrt(3)*Ubeta-Ualpha)/2 + voltage_power_supply/2;
-  Uc = (-Ualpha-sqrt(3)*Ubeta)/2 + voltage_power_supply/2;
-  setPwm(Ua,Ub,Uc);
-}
-
-
-//¿ª»·ËÙ¶Èº¯Êı
-float velocityOpenloop(float target_velocity){
-  // printf("%d\n",111);
-  // unsigned long now_us = HAL_GetTick()*1000;  //»ñÈ¡´Ó¿ªÆôĞ¾Æ¬ÒÔÀ´µÄÎ¢ÃëÊı£¬ËüµÄ¾«¶ÈÊÇ 4 Î¢Ãë¡£ micros() ·µ»ØµÄÊÇÒ»¸öÎŞ·ûºÅ³¤ÕûĞÍ£¨unsigned long£©µÄÖµ
-  // // printf("%d\n",now_us);
-  // //¼ÆËãµ±Ç°Ã¿¸öLoopµÄÔËĞĞÊ±¼ä¼ä¸ô
-  // float Ts = (now_us - open_loop_timestamp) * 1e-4f;
-
-  // //ÓÉÓÚ micros() º¯Êı·µ»ØµÄÊ±¼ä´Á»áÔÚ´óÔ¼ 70 ·ÖÖÓÖ®ºóÖØĞÂ¿ªÊ¼¼ÆÊı£¬ÔÚÓÉ70·ÖÖÓÌø±äµ½0Ê±£¬TS»á³öÏÖÒì³££¬Òò´ËĞèÒª½øĞĞĞŞÕı¡£Èç¹ûÊ±¼ä¼ä¸ôĞ¡ÓÚµÈÓÚÁã»ò´óÓÚ 0.5 Ãë£¬Ôò½«ÆäÉèÖÃÎªÒ»¸ö½ÏĞ¡µÄÄ¬ÈÏÖµ£¬¼´ 1e-3f
-  // if(Ts <= 0 || Ts > 0.5f) Ts = 1e-3f;
-  
-  // Ts = 0.0001;
-  // static float ftemp = 0.0f;
-  // ftemp += 0.1f;
-  // printf("%f,%f,%f,%f\n",shaft_angle,Ts,target_velocity,shaft_angle + target_velocity*Ts);
-  // Í¨¹ı³ËÒÔÊ±¼ä¼ä¸ôºÍÄ¿±êËÙ¶ÈÀ´¼ÆËãĞèÒª×ª¶¯µÄ»úĞµ½Ç¶È£¬´æ´¢ÔÚ shaft_angle ±äÁ¿ÖĞ¡£ÔÚ´ËÖ®Ç°£¬»¹ĞèÒª¶ÔÖá½Ç¶È½øĞĞ¹éÒ»»¯£¬ÒÔÈ·±£ÆäÖµÔÚ 0 µ½ 2¦Ğ Ö®¼ä¡£
-  shaft_angle = _normalizeAngle(shaft_angle + 0.001f);
-  //ÒÔÄ¿±êËÙ¶ÈÎª 10 rad/s ÎªÀı£¬Èç¹ûÊ±¼ä¼ä¸ôÊÇ 1 Ãë£¬ÔòÔÚÃ¿¸öÑ­»·ÖĞĞèÒªÔö¼Ó 10 * 1 = 10 »¡¶ÈµÄ½Ç¶È±ä»¯Á¿£¬²ÅÄÜÊ¹µç»ú×ª¶¯µ½Ä¿±êËÙ¶È¡£
-  //Èç¹ûÊ±¼ä¼ä¸ôÊÇ 0.1 Ãë£¬ÄÇÃ´ÔÚÃ¿¸öÑ­»·ÖĞĞèÒªÔö¼ÓµÄ½Ç¶È±ä»¯Á¿¾ÍÊÇ 10 * 0.1 = 1 »¡¶È£¬²ÅÄÜÊµÏÖÏàÍ¬µÄÄ¿±êËÙ¶È¡£Òò´Ë£¬µç»úÖáµÄ×ª¶¯½Ç¶ÈÈ¡¾öÓÚÄ¿±êËÙ¶ÈºÍÊ±¼ä¼ä¸ôµÄ³Ë»ı¡£
-  // printf("%f,%f,%f,%f\n",shaft_angle,Ts,target_velocity,shaft_angle + target_velocity*Ts);
-  // Ê¹ÓÃÔçÇ°ÉèÖÃµÄvoltage_power_supplyµÄ1/3×÷ÎªUqÖµ£¬Õâ¸öÖµ»áÖ±½ÓÓ°ÏìÊä³öÁ¦¾Ø
-  // ×î´óÖ»ÄÜÉèÖÃÎªUq = voltage_power_supply/2£¬·ñÔòua,ub,uc»á³¬³ö¹©µçµçÑ¹ÏŞ·ù
-  float Uq = voltage_power_supply/3;
-  // float Uq = voltage_power_supply/2 * (1 + 0.2f * fabsf(target_velocity)/5);
-  setPhaseVoltage(Uq,  0, _electricalAngle(shaft_angle, 7));
-  
-  // open_loop_timestamp = now_us;  //ÓÃÓÚ¼ÆËãÏÂÒ»¸öÊ±¼ä¼ä¸ô
-
-  return Uq;
-}
-// float velocityOpenloop(float target_velocity) {
-//     uint32_t now_us = HAL_GetTick();  // »ñÈ¡ºÁÃë²¢×ª»»ÎªÎ¢Ãë
-//     float Ts = (now_us - open_loop_timestamp) * 1e-6f;
-    
-//     if(Ts <= 0 || Ts > 0.5f) Ts = 1e-3f;
-    
-//     shaft_angle = _normalizeAngle(shaft_angle + target_velocity * Ts);
-//     float Uq = voltage_power_supply/5;
-    
-//     setPhaseVoltage(Uq, 0, _electricalAngle(shaft_angle, 7));
-    
-//     open_loop_timestamp = now_us;
-//     return Uq;
-// }
 void FocInit(void)
 {
-    // velocityOpenloop(5);
+    s_open_loop_timestamp_ms = HAL_GetTick();
 }
-/***************************************************************************************************
- * ¹¦ÄÜÃèÊö: 
- * ÊäÈë²ÎÊı: 
- * Êä³ö²ÎÊı: 
- * ·µ »Ø Öµ: 
- * ÆäËüËµÃ÷: 
-***************************************************************************************************/
-int PT_TASK_FOC()
+
+int PT_TASK_FOC(void)
 {
     PT_BEGIN()
     {
-        // st7789v_init();
-        printf("%d\n",222);
+        printf("%d\n", 222);
     }
     while (1)
     {
-        PT_WAIT_UNTIL(10/TIME_ms); // Ã¿100msÖ´ĞĞÒ»´Î
-        // velocityOpenloop(5);
-        printf("%f,%f,%f\n",dc_a,dc_b,dc_c);
+        PT_WAIT_UNTIL(100 / TIME_ms);
+        // velocityOpenloop(5.0f);
+        printf("%f,%f,%f\n", dc_a, dc_b, dc_c);
     }
     PT_END();
 }
-

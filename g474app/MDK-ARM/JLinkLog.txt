@@ -1,0 +1,79 @@
+T11AB4 004:606.217   SEGGER J-Link V7.98a Log File
+T11AB4 004:606.265   DLL Compiled: Jul 19 2024 14:57:58
+T11AB4 004:606.271   Logging started @ 2026-01-06 13:55
+T11AB4 004:606.275   Process: D:\App\Keil\Keil_v5\UV4\UV4.exe
+T11AB4 004:606.280 - 9.082ms
+T11AB4 004:606.287 JLINK_SetWarnOutHandler(...)
+T11AB4 004:606.291 - 0.004ms
+T11AB4 004:606.297 JLINK_OpenEx(...)
+T11AB4 004:608.790   Firmware: J-Link V9 compiled May  7 2021 16:26:12
+T11AB4 004:610.903   Firmware: J-Link V9 compiled May  7 2021 16:26:12
+T11AB4 004:610.999   Decompressing FW timestamp took 76 us
+T11AB4 004:619.204   Hardware: V9.50
+T11AB4 004:619.217   S/N: 30500541
+T11AB4 004:619.223   OEM: SEGGER
+T11AB4 004:619.230   Feature(s): GDB, RDI, FlashBP, FlashDL, JFlash
+T11AB4 004:621.205   Bootloader: (Could not read)
+T11AB4 004:623.159   TELNET listener socket opened on port 19021
+T11AB4 004:625.932   WEBSRV WEBSRV_Init(): Starting webserver thread(s)
+T11AB4 004:626.067   WEBSRV Webserver running on local port 19080
+T11AB4 004:626.198   Looking for J-Link GUI Server exe at: D:\App\Keil\Keil_v5\ARM\Segger\JLinkGUIServer.exe
+T11AB4 004:626.250   Looking for J-Link GUI Server exe at: D:\App\JLink_V798a\JLinkGUIServer.exe
+T11AB4 004:626.282   Forking J-Link GUI Server: D:\App\JLink_V798a\JLinkGUIServer.exe
+T11AB4 004:629.963   J-Link GUI Server info: "J-Link GUI server V7.98a "
+T11AB4 004:630.190 - 23.892ms returns "O.K."
+T11AB4 004:630.213 JLINK_GetEmuCaps()
+T11AB4 004:630.219 - 0.006ms returns 0xB9FF7BBF
+T11AB4 004:630.229 JLINK_TIF_GetAvailable(...)
+T11AB4 004:630.780 - 0.551ms
+T11AB4 004:630.798 JLINK_SetErrorOutHandler(...)
+T11AB4 004:630.803 - 0.005ms
+T11AB4 004:630.814 JLINK_ExecCommand("ProjectFile = "D:\document\code\stm32\MyFoc\g474app\MDK-ARM\JLinkSettings.ini"", ...). 
+T11AB4 004:632.404 - 1.589ms returns 0x00
+T11AB4 004:632.422 JLINK_ExecCommand("Device = STM32G474RETx", ...). 
+T11AB4 004:632.577   Flash bank @ 0x08000000: SFL: Parsing sectorization info from ELF file
+T11AB4 004:632.585     FlashDevice.SectorInfo[0]: .SectorSize = 0x00000800, .SectorStartAddr = 0x00000000
+T11AB4 004:632.592   FlashBank @0x08000000: Sectorization info from SFL ELF file ignored because sectorization override from DLL / XML file is active.
+T11AB4 004:632.703   Device "STM32G474RE" selected.
+T11AB4 004:633.092 - 0.661ms returns 0x00
+T11AB4 004:633.118 JLINK_ExecCommand("DisableConnectionTimeout", ...). 
+T11AB4 004:633.139   ERROR: Unknown command
+T11AB4 004:633.150 - 0.012ms returns 0x01
+T11AB4 004:633.162 JLINK_GetHardwareVersion()
+T11AB4 004:633.168 - 0.006ms returns 95000
+T11AB4 004:633.178 JLINK_GetDLLVersion()
+T11AB4 004:633.184 - 0.005ms returns 79801
+T11AB4 004:633.193 JLINK_GetOEMString(...)
+T11AB4 004:633.200 JLINK_GetFirmwareString(...)
+T11AB4 004:633.205 - 0.005ms
+T11AB4 004:633.216 JLINK_GetDLLVersion()
+T11AB4 004:633.221 - 0.005ms returns 79801
+T11AB4 004:633.230 JLINK_GetCompileDateTime()
+T11AB4 004:633.236 - 0.005ms
+T11AB4 004:634.050 JLINK_GetFirmwareString(...)
+T11AB4 004:634.065 - 0.015ms
+T11AB4 004:634.074 JLINK_GetHardwareVersion()
+T11AB4 004:634.080 - 0.005ms returns 95000
+T11AB4 004:634.087 JLINK_GetSN()
+T11AB4 004:634.093 - 0.005ms returns 30500541
+T11AB4 004:634.100 JLINK_GetOEMString(...)
+T11AB4 004:634.109 JLINK_TIF_Select(JLINKARM_TIF_SWD)
+T11AB4 004:636.479 - 2.370ms returns 0x00
+T11AB4 004:636.492 JLINK_HasError()
+T11AB4 004:636.507 JLINK_SetSpeed(10)
+T11AB4 004:637.108 - 0.601ms
+T11AB4 004:637.915 JLINK_HasError()
+T11AB4 004:637.929 JLINK_SetResetType(JLINKARM_RESET_TYPE_NORMAL)
+T11AB4 004:637.935 - 0.006ms returns JLINKARM_RESET_TYPE_NORMAL
+T11AB4 004:637.942 JLINK_Reset()
+T11AB4 004:638.618 - 0.675ms
+T11AB4 004:638.653 JLINK_GetId()
+T11AB4 004:639.306 - 0.653ms returns 0x00000000
+T11AB4 004:639.319 JLINK_GetId()
+T11AB4 004:639.896 - 0.577ms returns 0x00000000
+T11AB4 004:642.763 JLINK_GetFirmwareString(...)
+T11AB4 004:642.773 - 0.010ms
+T11AB4 128:304.432 JLINK_Close()
+T11AB4 128:316.720 - 12.285ms
+T11AB4 128:316.736   
+T11AB4 128:316.736   Closed
