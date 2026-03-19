@@ -1,7 +1,7 @@
 Dependencies for Project 'g474app', Target 'g474app': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (startup_stm32g474xx.s)(0x690612DB)(--cpu Cortex-M4.fp.sp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include--pd "__UVISION_VERSION SETA 541" --pd "STM32G474xx SETA 1" --pd "_RTE_ SETA 1"--list .\lib_i\startup_stm32g474xx.lst --xref -o .\g474app\startup_stm32g474xx.o --depend .\g474app\startup_stm32g474xx.d)
-F (../Core/Src/main.c)(0x69AECF62)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\main.o --omf_browse .\g474app\main.crf --depend .\g474app\main.d)
+F (startup_stm32g474xx.s)(0x69BA939F)(--cpu Cortex-M4.fp.sp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include--pd "__UVISION_VERSION SETA 541" --pd "STM32G474xx SETA 1" --pd "_RTE_ SETA 1"--list .\lib_i\startup_stm32g474xx.lst --xref -o .\g474app\startup_stm32g474xx.o --depend .\g474app\startup_stm32g474xx.d)
+F (../Core/Src/main.c)(0x69BBDAB0)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\main.o --omf_browse .\g474app\main.crf --depend .\g474app\main.d)
 I (../Core/Inc/main.h)(0x6898872E)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x681F6F2C)
@@ -44,26 +44,18 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 I (../Core/Inc/dma.h)(0x681B72AC)
 I (../Core/Inc/usart.h)(0x681B72AC)
-I (../My_Lib/sfunction/vf_ctrl.h)(0x6905FF13)
-I (../My_Lib/sfunction/rtwtypes.h)(0x6905FF13)
-I (../My_Lib/sfunction/em_sincos.h)(0x651A734A)
-I (../My_Lib/sfunction/data_type.h)(0x65487725)
-I (../My_Lib/sfunction/em_svpwm.h)(0x690612DC)
-I (../My_Lib/sfunction/vf_ctrl_types.h)(0x6905FF13)
-I (../My_Lib/sfunction/VFControler.h)(0x6905FF13)
-I (../My_Lib/sfunction/model_param.h)(0x6906101B)
 I (../My_Lib/mt6816ct/mt6816.h)(0x68988B15)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x6025237C)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
-F (../Core/Src/gpio.c)(0x681DF9FD)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\gpio.o --omf_browse .\g474app\gpio.crf --depend .\g474app\gpio.d)
+F (../Core/Src/gpio.c)(0x69BA939D)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\gpio.o --omf_browse .\g474app\gpio.crf --depend .\g474app\gpio.d)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../Core/Inc/main.h)(0x6898872E)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
@@ -106,10 +98,10 @@ I (../My_Lib/st7789v/st7789v.h)(0x68207DA2)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 F (../Core/Src/adc.c)(0x6839CA2D)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\adc.o --omf_browse .\g474app\adc.crf --depend .\g474app\adc.d)
 I (../Core/Inc/adc.h)(0x681DFA53)
@@ -155,9 +147,9 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 F (../Core/Src/dma.c)(0x682001D6)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\dma.o --omf_browse .\g474app\dma.crf --depend .\g474app\dma.d)
 I (../Core/Inc/dma.h)(0x681B72AC)
@@ -203,10 +195,10 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 F (../Core/Src/spi.c)(0x68988B8D)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\spi.o --omf_browse .\g474app\spi.crf --depend .\g474app\spi.d)
 I (../Core/Inc/spi.h)(0x68988409)
@@ -251,12 +243,12 @@ I (../My_Lib/st7789v/st7789v.h)(0x68207DA2)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
-F (../Core/Src/tim.c)(0x690612D9)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\tim.o --omf_browse .\g474app\tim.crf --depend .\g474app\tim.d)
+F (../Core/Src/tim.c)(0x69AED9DF)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\tim.o --omf_browse .\g474app\tim.crf --depend .\g474app\tim.d)
 I (../Core/Inc/tim.h)(0x683868DE)
 I (../Core/Inc/main.h)(0x6898872E)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
@@ -300,9 +292,9 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 F (../Core/Src/usart.c)(0x681B72AC)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\usart.o --omf_browse .\g474app\usart.crf --depend .\g474app\usart.d)
 I (../Core/Inc/usart.h)(0x681B72AC)
@@ -348,10 +340,10 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 F (../Core/Src/stm32g4xx_it.c)(0x6839C393)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\stm32g4xx_it.o --omf_browse .\g474app\stm32g4xx_it.crf --depend .\g474app\stm32g4xx_it.d)
 I (../Core/Inc/main.h)(0x6898872E)
@@ -396,10 +388,10 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 I (../Core/Inc/stm32g4xx_it.h)(0x6839C393)
 F (../Core/Src/stm32g4xx_hal_msp.c)(0x681B72AC)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\stm32g4xx_hal_msp.o --omf_browse .\g474app\stm32g4xx_hal_msp.crf --depend .\g474app\stm32g4xx_hal_msp.d)
@@ -445,10 +437,10 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_adc.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\stm32g4xx_hal_adc.o --omf_browse .\g474app\stm32g4xx_hal_adc.crf --depend .\g474app\stm32g4xx_hal_adc.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
@@ -1265,7 +1257,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
-F (..\My_Lib\st7789v\st7789v.c)(0x683866AC)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\st7789v.o --omf_browse .\g474app\st7789v.crf --depend .\g474app\st7789v.d)
+F (..\My_Lib\st7789v\st7789v.c)(0x69B96048)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\st7789v.o --omf_browse .\g474app\st7789v.crf --depend .\g474app\st7789v.d)
 I (../My_Lib/st7789v/st7789v.h)(0x68207DA2)
 I (../Core/Inc/main.h)(0x6898872E)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
@@ -1305,10 +1297,10 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
@@ -1358,13 +1350,13 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
-F (..\My_Lib\FOC\foc.c)(0x69AEC4E4)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\foc.o --omf_browse .\g474app\foc.crf --depend .\g474app\foc.d)
-I (..\My_Lib\FOC\foc.h)(0x69AEC4C9)
+F (..\My_Lib\FOC\foc.c)(0x69BA8F81)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\foc.o --omf_browse .\g474app\foc.crf --depend .\g474app\foc.d)
+I (..\My_Lib\FOC\foc.h)(0x69AED06A)
 I (../Core/Inc/main.h)(0x6898872E)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x681F6F2C)
@@ -1407,14 +1399,14 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
 F (..\My_Lib\FOC\TaskTest.c)(0x68386454)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../My_Lib -I ../My_Lib/sfunction-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__CC_ARM -D__TARGET_FPU_VFP -D__FPU_PRESENT="1U" -D__FPU_USED="1U"-o .\g474app\tasktest.o --omf_browse .\g474app\tasktest.crf --depend .\g474app\tasktest.d)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../Core/Inc/main.h)(0x6898872E)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x681F6F2C)
@@ -1457,7 +1449,7 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
@@ -1506,10 +1498,10 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x68988409)
 I (../Core/Inc/gpio.h)(0x681B72AB)
 I (../My_Lib/soft_timer/soft_timer.h)(0x681FFFF7)
-I (../My_Lib/foc/foc.h)(0x69AEC4C9)
+I (../My_Lib/foc/foc.h)(0x69AED06A)
 I (../Core/Inc/adc.h)(0x681DFA53)
 I (../Core/Inc/tim.h)(0x683868DE)
-I (../My_Lib/Task.h)(0x6898876F)
+I (../My_Lib/Task.h)(0x69AED547)
 I (../My_Lib/Def/Def.h)(0x682C91A6)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x6025237C)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)

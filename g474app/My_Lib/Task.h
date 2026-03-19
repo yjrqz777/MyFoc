@@ -1,7 +1,7 @@
 /***************************************************************************************************
  * Author: yjrqz777 3210551161@qq.com
  * Date: 2025-05-26 21:03:02
- * LastEditTime: 2025-07-23 20:26:57
+ * LastEditTime: 2026-03-09 22:12:23
  * LastEditors: yjrqz777 3210551161@qq.com
  * Description:
  * FilePath: \g474app\My_Lib\Task.h
@@ -14,7 +14,7 @@
 
 
 #define TASK_MAX 20
-#define TIME_ms 10 // 定时器时间间隔，单位为毫秒
+#define TIME_ms 1 // 定时器时间间隔，单位为毫秒
 
 extern unsigned int PT_TICK[TASK_MAX];/* global var */
 

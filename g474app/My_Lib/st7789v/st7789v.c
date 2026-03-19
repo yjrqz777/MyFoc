@@ -1,7 +1,7 @@
 /***************************************************************************************************
  * Author: yjrqz777 3210551161@qq.com
  * Date: 2025-05-08 20:07:45
- * LastEditTime: 2025-05-29 21:52:44
+ * LastEditTime: 2026-03-17 22:08:08
  * LastEditors: yjrqz777 3210551161@qq.com
  * Description: 
  * FilePath: \g474app\My_Lib\st7789v\st7789v.c
@@ -668,7 +668,7 @@ void LCD_ShowChinese32x32(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t 
 	{
 		if ((tfont32[k].Index[0]==*(s))&&(tfont32[k].Index[1]==*(s+1)))
 		{ 	
-			printf("32:%d,%d,%x,%X\n",HZnum,TypefaceNum,tfontTEST[k].Index[0],*(s));
+			// printf("32:%d,%d,%x,%X\n",HZnum,TypefaceNum,tfontTEST[k].Index[0],*(s));
 			LCD_Address_Set(x,y,x+sizey-1,y+sizey-1);
 			for(i=0;i<TypefaceNum;i++)
 			{

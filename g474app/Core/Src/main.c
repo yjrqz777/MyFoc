@@ -28,7 +28,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "Task.h"
-#include "vf_ctrl.h"
 // #include "st7789v/st7789v.h"
 #include "mt6816ct/mt6816.h"
 /***************************************************************************************************
@@ -43,8 +42,8 @@
 int fputc(int ch, FILE *f)
 {
     uint8_t temp[1] = {ch};
-    // HAL_UART_Transmit(&huart3, temp, 1, 0xffff);
-    HAL_UART_Transmit_IT(&huart3, temp, 1);
+    HAL_UART_Transmit(&huart3, temp, 1, 0xffff);
+    // HAL_UART_Transmit_IT(&huart3, temp, 1);
     return ch;
 }
 /***************************************************************************************************
@@ -125,6 +124,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 static int PT_TASK_st7789()
 {
+  static uint8_t u8temp = 0;
     PT_BEGIN()
     {
         st7789v_init();
@@ -132,7 +132,11 @@ static int PT_TASK_st7789()
     while (1)
     {
         PT_WAIT_UNTIL(100/TIME_ms); // 每100ms执行一次
+        // u8temp = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6) | HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_7)<<1 | HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0)<<2;
         LCD_ShowFloatNum1(0, 0, (ADC_Read(hadc2,ADC_CHANNEL_5) / 4096.0) * 3.3, 4, WHITE, BLACK, 24);
+        // LCD_ShowIntNum(0, 24, HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6), 1, WHITE, BLACK, 24);
+        // LCD_ShowIntNum(0, 48, HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_7), 1, WHITE, BLACK, 24);
+        // LCD_ShowIntNum(0, 72, HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0), 1, WHITE, BLACK, 24);
     }
     PT_END();
 }
@@ -224,7 +228,7 @@ int main(void)
         // PT_TASK_REG(3, PT_TASK_mt6816);
 
         // printf("In APP 22!\n");
-        // HAL_Delay(100);
+        HAL_Delay(100);
         // LCD_ConvertAndSendDMA();
         // if (soft_timer_is_timeout(SOFT_TIMER_0))
         // {
@@ -248,6 +252,13 @@ int main(void)
         // }
         // printf("%d,%d,%d\n",mcu_ccrx[0],mcu_ccrx[1],mcu_ccrx[2]);
         // printf("%d,%d,%d,%d,%d,%d,%d,%f,%d\n",adc1_value[0],adc1_value[1],adc1_value[2],adc1_value[3],adc1_value[4],adc1_value[5],adc1_value[6],(adc2_value[0]/4096.0)*3.3,adc2_value[1]);
+      //printf("%d,%d,%d,%d\n",ADC_Read(hadc1, ADC_CHANNEL_1),ADC_Read(hadc1, ADC_CHANNEL_2),ADC_Read(hadc1, ADC_CHANNEL_3),ADC_Read(hadc1, ADC_CHANNEL_4));
+
+        // LCD_ShowIntNum(0, 24, HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6), 1, WHITE, BLACK, 24);
+        // LCD_ShowIntNum(0, 48, HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_7), 1, WHITE, BLACK, 24);
+        // LCD_ShowIntNum(0, 72, HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0), 1, WHITE, BLACK, 24);
+        // printf("%d,%d,%d\n",HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6),HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0),HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_7));
+
         // LCD_ShowIntNum(0, 0, adc1_value[0], 4, WHITE, BLACK, 24);
         // LCD_ShowIntNum(0, 24, adc1_value[1], 4, WHITE, BLACK, 24);
         // LCD_ShowIntNum(0, 48, adc1_value[2], 4, WHITE, BLACK, 24);

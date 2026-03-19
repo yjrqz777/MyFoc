@@ -29,6 +29,7 @@ int PT_TASK_Test(void);
 
 int PT_TASK_FOC(void);
 
+void FocInit(void);
 float velocityOpenloop(float target_velocity);
 // void FocLoop(void);
 #endif
