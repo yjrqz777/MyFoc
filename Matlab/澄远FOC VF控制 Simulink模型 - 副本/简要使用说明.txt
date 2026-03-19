@@ -1,9 +1,0 @@
-1，目录说明
-	- vf_ctrl：VF控制simulink模型
-	- sfunction：模型用到的s函数源码
-
-2，MATLAB版本：2021b及以上
-
-3，打开模型注意事项
-	- MATLAB首页，请先将“当前文件夹”更改为vf_ctrl.slx所在文件夹，否则初始化脚本会出错
-	- 若“当前文件夹”未更改，打开vf_ctrl.slx时报错，请先关闭vf_ctrl.slx，更改“当前文件夹”后再打开
