@@ -46,3 +46,5 @@ g474app\main.o: ../Core/Inc/gpio.h
 g474app\main.o: ..\Code\Task.h
 g474app\main.o: D:\App\Keil\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 g474app\main.o: ..\Code\Drv\st7789v/st7789v.h
+g474app\main.o: D:\App\Keil\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+g474app\main.o: ..\Code\User\Userfoc.h

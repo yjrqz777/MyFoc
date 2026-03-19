@@ -27,22 +27,29 @@ Project File Date:  03/19/2026
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\App\Keil\Keil_v5\ARM\ARMCC\Bin'
 Build target 'g474app'
+compiling Userfoc.c...
 compiling main.c...
 ..\Code\Task.h(69): warning:  #9-D: nested comment is not allowed
   //*****************************************************************************************************
-../Core/Src/main.c(109): warning:  #111-D: statement is unreachable
+../Core/Src/main.c(208): warning:  #111-D: statement is unreachable
       PT_END();
-../Core/Src/main.c(96): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
+../Core/Src/main.c(176): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
       PT_BEGIN()
-../Core/Src/main.c(96): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
+../Core/Src/main.c(176): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
       PT_BEGIN()
-../Core/Src/main.c(95): warning:  #177-D: variable "u8temp"  was declared but never referenced
+../Core/Src/main.c(175): warning:  #177-D: variable "u8temp"  was declared but never referenced
     static uint8_t u8temp = 0;
-../Core/Src/main.c: 5 warnings, 0 errors
+../Core/Src/main.c(408): warning:  #186-D: pointless comparison of unsigned integer with zero
+          if (ccr1 < 0) ccr1 = 0;
+../Core/Src/main.c(409): warning:  #186-D: pointless comparison of unsigned integer with zero
+          if (ccr2 < 0) ccr2 = 0;
+../Core/Src/main.c(410): warning:  #186-D: pointless comparison of unsigned integer with zero
+          if (ccr3 < 0) ccr3 = 0;
+../Core/Src/main.c: 8 warnings, 0 errors
 linking...
-Program Size: Code=20072 RO-data=19112 RW-data=28 ZI-data=1996  
+Program Size: Code=26776 RO-data=19144 RW-data=184 ZI-data=1992  
 FromELF: creating hex file...
-"g474app\g474app.axf" - 0 Error(s), 5 Warning(s).
+"g474app\g474app.axf" - 0 Error(s), 8 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -65,7 +72,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@6.1.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>
