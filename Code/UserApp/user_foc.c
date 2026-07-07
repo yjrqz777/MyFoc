@@ -2,11 +2,11 @@
  * Author: yjrqz777 3210551161@qq.com
  * Date: 2026-03-19
  * Description: FOC电流闭环控制实现
- * FilePath: \Myfoc2\Code\User\Userfoc.c
+ * FilePath: \Myfoc2\Code\UserApp\user_foc.c
  * @YJRQZ777
 ***************************************************************************************************/
 
-#include "Userfoc.h"
+#include "user_foc.h"
 #include <math.h>
 
 /***************************************************************************************************

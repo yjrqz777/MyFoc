@@ -1,4 +1,4 @@
-#include "BspPwm.h"
+#include "bsp_pwm.h"
 #include "tim.h"
 
 static uint16_t BspPwm_LimitCompare(int32_t value, uint16_t pwm_max)

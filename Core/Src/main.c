@@ -29,11 +29,10 @@
 /* USER CODE BEGIN Includes */
 #include "Task.h"
 #include <stdio.h>
-#include "BspAdc.h"
-#include "BspHall.h"
-#include "BspLcd.h"
-#include "UserMotor.h"
-#include "Userfoc.h"
+#include "bsp_adc.h"
+#include "user_button.h"
+#include "user_display.h"
+#include "user_motor.h"
 #include "SEGGER_RTT.h"
 /* USER CODE END Includes */
 
@@ -84,34 +83,8 @@ static void DebugRtt_Init(void)
     SEGGER_RTT_WriteString(0, "Motor control startup\r\n");
 }
 
-static int PT_TASK_st7789(void)
-{
-    PT_BEGIN()
-    {
-        BspLcd_Init();
-    }
 
-    while (1)
-    {
-        uint16_t adc_raw[4];
-        uint8_t hall_state;
-        DQCurrent_t dq;
 
-        PT_WAIT_UNTIL(100 / TIME_ms);
-
-        adc_raw[0] = BspAdc_GetInjectedRaw(0);
-        adc_raw[1] = BspAdc_GetInjectedRaw(1);
-        adc_raw[2] = BspAdc_GetInjectedRaw(2);
-        adc_raw[3] = BspAdc_GetInjectedRaw(3);
-        hall_state = BspHall_GetState();
-        dq = FOC_GetDQCurrent();
-
-        BspLcd_ShowMotorDebug(hall_state, adc_raw);
-        SEGGER_RTT_printf(0, "Hall:%u IdIq:%.2f,%.2f\r\n", hall_state, dq.d, dq.q);
-    }
-
-    PT_END();
-}
 /* USER CODE END 0 */
 
 /**
@@ -168,7 +141,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    PT_TASK_REG(0, PT_TASK_st7789);
+    PT_TASK_REG(0, PT_TASK_Display);
+    PT_TASK_REG(1, PtTaskButton);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

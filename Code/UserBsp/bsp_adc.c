@@ -1,4 +1,4 @@
-#include "BspAdc.h"
+#include "bsp_adc.h"
 #include "adc.h"
 
 static volatile uint16_t s_injected_raw[BSP_ADC_INJECTED_CHANNELS] = {0};

@@ -1,7 +1,7 @@
-#include "UserMotor.h"
-#include "BspAdc.h"
-#include "BspPwm.h"
-#include "Userfoc.h"
+#include "user_motor.h"
+#include "bsp_adc.h"
+#include "bsp_pwm.h"
+#include "user_foc.h"
 #include <math.h>
 
 #define USER_MOTOR_PI              3.14159265f

@@ -8,7 +8,7 @@ extern "C" {
 #include "main.h"
 
 void BspLcd_Init(void);
-void BspLcd_ShowMotorDebug(uint8_t hall_state, const uint16_t adc_raw[4]);
+void BspLcd_ShowUInt(uint16_t x, uint16_t y, uint32_t value, uint8_t len);
 
 #ifdef __cplusplus
 }

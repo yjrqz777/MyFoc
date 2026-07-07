@@ -615,7 +615,7 @@
   </Group>
 
   <Group>
-    <GroupName>User</GroupName>
+    <GroupName>UserApp</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -627,8 +627,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Code\User\Userfoc.c</PathWithFileName>
-      <FilenameWithoutPath>Userfoc.c</FilenameWithoutPath>
+      <PathWithFileName>..\Code\UserApp\user_foc.c</PathWithFileName>
+      <FilenameWithoutPath>user_foc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -639,43 +639,43 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Code\User\UserMotor.c</PathWithFileName>
-      <FilenameWithoutPath>UserMotor.c</FilenameWithoutPath>
+      <PathWithFileName>..\Code\UserApp\user_motor.c</PathWithFileName>
+      <FilenameWithoutPath>user_motor.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>36</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\Code\UserApp\user_display.c</PathWithFileName>
+      <FilenameWithoutPath>user_display.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>37</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\Code\UserApp\user_button.c</PathWithFileName>
+      <FilenameWithoutPath>user_button.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
   </Group>
 
   <Group>
-    <GroupName>Bsp</GroupName>
+    <GroupName>UserBsp</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>6</GroupNumber>
-      <FileNumber>36</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\Code\Bsp\BspAdc.c</PathWithFileName>
-      <FilenameWithoutPath>BspAdc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>6</GroupNumber>
-      <FileNumber>37</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\Code\Bsp\BspPwm.c</PathWithFileName>
-      <FilenameWithoutPath>BspPwm.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
     <File>
       <GroupNumber>6</GroupNumber>
       <FileNumber>38</FileNumber>
@@ -683,8 +683,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Code\Bsp\BspHall.c</PathWithFileName>
-      <FilenameWithoutPath>BspHall.c</FilenameWithoutPath>
+      <PathWithFileName>..\Code\UserBsp\bsp_adc.c</PathWithFileName>
+      <FilenameWithoutPath>bsp_adc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -695,8 +695,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Code\Bsp\BspLcd.c</PathWithFileName>
-      <FilenameWithoutPath>BspLcd.c</FilenameWithoutPath>
+      <PathWithFileName>..\Code\UserBsp\bsp_pwm.c</PathWithFileName>
+      <FilenameWithoutPath>bsp_pwm.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -707,8 +707,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Code\Bsp\st7789v\st7789v.c</PathWithFileName>
-      <FilenameWithoutPath>st7789v.c</FilenameWithoutPath>
+      <PathWithFileName>..\Code\UserBsp\bsp_hall.c</PathWithFileName>
+      <FilenameWithoutPath>bsp_hall.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -719,8 +719,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Code\Bsp\RTT\SEGGER_RTT.c</PathWithFileName>
-      <FilenameWithoutPath>SEGGER_RTT.c</FilenameWithoutPath>
+      <PathWithFileName>..\Code\UserBsp\bsp_lcd.c</PathWithFileName>
+      <FilenameWithoutPath>bsp_lcd.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -731,7 +731,43 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Code\Bsp\RTT\SEGGER_RTT_printf.c</PathWithFileName>
+      <PathWithFileName>..\Code\UserBsp\bsp_button.c</PathWithFileName>
+      <FilenameWithoutPath>bsp_button.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>43</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\Code\UserBsp\st7789v\st7789v.c</PathWithFileName>
+      <FilenameWithoutPath>st7789v.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>44</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\Code\UserBsp\RTT\SEGGER_RTT.c</PathWithFileName>
+      <FilenameWithoutPath>SEGGER_RTT.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>45</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\Code\UserBsp\RTT\SEGGER_RTT_printf.c</PathWithFileName>
       <FilenameWithoutPath>SEGGER_RTT_printf.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -739,7 +775,7 @@
   </Group>
 
   <Group>
-    <GroupName>Drv</GroupName>
+    <GroupName>UserDrv</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>

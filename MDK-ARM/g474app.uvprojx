@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32G474xx,__TARGET_FPU_VFP</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G4xx/Include;../Drivers/CMSIS/Include;../Code;../Code/User;../Code/Bsp;../Code/Drv;../Code/Bsp/RTT</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G4xx/Include;../Drivers/CMSIS/Include;../Code;../Code/UserApp;../Code/UserBsp;../Code/UserDrv;../Code/UserBsp/RTT</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -567,62 +567,77 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>User</GroupName>
+          <GroupName>UserApp</GroupName>
           <Files>
             <File>
-              <FileName>Userfoc.c</FileName>
+              <FileName>user_foc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Code\User\Userfoc.c</FilePath>
+              <FilePath>..\Code\UserApp\user_foc.c</FilePath>
             </File>
             <File>
-              <FileName>UserMotor.c</FileName>
+              <FileName>user_motor.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Code\User\UserMotor.c</FilePath>
+              <FilePath>..\Code\UserApp\user_motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_display.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Code\UserApp\user_display.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Code\UserApp\user_button.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Bsp</GroupName>
+          <GroupName>UserBsp</GroupName>
           <Files>
             <File>
-              <FileName>BspAdc.c</FileName>
+              <FileName>bsp_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Code\Bsp\BspAdc.c</FilePath>
+              <FilePath>..\Code\UserBsp\bsp_adc.c</FilePath>
             </File>
             <File>
-              <FileName>BspPwm.c</FileName>
+              <FileName>bsp_pwm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Code\Bsp\BspPwm.c</FilePath>
+              <FilePath>..\Code\UserBsp\bsp_pwm.c</FilePath>
             </File>
             <File>
-              <FileName>BspHall.c</FileName>
+              <FileName>bsp_hall.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Code\Bsp\BspHall.c</FilePath>
+              <FilePath>..\Code\UserBsp\bsp_hall.c</FilePath>
             </File>
             <File>
-              <FileName>BspLcd.c</FileName>
+              <FileName>bsp_lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Code\Bsp\BspLcd.c</FilePath>
+              <FilePath>..\Code\UserBsp\bsp_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Code\UserBsp\bsp_button.c</FilePath>
             </File>
             <File>
               <FileName>st7789v.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Code\Bsp\st7789v\st7789v.c</FilePath>
+              <FilePath>..\Code\UserBsp\st7789v\st7789v.c</FilePath>
             </File>
             <File>
               <FileName>SEGGER_RTT.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Code\Bsp\RTT\SEGGER_RTT.c</FilePath>
+              <FilePath>..\Code\UserBsp\RTT\SEGGER_RTT.c</FilePath>
             </File>
             <File>
               <FileName>SEGGER_RTT_printf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Code\Bsp\RTT\SEGGER_RTT_printf.c</FilePath>
+              <FilePath>..\Code\UserBsp\RTT\SEGGER_RTT_printf.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Drv</GroupName>
+          <GroupName>UserDrv</GroupName>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>

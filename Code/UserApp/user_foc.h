@@ -2,7 +2,7 @@
  * Author: yjrqz777 3210551161@qq.com
  * Date: 2026-03-19
  * Description: FOC电流闭环控制头文件
- * FilePath: \Myfoc2\Code\User\Userfoc.h
+ * FilePath: \Myfoc2\Code\UserApp\user_foc.h
  * @YJRQZ777
 ***************************************************************************************************/
 
