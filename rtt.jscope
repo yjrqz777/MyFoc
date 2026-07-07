@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<JScopeProject>
+    <FileVersion major="1" minor="1" />
+    <Project>
+        <Configuration>
+            <JLink>
+                <Options Connection="1" IsRTTSession="0" IsRTTWithTimeStamp="0" SamplingPeriod="1000" SerialNo="0" JTAG_IRPre="0" JTAG_DRPre="0" IP="" TargetDevice="STM32G474RE" TargetInterface="SWD" InterfaceSpeed="12000" />
+            </JLink>
+            <ElfFile Name="D:\document\code\stm32\Myfoc2\MDK-ARM\g474app\g474app.axf" />
+            <Scope>
+                <Options TimeResolutionUs="1000000" />
+            </Scope>
+        </Configuration>
+        <Windows>
+            <Graph Show="1" />
+            <Watch Show="1" />
+        </Windows>
+        <SelectedSymbols>
+            <Symbol>
+                <Options Name="hall_c" Address="0x20000002" Type="unsigned char" TypeID="6" Size="1" GraphColorRed="255" GraphColorGreen="0" GraphColorBlue="0" YMinSampled="0" YMaxSampled="1" YAvgSampled="0.31346" Offset="4" ShowInGraph="1" YOffset="0" IsAutoConfig="0" YResolution="1" MaxValue="255" File="D:\document\code\stm32\Myfoc2\MDK-ARM/../Core/Src/main.c" DrawStyle="0" NameWithParents="hall_c" />
+            </Symbol>
+            <Symbol>
+                <Options Name="hall_b" Address="0x20000001" Type="unsigned char" TypeID="6" Size="1" GraphColorRed="0" GraphColorGreen="0" GraphColorBlue="255" YMinSampled="0" YMaxSampled="1" YAvgSampled="0.290089" Offset="5" ShowInGraph="1" YOffset="0" IsAutoConfig="0" YResolution="1" MaxValue="255" File="D:\document\code\stm32\Myfoc2\MDK-ARM/../Core/Src/main.c" DrawStyle="0" NameWithParents="hall_b" />
+            </Symbol>
+            <Symbol>
+                <Options Name="hall_a" Address="0x20000000" Type="unsigned char" TypeID="6" Size="1" GraphColorRed="0" GraphColorGreen="255" GraphColorBlue="0" YMinSampled="0" YMaxSampled="1" YAvgSampled="0.300921" Offset="6" ShowInGraph="1" YOffset="0" IsAutoConfig="0" YResolution="1" MaxValue="255" File="D:\document\code\stm32\Myfoc2\MDK-ARM/../Core/Src/main.c" DrawStyle="0" NameWithParents="hall_a" />
+            </Symbol>
+        </SelectedSymbols>
+    </Project>
+</JScopeProject>

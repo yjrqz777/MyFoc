@@ -54,12 +54,12 @@ typedef struct {
 
 // 全局FOC变量
 static FOC_Current_Loop_t foc = {
-    .iDQ_Ref = {0.0f, 3.0f},       // Id=0，Iq=3.0A
+    .iDQ_Ref = {0.0f, 6.0f},       // Id=0，Iq=6.0A
     .theta = 0.0f,
     .ts = 0.0001f,                 // 100µs
     .pi_d = {
-        .kp = 0.2f,                // 0.2 - 保守增益
-        .ki = 0.02f,               // 0.02
+        .kp = 0.35f,               // 0.35
+        .ki = 2.0f,                // 2.0
         .integral = 0.0f,
         .output = 0.0f,
         .max_output = 100.0f       

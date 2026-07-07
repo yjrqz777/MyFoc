@@ -9,18 +9,21 @@
                 "d:\\document\\code\\stm32\\Myfoc2\\Drivers\\CMSIS\\Device\\ST\\STM32G4xx\\Include",
                 "d:\\document\\code\\stm32\\Myfoc2\\Drivers\\CMSIS\\Include",
                 "d:\\document\\code\\stm32\\Myfoc2\\Code",
-                "d:\\document\\code\\stm32\\Myfoc2\\Code\\Drv",
                 "d:\\document\\code\\stm32\\Myfoc2\\Code\\User",
+                "d:\\document\\code\\stm32\\Myfoc2\\Code\\Bsp",
+                "d:\\document\\code\\stm32\\Myfoc2\\Code\\Drv",
+                "d:\\document\\code\\stm32\\Myfoc2\\Code\\Bsp\\RTT",
                 "D:\\App\\Keil\\Keil_v5\\ARM\\ARMCC\\include",
                 "D:\\App\\Keil\\Keil_v5\\ARM\\ARMCC\\include\\rw",
                 "d:\\document\\code\\stm32\\Myfoc2\\MDK-ARM",
                 "d:\\document\\code\\stm32\\Myfoc2\\Core\\Src",
                 "d:\\document\\code\\stm32\\Myfoc2\\Drivers\\STM32G4xx_HAL_Driver\\Src",
-                "d:\\document\\code\\stm32\\Myfoc2\\Code\\Drv\\st7789v"
+                "d:\\document\\code\\stm32\\Myfoc2\\Code\\Bsp\\st7789v"
             ],
             "defines": [
                 "USE_HAL_DRIVER",
                 "STM32G474xx",
+                "__TARGET_FPU_VFP",
                 "__CC_ARM",
                 "__arm__",
                 "__align(x)=",

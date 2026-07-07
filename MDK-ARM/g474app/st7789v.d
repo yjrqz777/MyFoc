@@ -1,5 +1,5 @@
-g474app\st7789v.o: ..\Code\Drv\st7789v\st7789v.c
-g474app\st7789v.o: ..\Code\Drv\st7789v/st7789v.h
+g474app\st7789v.o: ..\Code\Bsp\st7789v\st7789v.c
+g474app\st7789v.o: ../Code/Bsp/st7789v/st7789v.h
 g474app\st7789v.o: ../Core/Inc/main.h
 g474app\st7789v.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h
 g474app\st7789v.o: ../Core/Inc/stm32g4xx_hal_conf.h
@@ -41,4 +41,4 @@ g474app\st7789v.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 g474app\st7789v.o: D:\App\Keil\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 g474app\st7789v.o: ../Core/Inc/spi.h
 g474app\st7789v.o: ../Core/Inc/gpio.h
-g474app\st7789v.o: ..\Code\Drv\st7789v/font.h
+g474app\st7789v.o: ../Code/Bsp/st7789v/font.h
