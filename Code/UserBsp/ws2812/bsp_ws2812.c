@@ -78,6 +78,8 @@ void BspWs2812_Init(void)
 {
     BspWs2812_Clear();
     __HAL_TIM_SET_COMPARE(&WS2812_TIM_HANDLE, WS2812_TIM_CHANNEL, 0u);
+    __HAL_TIM_ENABLE_OCxPRELOAD(&WS2812_TIM_HANDLE, WS2812_TIM_CHANNEL);
+    (void)HAL_TIM_GenerateEvent(&WS2812_TIM_HANDLE, TIM_EVENTSOURCE_UPDATE);
 }
 
 HAL_StatusTypeDef BspWs2812_SetColor(uint8_t red, uint8_t green, uint8_t blue)
@@ -110,13 +112,15 @@ HAL_StatusTypeDef BspWs2812_Show(void)
 
     if (ws2812_busy != 0u)
     {
-        return HAL_BUSY;
+        (void)HAL_TIM_PWM_Stop_DMA(&WS2812_TIM_HANDLE, WS2812_TIM_CHANNEL);
+        ws2812_busy = 0u;
     }
 
     BspWs2812_BuildBuffer();
     ws2812_busy = 1u;
     __HAL_TIM_SET_COUNTER(&WS2812_TIM_HANDLE, 0u);
     __HAL_TIM_SET_COMPARE(&WS2812_TIM_HANDLE, WS2812_TIM_CHANNEL, 0u);
+    (void)HAL_TIM_GenerateEvent(&WS2812_TIM_HANDLE, TIM_EVENTSOURCE_UPDATE);
 
     status = HAL_TIM_PWM_Start_DMA(&WS2812_TIM_HANDLE,
                                    WS2812_TIM_CHANNEL,

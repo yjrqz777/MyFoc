@@ -67,16 +67,16 @@ uint16_t PtTaskSystem(void)
 
         PT_WAIT_UNTIL(SYSTEM_TIME_MS / OS_TICK_MS);
 
-        ia = UserSystem_CurrentToDecimal3(BspAdc_GetIa());
-        ib = UserSystem_CurrentToDecimal3(BspAdc_GetIb());
-        ic = UserSystem_CurrentToDecimal3(BspAdc_GetIc());
-        ibus = UserSystem_CurrentToDecimal3(BspAdc_GetIbus());
+        // ia = UserSystem_CurrentToDecimal3(BspAdc_GetIa());
+        // ib = UserSystem_CurrentToDecimal3(BspAdc_GetIb());
+        // ic = UserSystem_CurrentToDecimal3(BspAdc_GetIc());
+        // ibus = UserSystem_CurrentToDecimal3(BspAdc_GetIbus());
 
-        SEGGER_RTT_printf(0, "%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u\r\n",
-                          ia.sign, (unsigned)ia.integer, (unsigned)ia.fraction,
-                          ib.sign, (unsigned)ib.integer, (unsigned)ib.fraction,
-                          ic.sign, (unsigned)ic.integer, (unsigned)ic.fraction,
-                          ibus.sign, (unsigned)ibus.integer, (unsigned)ibus.fraction);
+        // SEGGER_RTT_printf(0, "%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u\r\n",
+        //                   ia.sign, (unsigned)ia.integer, (unsigned)ia.fraction,
+        //                   ib.sign, (unsigned)ib.integer, (unsigned)ib.fraction,
+        //                   ic.sign, (unsigned)ic.integer, (unsigned)ic.fraction,
+        //                   ibus.sign, (unsigned)ibus.integer, (unsigned)ibus.fraction);
     }
 
     PT_END();

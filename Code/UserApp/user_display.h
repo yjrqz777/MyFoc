@@ -11,7 +11,7 @@
 
 #include "user_global.h"
 #include "user_system.h"
-#define USER_DISPLAY_PERIOD_MS 100u  /**< 显示刷新周期（毫秒） */
+#define USER_DISPLAY_PERIOD_MS 10u  /**< 显示刷新周期（毫秒） */
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,6 +25,7 @@ typedef struct tDisplayFunDataDef
 
 typedef struct tDisDataDef
 {
+    uint8_t u8color[3];
     uint16_t u16RGB;
 } tDisDataDef;
 

@@ -113,18 +113,19 @@ void buttons_init(void)
     }
 
     button_init(&btn1, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 1u);
-    // button_init(&btn2, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 2u);
+    button_init(&btn2, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 2u);
     // button_init(&btn3, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 3u);
     // button_init(&btn4, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 4u);
 
     // button_attach_all_events(&btn1);
     button_attach(&btn1, BTN_SINGLE_CLICK, UserStatusSwitch);
+    // button_attach(&btn1, BTN_SINGLE_CLICK, UserStatusSwitch);
     // button_attach_all_events(&btn2);
     // button_attach_all_events(&btn3);
     // button_attach_all_events(&btn4);
 
     button_start(&btn1);
-    // button_start(&btn2);
+    button_start(&btn2);
     // button_start(&btn3);
     // button_start(&btn4);
 

@@ -16,11 +16,38 @@
 #include "bsp_adc.h"
 #include "bsp_hall.h"
 #include "bsp_lcd.h"
+#include "bsp_ws2812.h"
 #include "user_button.h"
 #include "user_foc.h"
 #include "st7789v/st7789v.h"
 
 tDisDataDef tDisData;
+
+#define DISPLAY_WS2812_LEVEL 255u
+
+static void UserDisplay_SetWs2812Color(uint8_t red, uint8_t green, uint8_t blue)
+{
+    static uint8_t last_valid = 0u;
+    static uint8_t last_red = 0u;
+    static uint8_t last_green = 0u;
+    static uint8_t last_blue = 0u;
+
+    if ((last_valid != 0u) &&
+        (last_red == red) &&
+        (last_green == green) &&
+        (last_blue == blue))
+    {
+        return;
+    }
+
+    if (BspWs2812_WriteColor(red, green, blue) == HAL_OK)
+    {
+        last_valid = 1u;
+        last_red = red;
+        last_green = green;
+        last_blue = blue;
+    }
+}
 
 /** @brief 显示更新周期（毫秒） */
 
@@ -31,12 +58,18 @@ tDisDataDef tDisData;
 void UserDisplay_Init(void)
 {
     BspLcd_Init();
+    // BspWs2812_Init();
 }
 
 
 void DisplayInit(void)
 {
     static uint8_t init_done = 0u;
+
+    tDisData.u8color[0] = DISPLAY_WS2812_LEVEL;
+    tDisData.u8color[1] = DISPLAY_WS2812_LEVEL;
+    tDisData.u8color[2] = 0;
+
     if (init_done == 0)
     {
         init_done = 1;
@@ -46,6 +79,11 @@ void DisplayInit(void)
 void DisplayPowerOn(void)
 {
     static uint8_t init_done = 0u;
+
+    tDisData.u8color[0] = DISPLAY_WS2812_LEVEL;
+    tDisData.u8color[1] = 0;
+    tDisData.u8color[2] = 0;
+
     if (init_done == 0)
     {
         init_done = 1;
@@ -58,10 +96,15 @@ void DisplayPowerOn(void)
 void DisplayRunning(void)
 {
     static uint8_t u8timecount = 0u;
+    static uint16_t u8timecount2 = 0u;
     uint8_t hall_state = BspHall_GetState();
     DQCurrent_t dq = FOC_GetDQCurrent();
     (void)dq;
 
+    
+    tDisData.u8color[0] = 0;
+    tDisData.u8color[1] = DISPLAY_WS2812_LEVEL;
+    tDisData.u8color[2] = 0;
     u8timecount++;
     if (u8timecount < 100/USER_DISPLAY_PERIOD_MS)
     {
@@ -79,8 +122,9 @@ void DisplayRunning(void)
 
     /* 中列：按键状态 */
     // BspLcd_ShowUInt(96, 24, UserButton_GetPressedMask(), 2);
-    // BspLcd_ShowUInt(96, 48, UserButton_GetPressed(1), 1);
-    // BspLcd_ShowUInt(96, 72, UserButton_GetPressed(2), 1);
+    // BspLcd_ShowUInt(96, 0, UserButton_GetPressed(1), 1);
+    BspLcd_ShowUInt(96, 0, UserButton_GetPressed(2), 1);
+    BspLcd_ShowUInt(120, 0, u8timecount2++, 1);
     // BspLcd_ShowUInt(96, 96, UserButton_GetPressed(3), 1);
     // BspLcd_ShowUInt(96, 120, UserButton_GetPressed(4), 1);
 
@@ -132,8 +176,8 @@ uint16_t PtTaskDisplay(void)
                 break;
             }
         }
-        // SEGGER_RTT_printf(0, "%d,%d,%d\r\n", tSysData.enuState,tSysData.u32OpenTimes, tSysData.u32PowerOnTimes);
-        
+        SEGGER_RTT_printf(0, "%d,%d,%d\r\n", tSysData.enuState,tSysData.u32OpenTimes, tSysData.u32PowerOnTimes);
+        // UserDisplay_SetWs2812Color(tDisData.u8color[0], tDisData.u8color[1], tDisData.u8color[2]);
 
         // DisPlayDrive();
 

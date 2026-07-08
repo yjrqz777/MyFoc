@@ -131,6 +131,7 @@ int main(void)
   DebugRtt_Init();
   UserMotor_Init();
 
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
   if (UserMotor_Start() != HAL_OK)
   {
       Error_Handler();

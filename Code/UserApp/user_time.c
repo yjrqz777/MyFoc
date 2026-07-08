@@ -11,7 +11,7 @@ void UserSysTimeUpdate(void)
 {
     tSysData.u32PowerOnTimes += TIME_TIME_MS;
 
-    if (tSysData.enuState == E_SYS_STATE_INIT && tSysData.u32PowerOnTimes > 1000u)
+    if (tSysData.enuState == E_SYS_STATE_INIT && tSysData.u32PowerOnTimes > 100u)
     {
         tSysData.enuState = E_SYS_STATE_POWER_ON;
     }

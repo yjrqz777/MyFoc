@@ -27,7 +27,20 @@ Project File Date:  07/08/2026
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\App\Keil\Keil_v5\ARM\ARMCC\Bin'
 Build target 'g474app'
-"g474app\g474app.axf" - 0 Error(s), 0 Warning(s).
+compiling user_display.c...
+..\Code\UserApp\user_display.c(185): warning:  #111-D: statement is unreachable
+      PT_END();
+..\Code\UserApp\user_display.c(159): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_display.c(159): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_display.c(28): warning:  #177-D: function "UserDisplay_SetWs2812Color"  was declared but never referenced
+  static void UserDisplay_SetWs2812Color(uint8_t red, uint8_t green, uint8_t blue)
+..\Code\UserApp\user_display.c: 4 warnings, 0 errors
+linking...
+Program Size: Code=26780 RO-data=19224 RW-data=212 ZI-data=4588  
+FromELF: creating hex file...
+"g474app\g474app.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -50,7 +63,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@6.1.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>
