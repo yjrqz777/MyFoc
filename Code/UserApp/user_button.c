@@ -1,28 +1,39 @@
-/***************************************************************************************************
- * Author: yjrqz777 3210551161@qq.com
- * Date: 2026-01-06 20:19:37
- * LastEditTime: 2026-07-07 22:57:45
- * LastEditors: yjrqz777 3210551161@qq.com
- * Description:
- * FilePath: \Myfoc2\Code\UserApp\user_button.c
- * @YJRQZ777
-***************************************************************************************************/
+/**
+ * @file    user_button.c
+ * @brief   用户按键管理实现
+ *******************************************************************************
+ * @note    基于 multi-button 库的 4 按键管理。
+ *          支持单击、双击、长按、重复触发等事件，
+ *          按键事件通过 RTT 输出调试信息。
+ *******************************************************************************
+ */
+
 #include "user_button.h"
 
 #include "Task.h"
 #include "bsp_button.h"
 #include "SEGGER_RTT.h"
 
-#define USER_BUTTON_NUM          4u
-#define USER_BUTTON_ACTIVE_LEVEL 0u
+#define USER_BUTTON_NUM          4u   /**< 按键总数 */
+#define USER_BUTTON_ACTIVE_LEVEL 0u   /**< 按键按下时的有效电平（低电平有效） */
 
+/** @brief 4 个按键的 Button 结构体实例 */
 static Button btn1;
 static Button btn2;
 static Button btn3;
 static Button btn4;
+
+/** @brief 初始化完成标志 */
 static uint8_t button_inited = 0u;
+
+/** @brief 各按键上次触发事件记录 */
 static uint8_t button_last_event[USER_BUTTON_NUM] = {0u};
 
+/**
+ * @brief  根据 ID 获取按键结构体指针
+ * @param[in] button_id  按键 ID（1~4）
+ * @return Button 结构体指针，无效 ID 返回 NULL
+ */
 static Button *UserButton_GetHandle(uint8_t button_id)
 {
     switch (button_id) {
@@ -39,11 +50,21 @@ static Button *UserButton_GetHandle(uint8_t button_id)
     }
 }
 
+/**
+ * @brief  读取按键 GPIO 电平（multi-button HAL 接口）
+ * @param[in] button_id  按键 ID
+ * @return GPIO 引脚电平（0 或 1）
+ */
 static uint8_t read_button_gpio(uint8_t button_id)
 {
     return BspButton_ReadLevel(button_id);
 }
 
+/**
+ * @brief  按键事件通用回调函数
+ * @param[in] btn  触发事件的按键结构体指针
+ * @note   记录事件到 button_last_event 数组，并通过 RTT 输出日志
+ */
 static void button_event_handler(Button *btn)
 {
     uint8_t index;
@@ -63,6 +84,12 @@ static void button_event_handler(Button *btn)
                       button_get_repeat_count(btn));
 }
 
+/**
+ * @brief  为指定按键注册所有事件回调
+ * @param[in] btn  按键结构体指针
+ * @note   注册事件：PRESS_DOWN, PRESS_UP, PRESS_REPEAT,
+ *         SINGLE_CLICK, DOUBLE_CLICK, LONG_PRESS_START, LONG_PRESS_HOLD
+ */
 static void button_attach_all_events(Button *btn)
 {
     button_attach(btn, BTN_PRESS_DOWN, button_event_handler);
@@ -74,6 +101,11 @@ static void button_attach_all_events(Button *btn)
     button_attach(btn, BTN_LONG_PRESS_HOLD, button_event_handler);
 }
 
+/**
+ * @brief  初始化所有 4 个按键
+ * @note   依次初始化 btn1~btn4，注册所有事件回调，
+ *         并将按键加入轮询链表。重复调用只执行一次。
+ */
 void buttons_init(void)
 {
     if (button_inited != 0u) {
@@ -98,11 +130,22 @@ void buttons_init(void)
     button_inited = 1u;
 }
 
+/**
+ * @brief  获取按键 GPIO 原始电平掩码
+ * @return 4-bit 掩码，bit0~bit3 对应 KEY1~KEY4
+ * @note   直接读取 GPIO 电平，不受去抖逻辑影响
+ */
 uint8_t UserButton_GetRawMask(void)
 {
     return BspButton_GetRawMask();
 }
 
+/**
+ * @brief  查询指定按键当前按下状态
+ * @param[in] button_id  按键 ID（1~4）
+ * @retval 1  正在按下
+ * @retval 0  未按下或 ID 无效
+ */
 uint8_t UserButton_GetPressed(uint8_t button_id)
 {
     Button *btn = UserButton_GetHandle(button_id);
@@ -116,6 +159,10 @@ uint8_t UserButton_GetPressed(uint8_t button_id)
     return (pressed > 0) ? 1u : 0u;
 }
 
+/**
+ * @brief  获取所有按键的按下状态掩码
+ * @return 4-bit 掩码，bit0~bit3 对应 KEY1~KEY4
+ */
 uint8_t UserButton_GetPressedMask(void)
 {
     uint8_t mask = 0u;
@@ -128,6 +175,12 @@ uint8_t UserButton_GetPressedMask(void)
     return mask;
 }
 
+/**
+ * @brief  获取指定按键的上次触发事件
+ * @param[in] button_id  按键 ID（1~4）
+ * @return 事件类型（ButtonEvent 枚举值）
+ * @retval BTN_NONE_PRESS  ID 无效或未触发事件
+ */
 uint8_t UserButton_GetLastEvent(uint8_t button_id)
 {
     if (button_id == 0u || button_id > USER_BUTTON_NUM) {
@@ -137,6 +190,12 @@ uint8_t UserButton_GetLastEvent(uint8_t button_id)
     return button_last_event[button_id - 1u];
 }
 
+/**
+ * @brief  Protothread 按键扫描协程任务
+ * @return PT 状态码
+ * @note   首次进入时初始化按键，
+ *         之后以 TICKS_INTERVAL（5ms）为周期调用 button_ticks() 扫描按键
+ */
 uint16_t PtTaskButton(void)
 {
     PT_BEGIN()

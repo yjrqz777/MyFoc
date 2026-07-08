@@ -1,3 +1,12 @@
+/**
+ * @file    bsp_pwm.h
+ * @brief   PWM 底层驱动头文件 — 三相六路 PWM 输出
+ *******************************************************************************
+ * @note    TIM1 高级定时器，6 路互补 PWM（CH1~CH3 + CH1N~CH3N）+ CH4 辅助输出
+ *          支持电压标幺值到占空比的转换
+ *******************************************************************************
+ */
+
 #ifndef __BSP_PWM_H__
 #define __BSP_PWM_H__
 
@@ -17,4 +26,4 @@ void BspPwm_SetVoltageABC(float ua, float ub, float uc);
 }
 #endif
 
-#endif
+#endif /* __BSP_PWM_H__ */

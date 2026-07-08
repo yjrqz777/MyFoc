@@ -1,8 +1,19 @@
+/**
+ * @file    global.h
+ * @brief   全局位模式常量定义
+ * @note    定义了从 0x00 到 0xFF 所有 8-bit 二进制位模式的宏别名，
+ *          方便在配置寄存器或位操作时直观地表达二进制值。
+ *          宏命名规则：下划线分隔每 4 位，如 _0101_1010 = 0x5A。
+ *******************************************************************************
+ */
+
 #ifndef __GLOBAL_H__
 #define __GLOBAL_H__
 
-
-// 低4位（0x00-0x0F）
+/**
+ * @name   8-bit 位模式常量 0x00~0x0F
+ * @{
+ */
 #define _0000_0000 0x00
 #define _0000_0001 0x01
 #define _0000_0010 0x02
@@ -20,7 +31,9 @@
 #define _0000_1110 0x0E
 #define _0000_1111 0x0F
 
-// 0x10-0x1F
+/** @name   0x10-0x1F
+ *  @{
+ */
 #define _0001_0000 0x10
 #define _0001_0001 0x11
 #define _0001_0010 0x12
@@ -38,7 +51,9 @@
 #define _0001_1110 0x1E
 #define _0001_1111 0x1F
 
-// 0x20-0x2F
+/** @name   0x20-0x2F
+ *  @{
+ */
 #define _0010_0000 0x20
 #define _0010_0001 0x21
 #define _0010_0010 0x22
@@ -56,7 +71,9 @@
 #define _0010_1110 0x2E
 #define _0010_1111 0x2F
 
-// 0x30-0x3F
+/** @name   0x30-0x3F
+ *  @{
+ */
 #define _0011_0000 0x30
 #define _0011_0001 0x31
 #define _0011_0010 0x32
@@ -74,7 +91,9 @@
 #define _0011_1110 0x3E
 #define _0011_1111 0x3F
 
-// 0x40-0x4F
+/** @name   0x40-0x4F
+ *  @{
+ */
 #define _0100_0000 0x40
 #define _0100_0001 0x41
 #define _0100_0010 0x42
@@ -92,7 +111,9 @@
 #define _0100_1110 0x4E
 #define _0100_1111 0x4F
 
-// 0x50-0x5F
+/** @name   0x50-0x5F
+ *  @{
+ */
 #define _0101_0000 0x50
 #define _0101_0001 0x51
 #define _0101_0010 0x52
@@ -110,7 +131,9 @@
 #define _0101_1110 0x5E
 #define _0101_1111 0x5F
 
-// 0x60-0x6F
+/** @name   0x60-0x6F
+ *  @{
+ */
 #define _0110_0000 0x60
 #define _0110_0001 0x61
 #define _0110_0010 0x62
@@ -128,7 +151,9 @@
 #define _0110_1110 0x6E
 #define _0110_1111 0x6F
 
-// 0x70-0x7F
+/** @name   0x70-0x7F
+ *  @{
+ */
 #define _0111_0000 0x70
 #define _0111_0001 0x71
 #define _0111_0010 0x72
@@ -146,7 +171,9 @@
 #define _0111_1110 0x7E
 #define _0111_1111 0x7F
 
-// 0x80-0x8F
+/** @name   0x80-0x8F
+ *  @{
+ */
 #define _1000_0000 0x80
 #define _1000_0001 0x81
 #define _1000_0010 0x82
@@ -164,7 +191,9 @@
 #define _1000_1110 0x8E
 #define _1000_1111 0x8F
 
-// 0x90-0x9F
+/** @name   0x90-0x9F
+ *  @{
+ */
 #define _1001_0000 0x90
 #define _1001_0001 0x91
 #define _1001_0010 0x92
@@ -182,7 +211,9 @@
 #define _1001_1110 0x9E
 #define _1001_1111 0x9F
 
-// 0xA0-0xAF
+/** @name   0xA0-0xAF
+ *  @{
+ */
 #define _1010_0000 0xA0
 #define _1010_0001 0xA1
 #define _1010_0010 0xA2
@@ -200,7 +231,9 @@
 #define _1010_1110 0xAE
 #define _1010_1111 0xAF
 
-// 0xB0-0xBF
+/** @name   0xB0-0xBF
+ *  @{
+ */
 #define _1011_0000 0xB0
 #define _1011_0001 0xB1
 #define _1011_0010 0xB2
@@ -218,7 +251,9 @@
 #define _1011_1110 0xBE
 #define _1011_1111 0xBF
 
-// 0xC0-0xCF
+/** @name   0xC0-0xCF
+ *  @{
+ */
 #define _1100_0000 0xC0
 #define _1100_0001 0xC1
 #define _1100_0010 0xC2
@@ -236,7 +271,9 @@
 #define _1100_1110 0xCE
 #define _1100_1111 0xCF
 
-// 0xD0-0xDF
+/** @name   0xD0-0xDF
+ *  @{
+ */
 #define _1101_0000 0xD0
 #define _1101_0001 0xD1
 #define _1101_0010 0xD2
@@ -254,7 +291,9 @@
 #define _1101_1110 0xDE
 #define _1101_1111 0xDF
 
-// 0xE0-0xEF
+/** @name   0xE0-0xEF
+ *  @{
+ */
 #define _1110_0000 0xE0
 #define _1110_0001 0xE1
 #define _1110_0010 0xE2
@@ -272,7 +311,9 @@
 #define _1110_1110 0xEE
 #define _1110_1111 0xEF
 
-// 0xF0-0xFF
+/** @name   0xF0-0xFF
+ *  @{
+ */
 #define _1111_0000 0xF0
 #define _1111_0001 0xF1
 #define _1111_0010 0xF2
@@ -289,4 +330,6 @@
 #define _1111_1101 0xFD
 #define _1111_1110 0xFE
 #define _1111_1111 0xFF
+/** @} */
+
 #endif /* __GLOBAL_H__ */

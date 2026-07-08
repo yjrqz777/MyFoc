@@ -12,128 +12,112 @@
 
 #include "st7789v/font.h"
 
-/***************************************************************************************************
- * 功能描述: SPI 发送字节函数
- * 输入参数: TxData    要发送的数据size    发送数据的字节大小
- * 输出参数: 
- * 返 回 值: 0:写入成功,其他:写入失败
- * 其它说明: 
- * param {uint8_t} TxData
- * param {uint16_t} size
-***************************************************************************************************/
+/**
+ * @brief  SPI 发送字节（阻塞模式）
+ * @param[in] TxData  待发送的数据
+ * @param[in] size    发送字节数
+ * @retval HAL_OK     发送成功
+ * @retval 其他       发送失败（HAL 错误码）
+ */
 uint8_t SPI_WriteByte(uint8_t TxData, uint16_t size)
 {
     return HAL_SPI_Transmit(&hspi3, &TxData, size, HAL_MAX_DELAY);
-   	// return HAL_SPI_Transmit_DMA(&hspi3,&TxData,size);
 }
 
-/***************************************************************************************************
- * 功能描述: 
- * 输入参数: 
- * 输出参数: 
- * 返 回 值: 
- * 其它说明: 
- * param {uint8_t} cmd
-***************************************************************************************************/
+/**
+ * @brief  向 LCD 写入一个字节的命令
+ * @param[in] cmd  命令字节
+ */
 static void LCD_Write_Cmd(uint8_t cmd)
 {
     LCD_DC(CMD);
     SPI_WriteByte(cmd, 1);
 }
 
-
-/***************************************************************************************************
- * 功能描述: 
- * 输入参数: 
- * 输出参数: 
- * 返 回 值: 
- * 其它说明: 
- * param {uint8_t} dat
-***************************************************************************************************/
+/**
+ * @brief  向 LCD 写入一个字节的数据
+ * @param[in] dat  数据字节
+ */
 static void LCD_Write_Data(uint8_t dat)
 {
     LCD_DC(DATA);
     SPI_WriteByte(dat, 1);
 }
-/***************************************************************************************************
- * 功能描述: 
- * 输入参数: 
- * 输出参数: 
- * 返 回 值: 
- * 其它说明: 
- * param {uint16_t} dat
-***************************************************************************************************/
+
+/**
+ * @brief  向 LCD 写入两字节数据（大端序）
+ * @param[in] dat  16-bit 数据（先高 8 位，后低 8 位）
+ */
 void LCD_Write_Data2Bytes(uint16_t dat)
 {
     LCD_DC(DATA);
 	LCD_Write_Data(dat>>8);
 	LCD_Write_Data(dat);
 }
-/***************************************************************************************************
- * 功能描述: 
- * 输入参数: 
- * 输出参数: 
- * 返 回 值: 
- * 其它说明: 
- * param {uint16_t} x1
- * param {uint16_t} y1
- * param {uint16_t} x2
- * param {uint16_t} y2
-***************************************************************************************************/
+
+/**
+ * @brief  设置 LCD 读写地址窗口
+ * @param[in] x1  列起始地址
+ * @param[in] y1  行起始地址
+ * @param[in] x2  列结束地址
+ * @param[in] y2  行结束地址
+ * @note   根据 USE_HORIZONTAL 自动进行偏移校正
+ *         命令序列：0x2a（列地址）→ 0x2b（行地址）→ 0x2c（存储器写）
+ */
 void LCD_Address_Set(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 {
 	if(USE_HORIZONTAL==0)
 	{
-		LCD_Write_Cmd(0x2a);//列地址设置
+		LCD_Write_Cmd(0x2a);        // 列地址设置
 		LCD_Write_Data2Bytes(x1+52);
 		LCD_Write_Data2Bytes(x2+52);
-		LCD_Write_Cmd(0x2b);//行地址设置
+		LCD_Write_Cmd(0x2b);        // 行地址设置
 		LCD_Write_Data2Bytes(y1+40);
 		LCD_Write_Data2Bytes(y2+40);
-		LCD_Write_Cmd(0x2c);//储存器写
+		LCD_Write_Cmd(0x2c);        // 存储器写
 	}
 	else if(USE_HORIZONTAL==1)
 	{
-		LCD_Write_Cmd(0x2a);//列地址设置
+		LCD_Write_Cmd(0x2a);        // 列地址设置
 		LCD_Write_Data2Bytes(x1+53);
 		LCD_Write_Data2Bytes(x2+53);
-		LCD_Write_Cmd(0x2b);//行地址设置
+		LCD_Write_Cmd(0x2b);        // 行地址设置
 		LCD_Write_Data2Bytes(y1+40);
 		LCD_Write_Data2Bytes(y2+40);
-		LCD_Write_Cmd(0x2c);//储存器写
+		LCD_Write_Cmd(0x2c);        // 存储器写
 	}
 	else if(USE_HORIZONTAL==2)
 	{
-		LCD_Write_Cmd(0x2a);//列地址设置
+		LCD_Write_Cmd(0x2a);        // 列地址设置
 		LCD_Write_Data2Bytes(x1+40);
 		LCD_Write_Data2Bytes(x2+40);
-		LCD_Write_Cmd(0x2b);//行地址设置
+		LCD_Write_Cmd(0x2b);        // 行地址设置
 		LCD_Write_Data2Bytes(y1+53);
 		LCD_Write_Data2Bytes(y2+53);
-		LCD_Write_Cmd(0x2c);//储存器写
+		LCD_Write_Cmd(0x2c);        // 存储器写
 	}
 	else
 	{
-		LCD_Write_Cmd(0x2a);//列地址设置
+		LCD_Write_Cmd(0x2a);        // 列地址设置
 		LCD_Write_Data2Bytes(x1+40);
 		LCD_Write_Data2Bytes(x2+40);
-		LCD_Write_Cmd(0x2b);//行地址设置
+		LCD_Write_Cmd(0x2b);        // 行地址设置
 		LCD_Write_Data2Bytes(y1+52);
 		LCD_Write_Data2Bytes(y2+52);
-		LCD_Write_Cmd(0x2c);//储存器写
+		LCD_Write_Cmd(0x2c);        // 存储器写
 	}
 }
-/***************************************************************************************************
- * 功能描述: 
- * 输入参数: 
- * 输出参数: 
- * 返 回 值: 
- * 其它说明: 
- * param {uint8_t} Dir_Mode
-***************************************************************************************************/
+
+/**
+ * @brief  设置 LCD 显示方向
+ * @param[in] Dir_Mode  方向模式
+ *                      0 = 竖屏（正常），1 = 竖屏（翻转）
+ *                      2 = 横屏（正常），3 = 横屏（翻转）
+ * @note   通过命令 0x36（MADCTL）设置扫描方向和 RGB 顺序
+ */
 void ST7789V_SetDir(uint8_t Dir_Mode)
 {
-    LCD_Write_Cmd(0x36); /*显示方向*/
+    LCD_Write_Cmd(0x36); /* 显示方向 */
     if (Dir_Mode == 0)
         LCD_Write_Data(0x00);
     else if (Dir_Mode == 1)
@@ -227,6 +211,12 @@ void ST7789V_SetDir(uint8_t Dir_Mode)
 //    free(buf);
 //}
 
+/**
+ * @brief  在指定坐标写入一个像素点颜色
+ * @param[in] x1     x 坐标
+ * @param[in] y1     y 坐标
+ * @param[in] color  像素颜色（RGB565）
+ */
 void LCD_color_point(uint16_t x1, uint16_t y1, uint16_t color)
 {
 
@@ -235,44 +225,52 @@ void LCD_color_point(uint16_t x1, uint16_t y1, uint16_t color)
 }
 
 
-#define DUBEG 0
-
+/**
+ * @brief  指定区域填充单一颜色
+ * @param[in] xsta  起始 x 坐标
+ * @param[in] ysta  起始 y 坐标
+ * @param[in] xend  结束 x 坐标（不含）
+ * @param[in] yend  结束 y 坐标（不含）
+ * @param[in] color 填充颜色（RGB565）
+ */
 void LCD_Fill(uint16_t xsta,uint16_t ysta,uint16_t xend,uint16_t yend,uint16_t color)
-{          
-	uint16_t i,j; 
-	LCD_Address_Set(xsta,ysta,xend-1,yend-1);//设置显示范围
+{
+	uint16_t i,j;
+	LCD_Address_Set(xsta,ysta,xend-1,yend-1);// 设置显示范围
 	for(i=ysta;i<yend;i++)
-	{													   	 	
+	{
 		for(j=xsta;j<xend;j++)
 		{
 			LCD_Write_Data2Bytes(color);
 		}
-	} 					  	    
+	}
 }
 
 /**
- * @brief   LCD初始化
- * @param   none
- * @return  none
+ * @brief  ST7789V LCD 初始化
+ * @note   执行完整的初始化序列，包括：
+ *         - 硬件复位（RESET 引脚时序）
+ *         - 退出睡眠模式（SLPOUT，命令 0x11）
+ *         - 显示方向设置（MADCTL，命令 0x36）
+ *         - 色彩格式设置（COLMOD，命令 0x3A — 16-bit RGB565）
+ *         - 帧率设置（命令 0xB2 / 0xB7）
+ *         - 电源设置（命令 0xBB / 0xC0~0xC6 / 0xD0）
+ *         - 正负 Gamma 校正（命令 0xE0 / 0xE1）
+ *         - 显示开启（DISPON，命令 0x29）
+ *         初始化完成后显示启动画面
  */
-
 void st7789v_init(void)
 {
-//    LCD_BLK(0);
     LCD_CS(0);
     HAL_Delay(100);
-    //
-    //		HAL_Delay();
     LCD_RST(1);
     HAL_Delay(100);
     LCD_RST(0);
     HAL_Delay(100);
     LCD_RST(1);
     HAL_Delay(100);
-    /* 初始化和LCD通信的引脚 */
-    //    HAL_Delay(120);
 
-    /* 关闭睡眠模式 */
+    /* 退出睡眠模式 */
     LCD_Write_Cmd(0x11);
     HAL_Delay(120);
     ST7789V_SetDir(USE_HORIZONTAL);
@@ -369,12 +367,12 @@ void st7789v_init(void)
 
 
 
-/******************************************************************************
-      函数说明：在指定位置画点
-      入口数据：x,y 画点坐标
-                color 点的颜色
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  在指定位置画一个像素点
+ * @param[in] x      x 坐标
+ * @param[in] y      y 坐标
+ * @param[in] color  点的颜色（RGB565）
+ */
 void LCD_DrawPoint(uint16_t x,uint16_t y,uint16_t color)
 {
 	LCD_Address_Set(x,y,x,y);//设置光标位置 
@@ -382,13 +380,12 @@ void LCD_DrawPoint(uint16_t x,uint16_t y,uint16_t color)
 } 
 
 
-/******************************************************************************
-      函数说明：画线
-      入口数据：x1,y1   起始坐标
-                x2,y2   终止坐标
-                color   线的颜色
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  画线（Bresenham 算法）
+ * @param[in] x1,y1  起点坐标
+ * @param[in] x2,y2  终点坐标
+ * @param[in] color  线的颜色（RGB565）
+ */
 void LCD_DrawLine(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t color)
 {
 	uint16_t t; 
@@ -425,13 +422,12 @@ void LCD_DrawLine(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t color
 }
 
 
-/******************************************************************************
-      函数说明：画矩形
-      入口数据：x1,y1   起始坐标
-                x2,y2   终止坐标
-                color   矩形的颜色
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  画空心矩形
+ * @param[in] x1,y1  左上角坐标
+ * @param[in] x2,y2  右下角坐标
+ * @param[in] color  边框颜色（RGB565）
+ */
 void LCD_DrawRectangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,uint16_t color)
 {
 	LCD_DrawLine(x1,y1,x2,y1,color);
@@ -441,13 +437,12 @@ void LCD_DrawRectangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,uint16
 }
 
 
-/******************************************************************************
-      函数说明：画圆
-      入口数据：x0,y0   圆心坐标
-                r       半径
-                color   圆的颜色
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  画空心圆（Bresenham 算法）
+ * @param[in] x0,y0  圆心坐标
+ * @param[in] r      半径（像素）
+ * @param[in] color  圆的颜色（RGB565）
+ */
 void Draw_Circle(uint16_t x0,uint16_t y0,uint8_t r,uint16_t color)
 {
 	int a,b;
@@ -472,16 +467,15 @@ void Draw_Circle(uint16_t x0,uint16_t y0,uint8_t r,uint16_t color)
 
 
 
-/******************************************************************************
-      函数说明：显示单个12x12汉字
-      入口数据：x,y显示坐标
-                *s 要显示的汉字
-                fc 字的颜色
-                bc 字的背景色
-                sizey 字号
-                mode:  0非叠加模式  1叠加模式
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  显示单个 12×12 汉字
+ * @param[in] x,y    显示坐标
+ * @param[in] s      汉字指针（2 字节 GB2312 编码）
+ * @param[in] fc     字体颜色
+ * @param[in] bc     背景色
+ * @param[in] sizey  字号（固定 12）
+ * @param[in] mode   0 = 非叠加模式（带背景），1 = 叠加模式（不覆盖背景）
+ */
 void LCD_ShowChinese12x12(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t bc,uint8_t sizey,uint8_t mode)
 {
 	uint8_t i,j,m=0;
@@ -530,16 +524,15 @@ void LCD_ShowChinese12x12(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t 
 	}
 } 
 
-/******************************************************************************
-      函数说明：显示单个16x16汉字
-      入口数据：x,y显示坐标
-                *s 要显示的汉字
-                fc 字的颜色
-                bc 字的背景色
-                sizey 字号
-                mode:  0非叠加模式  1叠加模式
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  显示单个 16×16 汉字
+ * @param[in] x,y    显示坐标
+ * @param[in] s      汉字指针（2 字节 GB2312 编码）
+ * @param[in] fc     字体颜色
+ * @param[in] bc     背景色
+ * @param[in] sizey  字号（固定 16）
+ * @param[in] mode   0 = 非叠加模式，1 = 叠加模式
+ */
 void LCD_ShowChinese16x16(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t bc,uint8_t sizey,uint8_t mode)
 {
 	uint8_t i,j,m=0;
@@ -588,16 +581,15 @@ void LCD_ShowChinese16x16(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t 
 } 
 
 
-/******************************************************************************
-      函数说明：显示单个24x24汉字
-      入口数据：x,y显示坐标
-                *s 要显示的汉字
-                fc 字的颜色
-                bc 字的背景色
-                sizey 字号
-                mode:  0非叠加模式  1叠加模式
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  显示单个 24×24 汉字
+ * @param[in] x,y    显示坐标
+ * @param[in] s      汉字指针（2 字节 GB2312 编码）
+ * @param[in] fc     字体颜色
+ * @param[in] bc     背景色
+ * @param[in] sizey  字号（固定 24）
+ * @param[in] mode   0 = 非叠加模式，1 = 叠加模式
+ */
 void LCD_ShowChinese24x24(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t bc,uint8_t sizey,uint8_t mode)
 {
 	uint8_t i,j,m=0;
@@ -645,16 +637,15 @@ void LCD_ShowChinese24x24(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t 
 	}
 } 
 
-/******************************************************************************
-      函数说明：显示单个32x32汉字
-      入口数据：x,y显示坐标
-                *s 要显示的汉字
-                fc 字的颜色
-                bc 字的背景色
-                sizey 字号
-                mode:  0非叠加模式  1叠加模式
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  显示单个 32×32 汉字
+ * @param[in] x,y    显示坐标
+ * @param[in] s      汉字指针（2 字节 GB2312 编码）
+ * @param[in] fc     字体颜色
+ * @param[in] bc     背景色
+ * @param[in] sizey  字号（固定 32）
+ * @param[in] mode   0 = 非叠加模式，1 = 叠加模式
+ */
 void LCD_ShowChinese32x32(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t bc,uint8_t sizey,uint8_t mode)
 {
 	uint8_t i,j,m=0;
@@ -703,20 +694,16 @@ void LCD_ShowChinese32x32(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t 
 	}
 }
 
-/***************************************************************************************************
- * 功能描述: 
- * 输入参数: 
- * 输出参数: 
- * 返 回 值: 
- * 其它说明: 
- * param {uint16_t} x
- * param {uint16_t} y
- * param {uint8_t} *s
- * param {uint16_t} fc
- * param {uint16_t} bc
- * param {uint8_t} sizey
- * param {uint8_t} mode
-***************************************************************************************************/
+/**
+ * @brief  显示自定义尺寸汉字（用于特殊大字显示）
+ * @param[in] x,y      显示坐标
+ * @param[in] s        汉字字符串
+ * @param[in] fc       字体颜色
+ * @param[in] bc       背景色
+ * @param[in] sizeW    字符宽度
+ * @param[in] sizeH    字符高度
+ * @param[in] mode     0 = 非叠加模式，1 = 叠加模式
+ */
 void LCD_ShowChineseTEST(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t bc,uint8_t sizeW,uint8_t sizeH,uint8_t mode)
 {
 	uint16_t i,j,m=0;
@@ -780,16 +767,16 @@ void LCD_ShowChineseTEST(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t b
 		continue;  //查找到对应点阵字库立即退出，防止多个汉字重复取模带来影响
 	}
 }
-/******************************************************************************
-      函数说明：显示汉字串
-      入口数据：x,y显示坐标
-                *s 要显示的汉字串
-                fc 字的颜色
-                bc 字的背景色
-                sizey 字号 可选 16 24 32
-                mode:  0非叠加模式  1叠加模式
-      返回值：  无
-******************************************************************************/
+
+/**
+ * @brief  显示汉字字符串（根据字号自动选择对应字库）
+ * @param[in] x,y    显示坐标
+ * @param[in] s      汉字字符串（以 '\0' 结尾，GB2312 编码）
+ * @param[in] fc     字体颜色
+ * @param[in] bc     背景色
+ * @param[in] sizey  字号：12/16/24/32
+ * @param[in] mode   0 = 非叠加模式，1 = 叠加模式
+ */
 void LCD_ShowChinese(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t bc,uint8_t sizey,uint8_t mode)
 {
 	while(*s!=0)
@@ -803,16 +790,16 @@ void LCD_ShowChinese(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t bc,ui
 		x+=sizey;
 	}
 }
-/******************************************************************************
-      函数说明：显示单个字符
-      入口数据：x,y显示坐标
-                num 要显示的字符
-                fc 字的颜色
-                bc 字的背景色
-                sizey 字号
-                mode:  0非叠加模式  1叠加模式
-      返回值：  无
-******************************************************************************/
+
+/**
+ * @brief  显示一个 ASCII 字符
+ * @param[in] x,y    显示坐标
+ * @param[in] num    要显示的字符（ASCII 码）
+ * @param[in] fc     字体颜色
+ * @param[in] bc     背景色
+ * @param[in] sizey  字号（12/16/24/32，对应 6×12 / 8×16 / 12×24 / 16×32）
+ * @param[in] mode   0 = 非叠加模式（带背景），1 = 叠加模式（不覆盖背景）
+ */
 void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint16_t fc,uint16_t bc,uint8_t sizey,uint8_t mode)
 {
 	uint8_t temp,sizex,t,m=0;
@@ -858,16 +845,15 @@ void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint16_t fc,uint16_t bc,uint
 }
 
 
-/******************************************************************************
-      函数说明：显示字符串
-      入口数据：x,y显示坐标
-                *p 要显示的字符串
-                fc 字的颜色
-                bc 字的背景色
-                sizey 字号
-                mode:  0非叠加模式  1叠加模式
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  显示 ASCII 字符串
+ * @param[in] x,y    显示坐标
+ * @param[in] p      字符串指针（以 '\0' 结尾）
+ * @param[in] fc     字体颜色
+ * @param[in] bc     背景色
+ * @param[in] sizey  字号
+ * @param[in] mode   0 = 非叠加模式，1 = 叠加模式
+ */
 void LCD_ShowString(uint16_t x,uint16_t y,const uint8_t *p,uint16_t fc,uint16_t bc,uint8_t sizey,uint8_t mode)
 {         
 	while(*p!='\0')
@@ -879,11 +865,13 @@ void LCD_ShowString(uint16_t x,uint16_t y,const uint8_t *p,uint16_t fc,uint16_t 
 }
 
 
-/******************************************************************************
-      函数说明：显示数字
-      入口数据：m底数，n指数
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  整数幂运算
+ * @param[in] m  底数
+ * @param[in] n  指数
+ * @return m 的 n 次幂
+ * @note   用于数字显示时的位权计算
+ */
 uint32_t mypow(uint8_t m,uint8_t n)
 {
 	uint32_t result=1;	 
@@ -892,16 +880,16 @@ uint32_t mypow(uint8_t m,uint8_t n)
 }
 
 
-/******************************************************************************
-      函数说明：显示整数变量
-      入口数据：x,y显示坐标
-                num 要显示整数变量
-                len 要显示的位数
-                fc 字的颜色
-                bc 字的背景色
-                sizey 字号
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  显示无符号整数（不显示前导零）
+ * @param[in] x,y    显示坐标
+ * @param[in] num    待显示整数
+ * @param[in] len    显示位数
+ * @param[in] fc     字体颜色
+ * @param[in] bc     背景色
+ * @param[in] sizey  字号
+ * @note   高位为零时显示空格，避免前导零，至少显示一位数字
+ */
 void LCD_ShowIntNum(uint16_t x,uint16_t y,uint16_t num,uint8_t len,uint16_t fc,uint16_t bc,uint8_t sizey)
 {         	
 	uint8_t t,temp;
@@ -924,16 +912,16 @@ void LCD_ShowIntNum(uint16_t x,uint16_t y,uint16_t num,uint8_t len,uint16_t fc,u
 } 
 
 
-/******************************************************************************
-      函数说明：显示两位小数变量
-      入口数据：x,y显示坐标
-                num 要显示小数变量
-                len 要显示的位数
-                fc 字的颜色
-                bc 字的背景色
-                sizey 字号
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  显示浮点数（保留两位小数）
+ * @param[in] x,y    显示坐标
+ * @param[in] num    待显示浮点数
+ * @param[in] len    显示总位数（含小数点）
+ * @param[in] fc     字体颜色
+ * @param[in] bc     背景色
+ * @param[in] sizey  字号
+ * @note   将浮点数放大 100 倍后按整数显示，在倒数第二位前插入小数点
+ */
 void LCD_ShowFloatNum1(uint16_t x,uint16_t y,float num,uint8_t len,uint16_t fc,uint16_t bc,uint8_t sizey)
 {         	
 	uint8_t t,temp,sizex;
@@ -954,14 +942,14 @@ void LCD_ShowFloatNum1(uint16_t x,uint16_t y,float num,uint8_t len,uint16_t fc,u
 }
 
 
-/******************************************************************************
-      函数说明：显示图片
-      入口数据：x,y起点坐标
-                length 图片长度
-                width  图片宽度
-                pic[]  图片数组    
-      返回值：  无
-******************************************************************************/
+/**
+ * @brief  显示 RGB565 格式图片
+ * @param[in] x,y      图片左上角坐标
+ * @param[in] length   图片宽度（像素）
+ * @param[in] width    图片高度（像素）
+ * @param[in] pic[]    图片数据数组（RGB565 格式，每像素 2 字节）
+ * @note   数据排列：先高字节后低字节，逐点逐行扫描
+ */
 void LCD_ShowPicture(uint16_t x,uint16_t y,uint16_t length,uint16_t width,const uint8_t pic[])
 {
 	uint16_t i,j;
