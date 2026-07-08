@@ -9,7 +9,9 @@
 #ifndef USER_BUTTON_H
 #define USER_BUTTON_H
 
-#include <stdint.h>
+#include "user_global.h"
+
+#define BUTTON_TIME_MS  5    // ms - timer interrupt interval
 
 void buttons_init(void);
 uint8_t UserButton_GetRawMask(void);

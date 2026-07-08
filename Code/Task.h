@@ -30,7 +30,7 @@
 #define TASK_MAX 20
 
 /** @brief 定时器间隔（单位：毫秒） */
-#define TIME_ms 1
+#define OS_TICK_MS 1
 
 /** @brief 全局任务定时器数组（外部声明） */
 extern unsigned int PT_TICK[TASK_MAX];
@@ -100,7 +100,7 @@ extern unsigned int PT_TICK[TASK_MAX];
 
 /**
  * @brief  等待指定时间后继续执行
- * @param[in] u32WiatTime  等待时间（单位为 TIME_ms 的倍数）
+ * @param[in] u32WiatTime  等待时间（单位为 OS_TICK_MS 的倍数）
  * @note   保存当前行号为断点位置，返回等待时间。
  *         下次触发时通过 switch-case 跳转到此行继续执行。
  */

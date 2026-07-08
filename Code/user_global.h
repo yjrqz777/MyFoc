@@ -10,6 +10,14 @@
 #ifndef __GLOBAL_H__
 #define __GLOBAL_H__
 
+#include "main.h"
+#include "Task.h"
+#include <stdint.h>
+#include <string.h>
+
+#include "SEGGER_RTT.h"
+// #include "Task.h"
+
 /**
  * @name   8-bit 位模式常量 0x00~0x0F
  * @{

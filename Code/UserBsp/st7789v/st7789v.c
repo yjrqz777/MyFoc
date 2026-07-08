@@ -1,15 +1,14 @@
 /***************************************************************************************************
  * Author: yjrqz777 3210551161@qq.com
  * Date: 2025-05-08 20:07:45
- * LastEditTime: 2026-03-19 21:05:52
+ * LastEditTime: 2026-07-08 21:50:21
  * LastEditors: yjrqz777 3210551161@qq.com
  * Description: 
- * FilePath: \Myfoc2\Code\Drv\st7789v\st7789v.c
+ * FilePath: \Myfoc2\Code\UserBsp\st7789v\st7789v.c
  * @YJRQZ777
 ***************************************************************************************************/
 
 #include "st7789v/st7789v.h"
-
 #include "st7789v/font.h"
 
 /**
@@ -351,9 +350,9 @@ void st7789v_init(void)
     // // LCD_ShowPicture(0, 0, 240, 135, (uint8_t *)gImage_fu);
 
     // Draw_Circle(120, 67, 50, RED);
-    LCD_ShowChineseTEST(0, 0, "FOC", WHITE, BLACK, 80,135, 0);
-	HAL_Delay(10);
-	LCD_ShowString(0, 0, "YJRQZ777", WHITE, BLACK, 16, 1);
+    // LCD_ShowChineseTEST(0, 0, "FOC", WHITE, BLACK, 80,135, 0);
+	// HAL_Delay(10);
+	// LCD_ShowString(0, 0, "YJRQZ777", WHITE, BLACK, 16, 1);
 
 
 	// HAL_Delay(1000);

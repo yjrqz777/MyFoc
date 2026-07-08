@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#include "main.h"
+#include "user_global.h"
 
 HAL_StatusTypeDef BspPwm_Start(void);
 void BspPwm_Stop(void);

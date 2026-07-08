@@ -71,6 +71,8 @@ void Error_Handler(void);
 #define IC_A2_1IN3_GPIO_Port GPIOA
 #define IBUS_A3_1IN4_Pin GPIO_PIN_3
 #define IBUS_A3_1IN4_GPIO_Port GPIOA
+#define RGB_Pin GPIO_PIN_5
+#define RGB_GPIO_Port GPIOA
 #define HALL_A_Pin GPIO_PIN_6
 #define HALL_A_GPIO_Port GPIOA
 #define HALL_B_Pin GPIO_PIN_7

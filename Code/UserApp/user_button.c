@@ -9,13 +9,13 @@
  */
 
 #include "user_button.h"
-
-#include "Task.h"
 #include "bsp_button.h"
-#include "SEGGER_RTT.h"
 
 #define USER_BUTTON_NUM          4u   /**< 按键总数 */
 #define USER_BUTTON_ACTIVE_LEVEL 0u   /**< 按键按下时的有效电平（低电平有效） */
+
+extern void UserStatusSwitch(Button *btn);
+
 
 /** @brief 4 个按键的 Button 结构体实例 */
 static Button btn1;
@@ -65,24 +65,24 @@ static uint8_t read_button_gpio(uint8_t button_id)
  * @param[in] btn  触发事件的按键结构体指针
  * @note   记录事件到 button_last_event 数组，并通过 RTT 输出日志
  */
-static void button_event_handler(Button *btn)
-{
-    uint8_t index;
-    ButtonEvent event;
+// static void button_event_handler(Button *btn)
+// {
+//     uint8_t index;
+//     ButtonEvent event;
 
-    if (btn == 0 || btn->button_id == 0u || btn->button_id > USER_BUTTON_NUM) {
-        return;
-    }
+//     if (btn == 0 || btn->button_id == 0u || btn->button_id > USER_BUTTON_NUM) {
+//         return;
+//     }
 
-    index = (uint8_t)(btn->button_id - 1u);
-    event = button_get_event(btn);
-    button_last_event[index] = (uint8_t)event;
+//     index = (uint8_t)(btn->button_id - 1u);
+//     event = button_get_event(btn);
+//     button_last_event[index] = (uint8_t)event;
 
-    SEGGER_RTT_printf(0, "KEY%u event:%u repeat:%u\r\n",
-                      btn->button_id,
-                      (uint8_t)event,
-                      button_get_repeat_count(btn));
-}
+//     SEGGER_RTT_printf(0, "KEY%u event:%u repeat:%u\r\n",
+//                       btn->button_id,
+//                       (uint8_t)event,
+//                       button_get_repeat_count(btn));
+// }
 
 /**
  * @brief  为指定按键注册所有事件回调
@@ -90,16 +90,16 @@ static void button_event_handler(Button *btn)
  * @note   注册事件：PRESS_DOWN, PRESS_UP, PRESS_REPEAT,
  *         SINGLE_CLICK, DOUBLE_CLICK, LONG_PRESS_START, LONG_PRESS_HOLD
  */
-static void button_attach_all_events(Button *btn)
-{
-    button_attach(btn, BTN_PRESS_DOWN, button_event_handler);
-    button_attach(btn, BTN_PRESS_UP, button_event_handler);
-    button_attach(btn, BTN_PRESS_REPEAT, button_event_handler);
-    button_attach(btn, BTN_SINGLE_CLICK, button_event_handler);
-    button_attach(btn, BTN_DOUBLE_CLICK, button_event_handler);
-    button_attach(btn, BTN_LONG_PRESS_START, button_event_handler);
-    button_attach(btn, BTN_LONG_PRESS_HOLD, button_event_handler);
-}
+// static void button_attach_all_events(Button *btn)
+// {
+    // button_attach(btn, BTN_PRESS_DOWN, button_event_handler);
+    // button_attach(btn, BTN_PRESS_UP, button_event_handler);
+    // button_attach(btn, BTN_PRESS_REPEAT, button_event_handler);
+    // button_attach(btn, BTN_SINGLE_CLICK, button_event_handler);
+    // button_attach(btn, BTN_DOUBLE_CLICK, button_event_handler);
+    // button_attach(btn, BTN_LONG_PRESS_START, button_event_handler);
+    // button_attach(btn, BTN_LONG_PRESS_HOLD, button_event_handler);
+// }
 
 /**
  * @brief  初始化所有 4 个按键
@@ -113,19 +113,20 @@ void buttons_init(void)
     }
 
     button_init(&btn1, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 1u);
-    button_init(&btn2, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 2u);
-    button_init(&btn3, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 3u);
-    button_init(&btn4, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 4u);
+    // button_init(&btn2, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 2u);
+    // button_init(&btn3, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 3u);
+    // button_init(&btn4, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 4u);
 
-    button_attach_all_events(&btn1);
-    button_attach_all_events(&btn2);
-    button_attach_all_events(&btn3);
-    button_attach_all_events(&btn4);
+    // button_attach_all_events(&btn1);
+    button_attach(&btn1, BTN_SINGLE_CLICK, UserStatusSwitch);
+    // button_attach_all_events(&btn2);
+    // button_attach_all_events(&btn3);
+    // button_attach_all_events(&btn4);
 
     button_start(&btn1);
-    button_start(&btn2);
-    button_start(&btn3);
-    button_start(&btn4);
+    // button_start(&btn2);
+    // button_start(&btn3);
+    // button_start(&btn4);
 
     button_inited = 1u;
 }
@@ -194,7 +195,7 @@ uint8_t UserButton_GetLastEvent(uint8_t button_id)
  * @brief  Protothread 按键扫描协程任务
  * @return PT 状态码
  * @note   首次进入时初始化按键，
- *         之后以 TICKS_INTERVAL（5ms）为周期调用 button_ticks() 扫描按键
+ *         之后以 BUTTON_TIME_MS / OS_TICK_MS 为周期调用 button_ticks() 扫描按键
  */
 uint16_t PtTaskButton(void)
 {
@@ -205,7 +206,7 @@ uint16_t PtTaskButton(void)
 
     while (1)
     {
-        PT_WAIT_UNTIL(TICKS_INTERVAL / TIME_ms);
+        PT_WAIT_UNTIL(BUTTON_TIME_MS / OS_TICK_MS);
         button_ticks();
     }
 

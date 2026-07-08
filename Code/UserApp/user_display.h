@@ -9,14 +9,31 @@
 #ifndef __USER_DISPLAY_H__
 #define __USER_DISPLAY_H__
 
+#include "user_global.h"
+#include "user_system.h"
+#define USER_DISPLAY_PERIOD_MS 100u  /**< 显示刷新周期（毫秒） */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+typedef struct tDisplayFunDataDef
+{
+    enuSysState enuState;
+    void (*fun)(void);
+} tDisplayFunDataDef;
+
+typedef struct tDisDataDef
+{
+    uint16_t u16RGB;
+} tDisDataDef;
+
+extern tDisDataDef tDisData;
+
 void UserDisplay_Init(void);
 void UserDisplay_Update100ms(void);
-void UserDisplay_Poll(void);
-int PT_TASK_Display(void);
+// void UserDisplay_Poll(void);
+uint16_t PtTaskDisplay(void);
 
 #ifdef __cplusplus
 }

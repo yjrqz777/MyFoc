@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#include "main.h"
+#include "user_global.h"
 
 void UserMotor_Init(void);
 HAL_StatusTypeDef UserMotor_Start(void);

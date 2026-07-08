@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#include "main.h"
+#include "user_global.h"
 
 /** @brief ADC 注入通道总数（Ia, Ib, Ic, Ibus） */
 #define BSP_ADC_INJECTED_CHANNELS 4u

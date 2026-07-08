@@ -1,10 +1,10 @@
 /***************************************************************************************************
  * Author: yjrqz777 3210551161@qq.com
  * Date: 2026-01-06 19:59:07
- * LastEditTime: 2026-01-06 19:59:44
+ * LastEditTime: 2026-07-08 21:22:54
  * LastEditors: yjrqz777 3210551161@qq.com
  * Description: 
- * FilePath: \8X8LED\User\UserBsp\bsp_button.h
+ * FilePath: \Myfoc2\Code\UserBsp\bsp_button.h
  * @YJRQZ777
 ***************************************************************************************************/
 
@@ -29,24 +29,24 @@ typedef void (*BtnCallback)(Button* btn_handle);
 
 // Button event types
 typedef enum {
-	BTN_PRESS_DOWN = 0,     // button pressed down
-	BTN_PRESS_UP,           // button released
-	BTN_PRESS_REPEAT,       // repeated press detected
-	BTN_SINGLE_CLICK,       // single click completed
-	BTN_DOUBLE_CLICK,       // double click completed
-	BTN_LONG_PRESS_START,   // long press started
-	BTN_LONG_PRESS_HOLD,    // long press holding
-	BTN_EVENT_COUNT,        // total number of events
-	BTN_NONE_PRESS          // no event
+	BTN_PRESS_DOWN = 0,     /* button pressed down       按键按下 */
+	BTN_PRESS_UP,           /* button released           按键释放 */
+	BTN_PRESS_REPEAT,       /* repeated press detected   检测到重复按下 */
+	BTN_SINGLE_CLICK,       /* single click completed    单击完成 */
+	BTN_DOUBLE_CLICK,       /* double click completed    双击完成 */
+	BTN_LONG_PRESS_START,   /* long press started        长按开始 */
+	BTN_LONG_PRESS_HOLD,    /* long press holding        长按持续中 */
+	BTN_EVENT_COUNT,        /* total number of events    事件总数 */
+	BTN_NONE_PRESS          /* no event                  无事件 */
 } ButtonEvent;
 
 // Button state machine states
 typedef enum {
-	BTN_STATE_IDLE = 0,     // idle state
-	BTN_STATE_PRESS,        // pressed state
-	BTN_STATE_RELEASE,      // released state waiting for timeout
-	BTN_STATE_REPEAT,       // repeat press state
-	BTN_STATE_LONG_HOLD     // long press hold state
+	BTN_STATE_IDLE = 0,     /* idle state                空闲状态 */
+	BTN_STATE_PRESS,        /* pressed state             按下状态 */
+	BTN_STATE_RELEASE,      /* released state waiting    释放等待超时 */
+	BTN_STATE_REPEAT,       /* repeat press state        重复按下状态 */
+	BTN_STATE_LONG_HOLD     /* long press hold state     长按保持状态 */
 } ButtonState;
 
 // Button structure

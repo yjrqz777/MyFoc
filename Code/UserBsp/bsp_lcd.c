@@ -36,5 +36,5 @@ void BspLcd_Init(void)
  */
 void BspLcd_ShowUInt(uint16_t x, uint16_t y, uint32_t value, uint8_t len)
 {
-    LCD_ShowIntNum(x, y, value, len, WHITE, BLACK, 24);
+    LCD_ShowIntNum(x, y, value, len, BLACK, WHITE, 24);
 }

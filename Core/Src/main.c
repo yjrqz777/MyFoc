@@ -33,7 +33,8 @@
 #include "user_button.h"
 #include "user_display.h"
 #include "user_motor.h"
-#include "SEGGER_RTT.h"
+#include "user_system.h"
+#include "user_time.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -125,6 +126,7 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM7_Init();
   MX_SPI1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   DebugRtt_Init();
   UserMotor_Init();
@@ -141,8 +143,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    PT_TASK_REG(0, PT_TASK_Display);
+    PT_TASK_REG(0, PtTaskDisplay);
     PT_TASK_REG(1, PtTaskButton);
+    PT_TASK_REG(2, PtTaskSystem);
+    PT_TASK_REG(3, PtTaskTime);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

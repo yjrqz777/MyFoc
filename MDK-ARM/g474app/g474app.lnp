@@ -36,6 +36,9 @@
 "g474app\user_motor.o"
 "g474app\user_display.o"
 "g474app\user_button.o"
+"g474app\user_button_fun.o"
+"g474app\user_system.o"
+"g474app\user_time.o"
 "g474app\bsp_adc.o"
 "g474app\bsp_pwm.o"
 "g474app\bsp_hall.o"
@@ -44,6 +47,7 @@
 "g474app\st7789v.o"
 "g474app\segger_rtt.o"
 "g474app\segger_rtt_printf.o"
+"g474app\bsp_ws2812.o"
 --library_type=microlib --strict --scatter "g474app\g474app.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

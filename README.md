@@ -61,7 +61,7 @@ UserApp 层新增：
 `main.c` 中保留 PT 协程框架，并新增按键任务注册：
 
 ```c
-PT_TASK_REG(0, PT_TASK_Display);
+PT_TASK_REG(0, PtTaskDisplay);
 PT_TASK_REG(1, PtTaskButton);
 ```
 

@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#include "main.h"
+#include "user_global.h"
 
 /** @brief Hall 传感器三引脚电平（a/b/c 对应 Hall A/B/C） */
 typedef struct {
