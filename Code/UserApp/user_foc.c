@@ -49,14 +49,17 @@ typedef struct {
     float theta;                    // 转子位置角（弧度）
     float sin_theta;
     float cos_theta;
-    float ts;                       // 控制周期（100µs = 0.0001s）
+    float ts;                       // 控制周期（50µs = 0.00005s）
 } FOC_Current_Loop_t;
+
+#define FOC_CONTROL_TS      0.00005f
+#define FOC_VOLTAGE_LIMIT   80.0f
 
 // 全局FOC变量
 static FOC_Current_Loop_t foc = {
-    .iDQ_Ref = {0.0f, 6.0f},       // Id=0，Iq=6.0A
+    .iDQ_Ref = {0.0f, 0.0f},       // Id=0，Iq由电机模块斜坡给定
     .theta = 0.0f,
-    .ts = 0.0001f,                 // 100µs
+    .ts = FOC_CONTROL_TS,          // 50µs
     .pi_d = {
         .kp = 0.35f,               // 0.35
         .ki = 2.0f,                // 2.0
@@ -65,8 +68,8 @@ static FOC_Current_Loop_t foc = {
         .max_output = 100.0f       
     },
     .pi_q = {
-        .kp = 0.2f,                // 0.2 - 保守增益
-        .ki = 0.02f,               // 0.02
+        .kp = 0.5f,                // 0.2 - 保守增益
+        .ki = 1.5f,               // 0.02
         .integral = 0.0f,
         .output = 0.0f,
         .max_output = 100.0f       
@@ -91,7 +94,7 @@ AlphaBeta_t Clarke_Transform(float ia, float ib, float ic)
     
     // β = (√3/3) * (ib - ic) = (1/√3) * (ib - ic)
     // 实际实现：β = (2/3) * ib - (1/3) * ia - (1/3) * ic
-    iab.beta = 0.866025f * (ib - ic);  // √3/2 ≈ 0.866025
+    iab.beta = 0.577350f * (ib - ic);  // 1/sqrt(3)
     
     return iab;
 }
@@ -191,6 +194,35 @@ void PI_Controller_Update(PI_Controller_t *pi, float error, float ts)
     }
 }
 
+static void FOC_LimitDQVoltage(DQ_t *udq, float max_voltage)
+{
+    float magnitude_sq = (udq->d * udq->d) + (udq->q * udq->q);
+    float max_sq = max_voltage * max_voltage;
+
+    if (magnitude_sq > max_sq)
+    {
+        float scale = max_voltage / sqrtf(magnitude_sq);
+        udq->d *= scale;
+        udq->q *= scale;
+    }
+}
+
+void FOC_Reset(void)
+{
+    foc.iDQ_Ref.d = 0.0f;
+    foc.iDQ_Ref.q = 0.0f;
+    foc.iDQ_Real.d = 0.0f;
+    foc.iDQ_Real.q = 0.0f;
+    foc.uDQ.d = 0.0f;
+    foc.uDQ.q = 0.0f;
+    foc.uAlphaBeta.alpha = 0.0f;
+    foc.uAlphaBeta.beta = 0.0f;
+    foc.pi_d.integral = 0.0f;
+    foc.pi_d.output = 0.0f;
+    foc.pi_q.integral = 0.0f;
+    foc.pi_q.output = 0.0f;
+}
+
 /***************************************************************************************************
  * 功能描述: FOC电流闭环主控制函数
  * 输入参数: 
@@ -199,7 +231,7 @@ void PI_Controller_Update(PI_Controller_t *pi, float error, float ts)
  *   id_ref, iq_ref - 目标d-q轴电流
  * 输出参数: pwm1, pwm2, pwm3 - 三相PWM占空比
  * 返回值: none
- * 调用频率: 10kHz（100µs）
+ * 调用频率: 20kHz（50µs）
 ***************************************************************************************************/
 void FOC_CurrentLoop(float ia, float ib, float ic, float theta)
 {
@@ -226,7 +258,8 @@ void FOC_CurrentLoop(float ia, float ib, float ic, float theta)
     PI_Controller_Update(&foc.pi_q, error_q, foc.ts);
     
     foc.uDQ.d = foc.pi_d.output;
-    foc.uDQ.q = foc.pi_q.output;
+    foc.uDQ.q = -foc.pi_q.output;
+    FOC_LimitDQVoltage(&foc.uDQ, FOC_VOLTAGE_LIMIT);
     
     // === 步骤6：反Park变换 (d,q) → (α,β) ===
     foc.uAlphaBeta = InversePark_Transform(foc.uDQ, foc.sin_theta, foc.cos_theta);

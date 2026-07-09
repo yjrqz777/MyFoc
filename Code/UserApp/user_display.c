@@ -19,6 +19,7 @@
 #include "bsp_ws2812.h"
 #include "user_button.h"
 #include "user_foc.h"
+#include "user_motor.h"
 #include "st7789v/st7789v.h"
 
 tDisDataDef tDisData;
@@ -99,6 +100,8 @@ void DisplayRunning(void)
     static uint16_t u8timecount2 = 0u;
     uint8_t hall_state = BspHall_GetState();
     DQCurrent_t dq = FOC_GetDQCurrent();
+    uint16_t iq_ref_ma;
+    uint16_t iq_target_ma;
     (void)dq;
 
     
@@ -115,6 +118,11 @@ void DisplayRunning(void)
 
     /* 左列：Hall + ADC */
     // BspLcd_ShowUInt(0, 24, hall_state, 1);
+    BspLcd_ShowUInt(0, 48, BspAdc2_GetRaw(BSP_ADC2_POT), 4);
+    iq_ref_ma = (uint16_t)(UserMotor_GetIqRef() * 1000.0f);
+    iq_target_ma = (uint16_t)(UserMotor_GetIqRefTarget() * 1000.0f);
+    BspLcd_ShowUInt(0, 72, iq_ref_ma, 4);
+    BspLcd_ShowUInt(0, 96, iq_target_ma, 4);
     // BspLcd_ShowUInt(0, 48, BspAdc_GetInjectedRaw(0), 4);
     // BspLcd_ShowUInt(0, 72, BspAdc_GetInjectedRaw(1), 4);
     // BspLcd_ShowUInt(0, 96, BspAdc_GetInjectedRaw(2), 4);
@@ -124,7 +132,7 @@ void DisplayRunning(void)
     // BspLcd_ShowUInt(96, 24, UserButton_GetPressedMask(), 2);
     // BspLcd_ShowUInt(96, 0, UserButton_GetPressed(1), 1);
     BspLcd_ShowUInt(96, 0, UserButton_GetPressed(2), 1);
-    BspLcd_ShowUInt(120, 0, u8timecount2++, 1);
+    BspLcd_ShowUInt(120, 0, u8timecount2++, 6);
     // BspLcd_ShowUInt(96, 96, UserButton_GetPressed(3), 1);
     // BspLcd_ShowUInt(96, 120, UserButton_GetPressed(4), 1);
 
@@ -176,7 +184,7 @@ uint16_t PtTaskDisplay(void)
                 break;
             }
         }
-        SEGGER_RTT_printf(0, "%d,%d,%d\r\n", tSysData.enuState,tSysData.u32OpenTimes, tSysData.u32PowerOnTimes);
+        // SEGGER_RTT_printf(0, "%d,%d,%d\r\n", tSysData.enuState,tSysData.u32OpenTimes, tSysData.u32PowerOnTimes);
         // UserDisplay_SetWs2812Color(tDisData.u8color[0], tDisData.u8color[1], tDisData.u8color[2]);
 
         // DisPlayDrive();

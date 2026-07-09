@@ -78,7 +78,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 static void DebugRtt_Init(void)
 {
-    SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL);
+    SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
     SEGGER_RTT_ConfigUpBuffer(1, "JScope_f32", rtt_jscope_up_buffer,
                               sizeof(rtt_jscope_up_buffer), SEGGER_RTT_MODE_NO_BLOCK_TRIM);
     SEGGER_RTT_WriteString(0, "Motor control startup\r\n");
@@ -201,14 +201,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
-{
-    if (BspAdc_UpdateInjected(hadc) != 0u)
-    {
-        UserMotor_FastLoop();
-    }
-}
-
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == TIM7)

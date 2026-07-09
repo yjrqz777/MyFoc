@@ -20,6 +20,8 @@ void UserMotor_Init(void);
 HAL_StatusTypeDef UserMotor_Start(void);
 void UserMotor_FastLoop(void);
 float UserMotor_GetOpenLoopTheta(void);
+float UserMotor_GetIqRef(void);
+float UserMotor_GetIqRefTarget(void);
 
 #ifdef __cplusplus
 }

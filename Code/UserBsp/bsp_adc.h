@@ -18,10 +18,25 @@ extern "C" {
 
 /** @brief ADC 注入通道总数（Ia, Ib, Ic, Ibus） */
 #define BSP_ADC_INJECTED_CHANNELS 4u
+#define BSP_ADC2_REGULAR_CHANNELS 5u
+
+typedef enum
+{
+    BSP_ADC2_SHA = 0,
+    BSP_ADC2_SHB,
+    BSP_ADC2_SHC,
+    BSP_ADC2_POT,
+    BSP_ADC2_VBUS,
+} BspAdc2Channel_t;
 
 HAL_StatusTypeDef BspAdc_StartInjected(void);
 uint8_t BspAdc_UpdateInjected(ADC_HandleTypeDef *hadc);
 uint16_t BspAdc_GetInjectedRaw(uint8_t index);
+uint8_t BspAdc_IsCurrentOffsetReady(void);
+
+HAL_StatusTypeDef BspAdc2_UpdateAll(void);
+uint16_t BspAdc2_GetRaw(BspAdc2Channel_t channel);
+float BspAdc2_GetVoltage(BspAdc2Channel_t channel);
 
 float BspAdc_GetIa(void);
 float BspAdc_GetIb(void);

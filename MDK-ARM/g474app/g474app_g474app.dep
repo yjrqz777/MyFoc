@@ -1,7 +1,7 @@
 Dependencies for Project 'g474app', Target 'g474app': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
 F (startup_stm32g474xx.s)(0x6A4E57F4)(--cpu Cortex-M4.fp.sp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include--pd "__UVISION_VERSION SETA 541" --pd "STM32G474xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32g474xx.lst --xref -o g474app\startup_stm32g474xx.o --depend g474app\startup_stm32g474xx.d)
-F (../Core/Src/main.c)(0x6A4E6026)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\main.o --omf_browse g474app\main.crf --depend g474app\main.d)
+F (../Core/Src/main.c)(0x6A4FA2F4)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\main.o --omf_browse g474app\main.crf --depend g474app\main.d)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -47,8 +47,8 @@ I (../Core/Inc/usart.h)(0x69BBDEBB)
 I (../Core/Inc/gpio.h)(0x69BBDEBA)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
-I (../Code/UserBsp/bsp_adc.h)(0x6A4E45EA)
-I (../Code/user_global.h)(0x6A4E497E)
+I (../Code/UserBsp/bsp_adc.h)(0x6A4FB289)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
 I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
@@ -57,7 +57,7 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (../Code/UserApp/user_button.h)(0x6A4E4946)
 I (../Code/UserApp/user_display.h)(0x6A4E6388)
 I (../Code/UserApp/user_system.h)(0x6A4E51A9)
-I (../Code/UserApp/user_motor.h)(0x6A4E4605)
+I (../Code/UserApp/user_motor.h)(0x6A4FAA67)
 I (../Code/UserApp/user_time.h)(0x6A4E4952)
 F (../Core/Src/gpio.c)(0x69BBDEDB)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\gpio.o --omf_browse g474app\gpio.crf --depend g474app\gpio.d)
 I (../Core/Inc/gpio.h)(0x69BBDEBA)
@@ -1185,9 +1185,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
-F (..\Code\UserApp\user_foc.c)(0x6A4D13B9)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_foc.o --omf_browse g474app\user_foc.crf --depend g474app\user_foc.d)
-I (..\Code\UserApp\user_foc.h)(0x6A4E4602)
-I (../Code/user_global.h)(0x6A4E497E)
+F (..\Code\UserApp\user_foc.c)(0x6A4FB627)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_foc.o --omf_browse g474app\user_foc.crf --depend g474app\user_foc.d)
+I (..\Code\UserApp\user_foc.h)(0x6A4FA2F7)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -1232,9 +1232,9 @@ I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
-F (..\Code\UserApp\user_motor.c)(0x6A4F9C54)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_motor.o --omf_browse g474app\user_motor.crf --depend g474app\user_motor.d)
-I (..\Code\UserApp\user_motor.h)(0x6A4E4605)
-I (../Code/user_global.h)(0x6A4E497E)
+F (..\Code\UserApp\user_motor.c)(0x6A4FB6D1)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_motor.o --omf_browse g474app\user_motor.crf --depend g474app\user_motor.d)
+I (..\Code\UserApp\user_motor.h)(0x6A4FAA67)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -1278,13 +1278,13 @@ I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
 I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
-I (../Code/UserBsp/bsp_adc.h)(0x6A4E45EA)
+I (../Code/UserBsp/bsp_adc.h)(0x6A4FB289)
 I (../Code/UserBsp/bsp_pwm.h)(0x6A4E45BC)
-I (..\Code\UserApp\user_foc.h)(0x6A4E4602)
+I (..\Code\UserApp\user_foc.h)(0x6A4FA2F7)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
-F (..\Code\UserApp\user_display.c)(0x6A4E63FC)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_display.o --omf_browse g474app\user_display.crf --depend g474app\user_display.d)
+F (..\Code\UserApp\user_display.c)(0x6A4FB2D6)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_display.o --omf_browse g474app\user_display.crf --depend g474app\user_display.d)
 I (..\Code\UserApp\user_display.h)(0x6A4E6388)
-I (../Code/user_global.h)(0x6A4E497E)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -1329,19 +1329,20 @@ I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (..\Code\UserApp\user_system.h)(0x6A4E51A9)
-I (../Code/UserBsp/bsp_adc.h)(0x6A4E45EA)
+I (../Code/UserBsp/bsp_adc.h)(0x6A4FB289)
 I (../Code/UserBsp/bsp_hall.h)(0x6A4E45CE)
 I (../Code/UserBsp/bsp_lcd.h)(0x6A4E593D)
 I (../Code/UserBsp/ws2812/bsp_ws2812.h)(0x6A4E4D55)
 I (..\Code\UserApp\user_button.h)(0x6A4E4946)
-I (..\Code\UserApp\user_foc.h)(0x6A4E4602)
+I (..\Code\UserApp\user_foc.h)(0x6A4FA2F7)
+I (..\Code\UserApp\user_motor.h)(0x6A4FAA67)
 I (../Code/UserBsp/st7789v/st7789v.h)(0x6A4E593D)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x69BBDEBB)
 I (../Core/Inc/gpio.h)(0x69BBDEBA)
 F (..\Code\UserApp\user_button.c)(0x6A4E631C)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_button.o --omf_browse g474app\user_button.crf --depend g474app\user_button.d)
 I (..\Code\UserApp\user_button.h)(0x6A4E4946)
-I (../Code/user_global.h)(0x6A4E497E)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -1388,7 +1389,7 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (../Code/UserBsp/bsp_button.h)(0x6A4E4F83)
 F (..\Code\UserApp\user_button_fun.c)(0x6A4E634E)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_button_fun.o --omf_browse g474app\user_button_fun.crf --depend g474app\user_button_fun.d)
 I (..\Code\UserApp\user_button.h)(0x6A4E4946)
-I (../Code/user_global.h)(0x6A4E497E)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -1434,9 +1435,9 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (../Code/UserBsp/bsp_button.h)(0x6A4E4F83)
 I (..\Code\UserApp\user_system.h)(0x6A4E51A9)
-F (..\Code\UserApp\user_system.c)(0x6A4E6178)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_system.o --omf_browse g474app\user_system.crf --depend g474app\user_system.d)
+F (..\Code\UserApp\user_system.c)(0x6A4FB11B)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_system.o --omf_browse g474app\user_system.crf --depend g474app\user_system.d)
 I (..\Code\UserApp\user_system.h)(0x6A4E51A9)
-I (../Code/user_global.h)(0x6A4E497E)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -1480,10 +1481,12 @@ I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
 I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
-I (../Code/UserBsp/bsp_adc.h)(0x6A4E45EA)
+I (../Code/UserBsp/bsp_adc.h)(0x6A4FB289)
+I (..\Code\UserApp\user_foc.h)(0x6A4FA2F7)
+I (..\Code\UserApp\user_motor.h)(0x6A4FAA67)
 F (..\Code\UserApp\user_time.c)(0x6A4E6396)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_time.o --omf_browse g474app\user_time.crf --depend g474app\user_time.d)
 I (..\Code\UserApp\user_time.h)(0x6A4E4952)
-I (../Code/user_global.h)(0x6A4E497E)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -1528,9 +1531,9 @@ I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (..\Code\UserApp\user_system.h)(0x6A4E51A9)
-F (..\Code\UserBsp\bsp_adc.c)(0x6A4E4096)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\bsp_adc.o --omf_browse g474app\bsp_adc.crf --depend g474app\bsp_adc.d)
-I (..\Code\UserBsp\bsp_adc.h)(0x6A4E45EA)
-I (../Code/user_global.h)(0x6A4E497E)
+F (..\Code\UserBsp\bsp_adc.c)(0x6A4FB294)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\bsp_adc.o --omf_browse g474app\bsp_adc.crf --depend g474app\bsp_adc.d)
+I (..\Code\UserBsp\bsp_adc.h)(0x6A4FB289)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -1575,9 +1578,10 @@ I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (../Core/Inc/adc.h)(0x69BBDEBA)
-F (..\Code\UserBsp\bsp_pwm.c)(0x6A4E40A8)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\bsp_pwm.o --omf_browse g474app\bsp_pwm.crf --depend g474app\bsp_pwm.d)
+I (../Code/UserApp/user_motor.h)(0x6A4FAA67)
+F (..\Code\UserBsp\bsp_pwm.c)(0x6A4FA2E0)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\bsp_pwm.o --omf_browse g474app\bsp_pwm.crf --depend g474app\bsp_pwm.d)
 I (..\Code\UserBsp\bsp_pwm.h)(0x6A4E45BC)
-I (../Code/user_global.h)(0x6A4E497E)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -1624,7 +1628,7 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (../Core/Inc/tim.h)(0x6A4E4C6F)
 F (..\Code\UserBsp\bsp_hall.c)(0x6A4E40B4)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\bsp_hall.o --omf_browse g474app\bsp_hall.crf --depend g474app\bsp_hall.d)
 I (..\Code\UserBsp\bsp_hall.h)(0x6A4E45CE)
-I (../Code/user_global.h)(0x6A4E497E)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)
@@ -1670,7 +1674,7 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 F (..\Code\UserBsp\bsp_lcd.c)(0x6A4E593D)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\bsp_lcd.o --omf_browse g474app\bsp_lcd.crf --depend g474app\bsp_lcd.d)
 I (..\Code\UserBsp\bsp_lcd.h)(0x6A4E593D)
-I (../Code/user_global.h)(0x6A4E497E)
+I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x69BBDEBB)

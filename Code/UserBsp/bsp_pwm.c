@@ -42,22 +42,18 @@ static uint16_t BspPwm_LimitCompare(int32_t value, uint16_t pwm_max)
  */
 HAL_StatusTypeDef BspPwm_Start(void)
 {
-    HAL_StatusTypeDef status;
+    uint16_t pwm_zero = (uint16_t)(BspPwm_GetPeriod() / 2u);
 
-    status = HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-    if (status != HAL_OK) return status;
-    status = HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-    if (status != HAL_OK) return status;
+    BspPwm_SetCompare(pwm_zero, pwm_zero, pwm_zero);
 
-    status = HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-    if (status != HAL_OK) return status;
-    status = HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-    if (status != HAL_OK) return status;
+    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1)    != HAL_OK) return HAL_ERROR;
+    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1) != HAL_OK) return HAL_ERROR;
 
-    status = HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-    if (status != HAL_OK) return status;
-    status = HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
-    if (status != HAL_OK) return status;
+    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2)    != HAL_OK) return HAL_ERROR;
+    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2) != HAL_OK) return HAL_ERROR;
+
+    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3)    != HAL_OK) return HAL_ERROR;
+    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3) != HAL_OK) return HAL_ERROR;
 
     return HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 }

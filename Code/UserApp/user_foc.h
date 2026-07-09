@@ -27,6 +27,7 @@ extern "C" {
  * @note 调用频率：10kHz（100µs），应在TIM6中断中调用
  */
 void FOC_CurrentLoop(float ia, float ib, float ic, float theta);
+void FOC_Reset(void);
 
 /**
  * @brief 获取FOC输出的三相电压
