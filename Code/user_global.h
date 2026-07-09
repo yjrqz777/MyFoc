@@ -16,8 +16,15 @@
 #include <string.h>
 
 #include "SEGGER_RTT.h"
-// #include "Task.h"
 
+// #include "Task.h"
+#if defined(__CC_ARM)
+#define USER_MOTOR_CCMRAM     __attribute__((section(".ccmram"), zero_init))
+#define USER_MOTOR_FAST_CODE  __attribute__((section(".fastcode")))
+#else
+#define USER_MOTOR_CCMRAM     __attribute__((section(".ccmram")))
+#define USER_MOTOR_FAST_CODE  __attribute__((section(".fastcode")))
+#endif
 /**
  * @name   8-bit 位模式常量 0x00~0x0F
  * @{

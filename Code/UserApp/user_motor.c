@@ -20,6 +20,8 @@
 #include "user_foc.h"
 #include <math.h>
 
+
+
 #define USER_MOTOR_PI              3.14159265f
 #define USER_MOTOR_TWO_PI          (2.0f * USER_MOTOR_PI)
 #define USER_MOTOR_BASE_VOLTAGE    55.0f       /**< 基波电压幅值 */
@@ -28,10 +30,10 @@
 #define USER_MOTOR_THETA_STEP_INC  0.0000005f  /**< 步进递增增量 */
 
 /** @brief 当前开环电角度（弧度） */
-static float s_open_loop_theta = 0.0f;
+static float s_open_loop_theta USER_MOTOR_CCMRAM;
 
 /** @brief 当前开环角度步进（决定转速） */
-static float s_open_loop_step = USER_MOTOR_THETA_STEP_INIT;
+static float s_open_loop_step USER_MOTOR_CCMRAM;
 
 /**
  * @brief  更新开环角度（斜坡加速）
@@ -93,7 +95,7 @@ HAL_StatusTypeDef UserMotor_Start(void)
  *         - 基波电压 + FOC 补偿电压合成
  *         - 更新 PWM 比较寄存器
  */
-void UserMotor_FastLoop(void)
+USER_MOTOR_FAST_CODE void UserMotor_FastLoop(void)
 {
     float ia;
     float ib;

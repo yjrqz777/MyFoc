@@ -1,3 +1,26 @@
+# STM32G474RBT6 参数
+[stm32g474cb.pdf](https://www.st.com.cn/resource/en/datasheet/stm32g474cb.pdf)
+| 项目 | 参数 |
+| --- | --- |
+| 内核 | Arm Cortex-M4，带 FPU / DSP / MPU |
+| 主频 | 最高 170 MHz |
+| Flash | 128 KB |
+| SRAM | 128 KB，包括 80 KB SRAM、16 KB SRAM、32 KB CCM SRAM |
+| 封装 | LQFP64，10 x 10 mm |
+| 引脚数 | 64 pins |
+| 工作电压 | 1.71 V ~ 3.6 V |
+| 温度等级 | -40 ~ +85 °C |
+| GPIO | 约 52 个 I/O，具体以封装复用为准 |
+| ADC | 5 个 12-bit ADC，最高 4 Msps |
+| DAC | 7 路 12-bit DAC |
+| 运放 / 比较器 | 6 个运放，7 个比较器 |
+| 定时器 | HRTIM、3 个高级控制定时器、32-bit/16-bit 通用定时器等 |
+| 通信接口 | I2C、SPI、USART/UART、LPUART、FDCAN、USB FS、UCPD、SAI |
+| 硬件加速 | CORDIC、FMAC、RNG、CRC |
+| 调试接口 | SWD / JTAG |
+
+> 注意：`STM32G474RBT6` 为 128 KB Flash；当前工程说明中的 `STM32G474RETx` 为 512 KB Flash，迁移时需要同步检查 CubeMX 与 Keil 目标器件配置。
+
 # MyFOC2 变更记录
 
 ## 2026-07-07

@@ -48,7 +48,7 @@
 "g474app\segger_rtt.o"
 "g474app\segger_rtt_printf.o"
 "g474app\bsp_ws2812.o"
---library_type=microlib --strict --scatter "g474app\g474app.sct"
+--library_type=microlib --strict --scatter ".\g474app.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list "g474app.map" -o g474app\g474app.axf
