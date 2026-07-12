@@ -2,7 +2,7 @@
  * @file    user_motor.c
  * @brief   电机控制应用层实现 — 开环角度 + FOC 电流闭环
  *******************************************************************************
- * @note    ADC1 注入转换完成中断中以 20kHz 标称频率执行快速环：
+ * @note    ADC1 注入转换完成中断中以 10kHz 标称频率执行快速环：
  *          更新开环角度、采样三相电流、运行 FOC、更新三相 PWM。
  *******************************************************************************
  */
@@ -16,29 +16,33 @@
 #define USER_MOTOR_PI              3.14159265f
 #define USER_MOTOR_TWO_PI          (2.0f * USER_MOTOR_PI)
 #define USER_MOTOR_IQ_REF_MAX      0.5f
-#define USER_MOTOR_IQ_REF_STEP     0.001f
-#define USER_MOTOR_FAST_LOOP_HZ     20000u
+#define USER_MOTOR_IQ_REF_STEP     0.002f
+#define USER_MOTOR_FAST_LOOP_HZ     10000u
 #define USER_MOTOR_ADC_FULL_SCALE  4095.0f
 #define USER_MOTOR_IQ_ADC_DEADZONE 300u
-#define USER_MOTOR_THETA_STEP_INIT 0.0005f
-#define USER_MOTOR_THETA_STEP_MAX  0.003f
-#define USER_MOTOR_THETA_STEP_INC  0.0000002f
+#define USER_MOTOR_THETA_STEP_INIT 0.001f
+#define USER_MOTOR_THETA_STEP_MAX  0.006f
+#define USER_MOTOR_THETA_STEP_INC  0.0000004f
 #define USER_MOTOR_IQ_STOP_THRESHOLD 0.02f
 #define USER_MOTOR_PHASE_CURRENT_LIMIT 3.0f
 #define USER_MOTOR_ALIGN_TIME_MS    800u
 #define USER_MOTOR_ALIGN_TICKS      ((USER_MOTOR_FAST_LOOP_HZ * USER_MOTOR_ALIGN_TIME_MS) / 1000u)
 #define USER_MOTOR_ALIGN_ID_REF     0.4f
+#define USER_MOTOR_OFFSET_TIMEOUT_MS 200u
+#define USER_MOTOR_ZERO_VECTOR_SETTLE_MS 5u
 
 /* Temporary diagnostic modes. Keep only one active while checking phase wiring. */
-#define USER_MOTOR_DEBUG_FIXED_VECTOR       1u
+#define USER_MOTOR_DEBUG_ADC_ONLY           0u      /* 1: keep CH1/CH2/CH3 and CH1N/CH2N/CH3N disabled; CH4 still triggers ADC. */
+#define USER_MOTOR_DEBUG_ZERO_VECTOR_PWM     1u      /* 1: enable power PWM at 50%/50%/50% for sampling-point verification. */
+#define USER_MOTOR_DEBUG_FIXED_VECTOR       0u
 #define USER_MOTOR_DEBUG_FIXED_PHASE        2u      /* 0=A+, 1=B+, 2=C+ */
 #define USER_MOTOR_DEBUG_FIXED_VOLTAGE      1.5f    /* Same percent-scale unit as BspPwm_SetVoltageABC. */
 #define USER_MOTOR_DEBUG_OPEN_VOLTAGE       0u
-#define USER_MOTOR_DEBUG_FORCE_ENABLE       1u
+#define USER_MOTOR_DEBUG_FORCE_ENABLE       0u
 #define USER_MOTOR_OPEN_VOLTAGE_ALIGN       2.0f
 #define USER_MOTOR_OPEN_VOLTAGE_RUN         2.0f
-#define USER_MOTOR_OPEN_VOLTAGE_THETA_STEP  0.001f
-#define USER_MOTOR_OPEN_VOLTAGE_RAMP_STEP   0.0001f
+#define USER_MOTOR_OPEN_VOLTAGE_THETA_STEP  0.002f
+#define USER_MOTOR_OPEN_VOLTAGE_RAMP_STEP   0.0002f
 
 typedef enum
 {
@@ -59,6 +63,7 @@ typedef struct
     uint32_t startup_counter;   /**< Startup alignment counter, control ticks */
     UserMotor_StartupState_t startup_state; /**< Startup state: align first, then run */
     uint8_t over_current_fault; /**< Over-current fault flag, 1 = fault */
+    volatile uint8_t power_output_enabled; /**< Power PWM outputs enabled after offset calibration */
 } UserMotor_ControlState_t;
 
 static UserMotor_ControlState_t s_motor USER_MOTOR_CCMRAM;
@@ -152,7 +157,8 @@ static void UserMotor_SetFixedVoltageVector(void)
 #elif (USER_MOTOR_DEBUG_FIXED_PHASE == 1u)
     BspPwm_SetVoltageABC(negative_half, voltage, negative_half);
 #else
-    BspPwm_SetVoltageABC(negative_half, negative_half, voltage);
+    // BspPwm_SetVoltageABC(negative_half, negative_half, voltage);
+    BspPwm_SetVoltageABC(0, 0, 0);
 #endif
 }
 #endif
@@ -163,7 +169,7 @@ static void UserMotor_SetFixedVoltageVector(void)
  * @note   开环步长从 USER_MOTOR_THETA_STEP_INIT 开始，
  *         逐步递增至 USER_MOTOR_THETA_STEP_MAX，实现软启动加速。
  *         角度超过 2π 时绕回，保持 [0, 2π) 范围。
- *         在 20kHz 快速环中每次迭代调用一次。
+ *         在 10kHz 快速环中每次迭代调用一次。
  */
 static void UserMotor_UpdateOpenLoopTheta(void)
 {
@@ -185,7 +191,7 @@ static void UserMotor_UpdateOpenLoopTheta(void)
  * @param[in] target  q 轴电流目标值（A）
  * @note   每次调用以 USER_MOTOR_IQ_REF_STEP 步长
  *         逐渐逼近目标值，防止电流突变。
- *         在 20kHz 快速环中每次迭代调用。
+ *         在 10kHz 快速环中每次迭代调用。
  */
 static void UserMotor_UpdateIqReference(float target)
 {
@@ -239,6 +245,21 @@ void UserMotor_Init(void)
     FOC_Reset();
 }
 
+static HAL_StatusTypeDef UserMotor_WaitForCurrentOffset(void)
+{
+    uint32_t start_tick = HAL_GetTick();
+
+    while (BspAdc_IsCurrentOffsetReady() == 0u)
+    {
+        if ((HAL_GetTick() - start_tick) >= USER_MOTOR_OFFSET_TIMEOUT_MS)
+        {
+            return HAL_TIMEOUT;
+        }
+    }
+
+    return HAL_OK;
+}
+
 /**
  * @brief  启动电机控制（ADC 注入采样 + PWM 输出）
  * @retval HAL_OK      启动成功
@@ -252,17 +273,67 @@ HAL_StatusTypeDef UserMotor_Start(void)
 {
     HAL_StatusTypeDef status;
 
+    s_motor.power_output_enabled = 0u;
+
     status = BspAdc_StartInjected();
     if (status != HAL_OK)
     {
         return status;
     }
 
-    return BspPwm_Start();
+    /* Stage 1: calibrate static offsets with the power bridge disabled. */
+    status = BspPwm_StartAdcTrigger();
+    if (status != HAL_OK)
+    {
+        return status;
+    }
+
+    status = UserMotor_WaitForCurrentOffset();
+    if (status != HAL_OK)
+    {
+        BspPwm_Stop();
+        return status;
+    }
+
+#if (USER_MOTOR_DEBUG_ADC_ONLY != 0u)
+    /*
+     * ADC-only diagnostic mode:
+     * - TIM1 CH4 remains running and continues to trigger ADC1 injected conversions.
+     * - TIM1 CH1/CH2/CH3 and complementary outputs are never started.
+     * - Keep power_output_enabled cleared so the FOC fast loop cannot drive PWM.
+     * The offset retained here is the Stage-1 value measured with the bridge off.
+     */
+    return HAL_OK;
+#else
+
+    /* Enable all legs at the same 50% duty, producing zero line voltage. */
+    BspPwm_SetVoltageABC(0.0f, 0.0f, 0.0f);
+    status = BspPwm_StartPowerOutputs();
+    if (status != HAL_OK)
+    {
+        BspPwm_Stop();
+        return status;
+    }
+
+    /* Allow gate-driver and current-amplifier switching transients to settle. */
+    HAL_Delay(USER_MOTOR_ZERO_VECTOR_SETTLE_MS);
+
+    /* Stage 2: capture the actual offsets while zero-vector PWM is switching. */
+    BspAdc_RestartCurrentOffsetCalibration();
+    status = UserMotor_WaitForCurrentOffset();
+    if (status != HAL_OK)
+    {
+        BspPwm_Stop();
+        return status;
+    }
+
+    s_motor.power_output_enabled = 1u;
+    return HAL_OK;
+#endif
 }
 
 /**
- * @brief  电机快速控制环（20kHz，在 ADC 中断中执行）
+ * @brief  电机快速控制环（10kHz，在 ADC 中断中执行）
  * @note   放置在 .fastcode 段（CCM SRAM），以保证零等待执行。
  *         执行流程：
  *         1. 等待 ADC 零电流偏移校准完成
@@ -286,11 +357,18 @@ USER_MOTOR_FAST_CODE void UserMotor_FastLoop(void)
     (void)output;
 #endif
 
-    if (BspAdc_IsCurrentOffsetReady() == 0u)
+    if ((BspAdc_IsCurrentOffsetReady() == 0u) ||
+        (s_motor.power_output_enabled == 0u))
     {
         BspPwm_SetVoltageABC(0.0f, 0.0f, 0.0f);
         return;
     }
+
+#if (USER_MOTOR_DEBUG_ZERO_VECTOR_PWM != 0u)
+    /* Keep all three phase duties at 50% while ADC sampling remains active. */
+    BspPwm_SetVoltageABC(0.0f, 0.0f, 0.0f);
+    return;
+#endif
 
 #if ((USER_MOTOR_DEBUG_OPEN_VOLTAGE != 0u) || (USER_MOTOR_DEBUG_FIXED_VECTOR != 0u)) && (USER_MOTOR_DEBUG_FORCE_ENABLE != 0u)
     iq_ref_target = USER_MOTOR_IQ_REF_MAX;

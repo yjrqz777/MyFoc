@@ -160,7 +160,6 @@ extern DMA_HandleTypeDef hdma_tim2_ch1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim7;
-extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -373,20 +372,6 @@ void TIM1_UP_TIM16_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles USART3 global interrupt / USART3 wake-up interrupt through EXTI line 28.
-  */
-void USART3_IRQHandler(void)
-{
-  /* USER CODE BEGIN USART3_IRQn 0 */
-
-  /* USER CODE END USART3_IRQn 0 */
-  HAL_UART_IRQHandler(&huart3);
-  /* USER CODE BEGIN USART3_IRQn 1 */
-
-  /* USER CODE END USART3_IRQn 1 */
-}
-
-/**
   * @brief This function handles TIM6 global interrupt, DAC1 and DAC3 channel underrun error interrupts.
   */
 void TIM6_DAC_IRQHandler(void)
@@ -416,5 +401,20 @@ void TIM7_DAC_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
+
+/**
+  * @brief TIM1 capture/compare interrupt; CH4 down-count compare is the ADC sample trigger.
+  */
+void TIM1_CC_IRQHandler(void)
+{
+  if ((__HAL_TIM_GET_FLAG(&htim1, TIM_FLAG_CC4) != RESET) &&
+      (__HAL_TIM_GET_IT_SOURCE(&htim1, TIM_IT_CC4) != RESET) &&
+      ((TIM1->CR1 & TIM_CR1_DIR) != 0u))
+  {
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_10);
+  }
+
+  HAL_TIM_IRQHandler(&htim1);
+}
 
 /* USER CODE END 1 */

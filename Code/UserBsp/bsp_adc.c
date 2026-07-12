@@ -62,6 +62,24 @@ static void BspAdc_ResetCurrentOffset(void)
 }
 
 /**
+ * @brief  Restart current-offset accumulation while injected ADC keeps running.
+ * @note   This is used after enabling a zero-voltage PWM vector so the stored
+ *         offsets include switching common-mode effects. The short critical
+ *         section prevents the ADC ISR from updating the sums during reset.
+ */
+void BspAdc_RestartCurrentOffsetCalibration(void)
+{
+    uint32_t primask = __get_PRIMASK();
+
+    __disable_irq();
+    BspAdc_ResetCurrentOffset();
+    if (primask == 0u)
+    {
+        __enable_irq();
+    }
+}
+
+/**
  * @brief  ADC 原始值转电流值
  * @param[in] raw  ADC 原始采样值（12-bit，0~4095）
  * @return 实际电流值，单位 A
@@ -156,6 +174,8 @@ uint8_t BspAdc_UpdateInjected(ADC_HandleTypeDef *hadc)
         return 0u;
     }
 
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_11);
+
     s_injected_raw[0] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_1);
     s_injected_raw[1] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_2);
     s_injected_raw[2] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_3);
@@ -188,7 +208,7 @@ uint8_t BspAdc_UpdateInjected(ADC_HandleTypeDef *hadc)
  * @note   由 TIM1 CH4 触发 ADC1 注入转换，转换完成后硬件触发此回调。
  *         在回调中更新采样缓冲并执行电机快速控制环。
  *         此函数运行在中断上下文中，必须保持高效。
- *         控制频率由 TIM1 配置决定，标称 20kHz。
+ *         控制频率由 TIM1 配置决定，标称 10kHz。
  */
 void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
@@ -320,6 +340,7 @@ float BspAdc2_GetVoltage(BspAdc2Channel_t channel)
 float BspAdc_GetIa(void)
 {
     return BSP_ADC_PHASE_CURRENT_SIGN * BspAdc_RawToCurrent(s_injected_raw[0], s_current_offset[0]);
+    
 }
 
 /**

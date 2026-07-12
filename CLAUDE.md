@@ -34,7 +34,7 @@ For hardware/runtime verification, flash and debug the generated target with the
 ### Application layer: `Code/UserApp`
 
 - `user_motor.c` owns motor lifecycle and the fast control loop. The current implementation uses a ramped open-loop electrical angle and an Iq reference ramp, then calls the FOC current loop and writes phase voltage to the PWM BSP. The fast loop is marked `USER_MOTOR_FAST_CODE` and is invoked from the ADC injected-conversion completion callback.
-- `user_foc.c` implements the current-loop math: Clarke transform, Park transform, d/q PI controllers with anti-windup, d/q voltage limiting, inverse transforms, and FOC state/reference accessors. Its nominal control period is 50 us (20 kHz).
+- `user_foc.c` implements the current-loop math: Clarke transform, Park transform, d/q PI controllers with anti-windup, d/q voltage limiting, inverse transforms, and FOC state/reference accessors. Its nominal control period is 100 us (10 kHz).
 - `user_system.c`, `user_display.c`, `user_button.c`, `user_button_fun.c`, and `user_time.c` implement cooperative foreground tasks, telemetry/display, button event handling, and time-related behavior.
 
 ### Board-support layer: `Code/UserBsp`

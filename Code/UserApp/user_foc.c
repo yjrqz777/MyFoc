@@ -7,7 +7,7 @@
  *          - dq 轴 PI 控制器（带积分抗饱和）
  *          - dq 电压限幅
  *
- *          控制周期由 ADC 注入转换触发，标称频率 20kHz（50us）。
+ *          控制周期由 ADC 注入转换触发，标称频率 10kHz（100us）。
  *          三相电流采样后经变换至 dq 坐标系，
  *          PI 控制器输出 dq 电压，再经逆变换得到三相调制电压。
  *******************************************************************************
@@ -16,8 +16,8 @@
 #include "user_foc.h"
 #include <math.h>
 
-/** @brief FOC 控制周期（秒），对应 20kHz */
-#define FOC_CONTROL_TS              0.00005f
+/** @brief FOC 控制周期（秒），对应 10kHz */
+#define FOC_CONTROL_TS              0.0001f
 
 /** @brief dq 电压调制限幅值 */
 #define FOC_MODULATION_LIMIT        20.0f
@@ -272,7 +272,7 @@ void FOC_Reset(void)
  * @note   运算流水线：
  *         abc → αβ (Clarke) → dq (Park) → PI 调节 → dq 限幅
  *         → αβ (逆 Park) → abc (逆 Clarke) → 三相调制电压
- *         由 ADC1 注入转换完成中断（20kHz）中调用，需保持高效。
+ *         由 ADC1 注入转换完成中断（10kHz）中调用，需保持高效。
  *         若 output 为 NULL，仅更新内部运行时状态。
  */
 void FOC_RunCurrentLoop(const FOC_CurrentLoopInput_t *input, FOC_CurrentLoopOutput_t *output)

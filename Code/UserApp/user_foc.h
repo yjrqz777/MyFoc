@@ -4,7 +4,7 @@
  *******************************************************************************
  * @note    声明 FOC 核心数据结构和对外接口。
  *          FOC 流程：Clarke → Park → PI 调节 → 逆 Park → 逆 Clarke
- *          控制周期 20kHz（50us），由 ADC1 注入转换完成中断驱动。
+ *          控制周期 10kHz（100us），由 ADC1 注入转换完成中断驱动。
  *******************************************************************************
  */
 
@@ -60,7 +60,7 @@ void FOC_Reset(void);
  * @brief 执行一次 FOC 电流闭环
  * @param[in] input 三相电流、电角度和 dq 电流参考值
  * @param[out] output 三相调制电压和实际 dq 电流，可传 NULL
- * @note 由 TIM1 CH4 触发的 ADC1 注入转换完成中断调用，标称频率 20 kHz
+ * @note 由 TIM1 CH4 触发的 ADC1 注入转换完成中断调用，标称频率 10 kHz
  */
 void FOC_RunCurrentLoop(const FOC_CurrentLoopInput_t *input, FOC_CurrentLoopOutput_t *output);
 

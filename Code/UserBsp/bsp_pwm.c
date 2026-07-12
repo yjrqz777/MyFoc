@@ -11,12 +11,16 @@
 #include "bsp_pwm.h"
 #include "tim.h"
 
-/* ADC trigger position in TIM1 period.
- * Keep it at the PWM center for this low-side current-sense board; moving it
- * to the zero-vector area made fixed-vector phase-current signs invalid.
+/* ADC trigger position for low-side shunt current sensing.
+ * TIM1 uses center-aligned mode 1, so the CC4 trigger is generated while the
+ * counter is counting down. PWM1 complementary low-side outputs are active
+ * while CNT is greater than each phase CCR. The FOC modulation limit keeps
+ * phase CCR1/2/3 at or below 60% of ARR, therefore CCR4=70% of ARR samples
+ * while all three low-side MOSFETs are on. At 10 kHz this leaves at least
+ * 5 us before the first phase switching edge, enough for all injected ranks.
  */
-#define BSP_PWM_ADC_TRIGGER_NUMERATOR    1u
-#define BSP_PWM_ADC_TRIGGER_DENOMINATOR  2u
+#define BSP_PWM_ADC_TRIGGER_NUMERATOR    7u
+#define BSP_PWM_ADC_TRIGGER_DENOMINATOR  10u
 
 /**
  * @brief  CCR 比较值限幅
@@ -47,26 +51,72 @@ static uint16_t BspPwm_LimitCompare(int32_t value, uint16_t pwm_max)
  * @retval HAL_BUSY        外设忙
  * @see    BspPwm_Stop
  */
-HAL_StatusTypeDef BspPwm_Start(void)
+HAL_StatusTypeDef BspPwm_StartAdcTrigger(void)
+{
+    uint16_t trigger = (uint16_t)(((uint32_t)BspPwm_GetPeriod() *
+                                   BSP_PWM_ADC_TRIGGER_NUMERATOR) /
+                                   BSP_PWM_ADC_TRIGGER_DENOMINATOR);
+
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_4, trigger);
+    HAL_NVIC_SetPriority(TIM1_CC_IRQn, 0u, 0u);
+    HAL_NVIC_EnableIRQ(TIM1_CC_IRQn);
+    return HAL_TIM_PWM_Start_IT(&htim1, TIM_CHANNEL_4);
+}
+
+HAL_StatusTypeDef BspPwm_StartPowerOutputs(void)
 {
     uint16_t pwm_zero = (uint16_t)(BspPwm_GetPeriod() / 2u);
 
+    /* Always enable the bridge from a zero-voltage command. */
     BspPwm_SetCompare(pwm_zero, pwm_zero, pwm_zero);
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_4,
-                         (uint32_t)(((uint32_t)BspPwm_GetPeriod() *
-                                     BSP_PWM_ADC_TRIGGER_NUMERATOR) /
-                                     BSP_PWM_ADC_TRIGGER_DENOMINATOR));
 
-    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1)    != HAL_OK) return HAL_ERROR;
-    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1) != HAL_OK) return HAL_ERROR;
+    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
+    {
+        return HAL_ERROR;
+    }
+    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
+    {
+        return HAL_ERROR;
+    }
 
-    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2)    != HAL_OK) return HAL_ERROR;
-    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2) != HAL_OK) return HAL_ERROR;
+    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2) != HAL_OK)
+    {
+        return HAL_ERROR;
+    }
+    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2) != HAL_OK)
+    {
+        return HAL_ERROR;
+    }
 
-    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3)    != HAL_OK) return HAL_ERROR;
-    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3) != HAL_OK) return HAL_ERROR;
+    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3) != HAL_OK)
+    {
+        return HAL_ERROR;
+    }
+    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3) != HAL_OK)
+    {
+        return HAL_ERROR;
+    }
 
-    return HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+    return HAL_OK;
+}
+
+HAL_StatusTypeDef BspPwm_Start(void)
+{
+    HAL_StatusTypeDef status;
+
+    status = BspPwm_StartAdcTrigger();
+    if (status != HAL_OK)
+    {
+        return status;
+    }
+
+    status = BspPwm_StartPowerOutputs();
+    if (status != HAL_OK)
+    {
+        BspPwm_Stop();
+    }
+
+    return status;
 }
 
 /**

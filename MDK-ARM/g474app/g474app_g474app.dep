@@ -1,10 +1,10 @@
 Dependencies for Project 'g474app', Target 'g474app': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (startup_stm32g474xx.s)(0x6A52F8C0)(--cpu Cortex-M4.fp.sp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include--pd "__UVISION_VERSION SETA 541" --pd "STM32G474xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32g474xx.lst --xref -o g474app\startup_stm32g474xx.o --depend g474app\startup_stm32g474xx.d)
-F (../Core/Src/main.c)(0x6A52FB0C)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\main.o --omf_browse g474app\main.crf --depend g474app\main.d)
+F (startup_stm32g474xx.s)(0x6A53A1AC)(--cpu Cortex-M4.fp.sp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include--pd "__UVISION_VERSION SETA 541" --pd "STM32G474xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32g474xx.lst --xref -o g474app\startup_stm32g474xx.o --depend g474app\startup_stm32g474xx.d)
+F (../Core/Src/main.c)(0x6A53A1AB)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\main.o --omf_browse g474app\main.crf --depend g474app\main.d)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -39,18 +39,15 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Core/Inc/adc.h)(0x69BBDEBA)
 I (../Core/Inc/dac.h)(0x6A52F8BE)
 I (../Core/Inc/dma.h)(0x69BBDEBA)
 I (../Core/Inc/spi.h)(0x69BBDEBB)
 I (../Core/Inc/tim.h)(0x6A4E4C6F)
-I (../Core/Inc/usart.h)(0x69BBDEBB)
 I (../Core/Inc/gpio.h)(0x69BBDEBA)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
-I (../Code/UserBsp/bsp_adc.h)(0x6A526C49)
+I (../Code/UserBsp/bsp_adc.h)(0x6A530378)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
@@ -62,11 +59,11 @@ I (../Code/UserApp/user_display.h)(0x6A523015)
 I (../Code/UserApp/user_system.h)(0x6A522F69)
 I (../Code/UserApp/user_motor.h)(0x6A5268C9)
 I (../Code/UserApp/user_time.h)(0x6A522FB5)
-F (../Core/Src/gpio.c)(0x69BBDEDB)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\gpio.o --omf_browse g474app\gpio.crf --depend g474app\gpio.d)
+F (../Core/Src/gpio.c)(0x6A53A1A8)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\gpio.o --omf_browse g474app\gpio.crf --depend g474app\gpio.d)
 I (../Core/Inc/gpio.h)(0x69BBDEBA)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -101,13 +98,11 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
-F (../Core/Src/adc.c)(0x6A4D05C3)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\adc.o --omf_browse g474app\adc.crf --depend g474app\adc.d)
+F (../Core/Src/adc.c)(0x6A53325E)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\adc.o --omf_browse g474app\adc.crf --depend g474app\adc.d)
 I (../Core/Inc/adc.h)(0x69BBDEBA)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -142,13 +137,11 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Core/Src/dac.c)(0x6A52F8BE)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\dac.o --omf_browse g474app\dac.crf --depend g474app\dac.d)
 I (../Core/Inc/dac.h)(0x6A52F8BE)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -183,13 +176,11 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Core/Src/dma.c)(0x6A4E4C6F)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\dma.o --omf_browse g474app\dma.crf --depend g474app\dma.d)
 I (../Core/Inc/dma.h)(0x69BBDEBA)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -224,13 +215,11 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Core/Src/spi.c)(0x6A4E593D)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\spi.o --omf_browse g474app\spi.crf --depend g474app\spi.d)
 I (../Core/Inc/spi.h)(0x69BBDEBB)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -265,13 +254,11 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
-F (../Core/Src/tim.c)(0x6A52F8BF)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\tim.o --omf_browse g474app\tim.crf --depend g474app\tim.d)
+F (../Core/Src/tim.c)(0x6A53A1AA)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\tim.o --omf_browse g474app\tim.crf --depend g474app\tim.d)
 I (../Core/Inc/tim.h)(0x6A4E4C6F)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -306,13 +293,10 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
-F (../Core/Src/usart.c)(0x69BBDEBB)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\usart.o --omf_browse g474app\usart.crf --depend g474app\usart.d)
-I (../Core/Inc/usart.h)(0x69BBDEBB)
+F (../Core/Src/stm32g4xx_it.c)(0x6A53A31B)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_it.o --omf_browse g474app\stm32g4xx_it.crf --depend g474app\stm32g4xx_it.d)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -347,49 +331,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
-F (../Core/Src/stm32g4xx_it.c)(0x6A52F8BF)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_it.o --omf_browse g474app\stm32g4xx_it.crf --depend g474app\stm32g4xx_it.d)
-I (../Core/Inc/main.h)(0x6A4E4C6F)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
-I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
-I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g474xx.h)(0x681B6F06)
-I (../Drivers/CMSIS/Include/core_cm4.h)(0x681B6EEC)
-I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025237E)
-I (../Drivers/CMSIS/Include/cmsis_version.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x681B6F06)
-I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stddef.h)(0x6025237E)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_adc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_it.h)(0x6A4E4C6F)
+I (../Core/Inc/stm32g4xx_it.h)(0x6A53A31B)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
 I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
@@ -397,7 +339,7 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 F (../Core/Src/stm32g4xx_hal_msp.c)(0x69BBDEBB)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_msp.o --omf_browse g474app\stm32g4xx_hal_msp.crf --depend g474app\stm32g4xx_hal_msp.d)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -432,11 +374,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_adc.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_adc.o --omf_browse g474app\stm32g4xx_hal_adc.crf --depend g474app\stm32g4xx_hal_adc.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -471,11 +411,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_adc_ex.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_adc_ex.o --omf_browse g474app\stm32g4xx_hal_adc_ex.crf --depend g474app\stm32g4xx_hal_adc_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -510,12 +448,10 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_adc.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_ll_adc.o --omf_browse g474app\stm32g4xx_ll_adc.crf --depend g474app\stm32g4xx_ll_adc.d)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal.o --omf_browse g474app\stm32g4xx_hal.crf --depend g474app\stm32g4xx_hal.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -550,11 +486,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_rcc.o --omf_browse g474app\stm32g4xx_hal_rcc.crf --depend g474app\stm32g4xx_hal_rcc.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -589,11 +523,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc_ex.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_rcc_ex.o --omf_browse g474app\stm32g4xx_hal_rcc_ex.crf --depend g474app\stm32g4xx_hal_rcc_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -628,11 +560,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_flash.o --omf_browse g474app\stm32g4xx_hal_flash.crf --depend g474app\stm32g4xx_hal_flash.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -667,11 +597,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ex.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_flash_ex.o --omf_browse g474app\stm32g4xx_hal_flash_ex.crf --depend g474app\stm32g4xx_hal_flash_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -706,11 +634,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ramfunc.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_flash_ramfunc.o --omf_browse g474app\stm32g4xx_hal_flash_ramfunc.crf --depend g474app\stm32g4xx_hal_flash_ramfunc.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -745,11 +671,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_gpio.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_gpio.o --omf_browse g474app\stm32g4xx_hal_gpio.crf --depend g474app\stm32g4xx_hal_gpio.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -784,11 +708,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_exti.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_exti.o --omf_browse g474app\stm32g4xx_hal_exti.crf --depend g474app\stm32g4xx_hal_exti.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -823,11 +745,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_dma.o --omf_browse g474app\stm32g4xx_hal_dma.crf --depend g474app\stm32g4xx_hal_dma.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -862,11 +782,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma_ex.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_dma_ex.o --omf_browse g474app\stm32g4xx_hal_dma_ex.crf --depend g474app\stm32g4xx_hal_dma_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -901,11 +819,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_pwr.o --omf_browse g474app\stm32g4xx_hal_pwr.crf --depend g474app\stm32g4xx_hal_pwr.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -940,11 +856,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr_ex.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_pwr_ex.o --omf_browse g474app\stm32g4xx_hal_pwr_ex.crf --depend g474app\stm32g4xx_hal_pwr_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -979,11 +893,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_cortex.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_cortex.o --omf_browse g474app\stm32g4xx_hal_cortex.crf --depend g474app\stm32g4xx_hal_cortex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1018,11 +930,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_dac.o --omf_browse g474app\stm32g4xx_hal_dac.crf --depend g474app\stm32g4xx_hal_dac.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1057,11 +967,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac_ex.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_dac_ex.o --omf_browse g474app\stm32g4xx_hal_dac_ex.crf --depend g474app\stm32g4xx_hal_dac_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1096,11 +1004,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_spi.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_spi.o --omf_browse g474app\stm32g4xx_hal_spi.crf --depend g474app\stm32g4xx_hal_spi.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1135,11 +1041,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_spi_ex.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_spi_ex.o --omf_browse g474app\stm32g4xx_hal_spi_ex.crf --depend g474app\stm32g4xx_hal_spi_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1174,11 +1078,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_tim.o --omf_browse g474app\stm32g4xx_hal_tim.crf --depend g474app\stm32g4xx_hal_tim.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1213,11 +1115,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim_ex.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_tim_ex.o --omf_browse g474app\stm32g4xx_hal_tim_ex.crf --depend g474app\stm32g4xx_hal_tim_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1252,86 +1152,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_uart.o --omf_browse g474app\stm32g4xx_hal_uart.crf --depend g474app\stm32g4xx_hal_uart.d)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
-I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
-I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g474xx.h)(0x681B6F06)
-I (../Drivers/CMSIS/Include/core_cm4.h)(0x681B6EEC)
-I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025237E)
-I (../Drivers/CMSIS/Include/cmsis_version.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x681B6F06)
-I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stddef.h)(0x6025237E)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_adc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart_ex.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\stm32g4xx_hal_uart_ex.o --omf_browse g474app\stm32g4xx_hal_uart_ex.crf --depend g474app\stm32g4xx_hal_uart_ex.d)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
-I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
-I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g474xx.h)(0x681B6F06)
-I (../Drivers/CMSIS/Include/core_cm4.h)(0x681B6EEC)
-I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025237E)
-I (../Drivers/CMSIS/Include/cmsis_version.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x681B6EEC)
-I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x681B6F06)
-I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stddef.h)(0x6025237E)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_adc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (../Core/Src/system_stm32g4xx.c)(0x681B6F06)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\system_stm32g4xx.o --omf_browse g474app\system_stm32g4xx.crf --depend g474app\system_stm32g4xx.d)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g474xx.h)(0x681B6F06)
@@ -1343,7 +1163,7 @@ I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x681B6EEC)
 I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x681B6EEC)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x681B6F06)
@@ -1369,14 +1189,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
-F (..\Code\UserApp\user_foc.c)(0x6A526BBB)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_foc.o --omf_browse g474app\user_foc.crf --depend g474app\user_foc.d)
-I (..\Code\UserApp\user_foc.h)(0x6A522FAB)
+F (..\Code\UserApp\user_foc.c)(0x6A533499)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_foc.o --omf_browse g474app\user_foc.crf --depend g474app\user_foc.d)
+I (..\Code\UserApp\user_foc.h)(0x6A533499)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1411,8 +1229,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
@@ -1420,12 +1236,12 @@ I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
-F (..\Code\UserApp\user_motor.c)(0x6A5269F9)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_motor.o --omf_browse g474app\user_motor.crf --depend g474app\user_motor.d)
+F (..\Code\UserApp\user_motor.c)(0x6A533864)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_motor.o --omf_browse g474app\user_motor.crf --depend g474app\user_motor.d)
 I (..\Code\UserApp\user_motor.h)(0x6A5268C9)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1460,24 +1276,22 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
 I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
-I (../Code/UserBsp/bsp_adc.h)(0x6A526C49)
-I (../Code/UserBsp/bsp_pwm.h)(0x6A4E45BC)
-I (..\Code\UserApp\user_foc.h)(0x6A522FAB)
+I (../Code/UserBsp/bsp_adc.h)(0x6A530378)
+I (../Code/UserBsp/bsp_pwm.h)(0x6A52FD62)
+I (..\Code\UserApp\user_foc.h)(0x6A533499)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\math.h)(0x60252378)
 F (..\Code\UserApp\user_display.c)(0x6A522FF0)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_display.o --omf_browse g474app\user_display.crf --depend g474app\user_display.d)
 I (..\Code\UserApp\user_display.h)(0x6A523015)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1512,8 +1326,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
@@ -1521,12 +1333,12 @@ I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (..\Code\UserApp\user_system.h)(0x6A522F69)
-I (../Code/UserBsp/bsp_adc.h)(0x6A526C49)
+I (../Code/UserBsp/bsp_adc.h)(0x6A530378)
 I (../Code/UserBsp/bsp_hall.h)(0x6A4E45CE)
 I (../Code/UserBsp/bsp_lcd.h)(0x6A4E593D)
 I (../Code/UserBsp/ws2812/bsp_ws2812.h)(0x6A4E4D55)
 I (..\Code\UserApp\user_button.h)(0x6A52300F)
-I (..\Code\UserApp\user_foc.h)(0x6A522FAB)
+I (..\Code\UserApp\user_foc.h)(0x6A533499)
 I (..\Code\UserApp\user_motor.h)(0x6A5268C9)
 I (../Code/UserBsp/st7789v/st7789v.h)(0x6A4E593D)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
@@ -1537,7 +1349,7 @@ I (..\Code\UserApp\user_button.h)(0x6A52300F)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1572,8 +1384,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
@@ -1586,7 +1396,7 @@ I (..\Code\UserApp\user_button.h)(0x6A52300F)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1621,8 +1431,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
@@ -1631,12 +1439,12 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (../Code/UserBsp/bsp_button.h)(0x6A4E4F83)
 I (..\Code\UserApp\user_system.h)(0x6A522F69)
-F (..\Code\UserApp\user_system.c)(0x6A526C49)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_system.o --omf_browse g474app\user_system.crf --depend g474app\user_system.d)
+F (..\Code\UserApp\user_system.c)(0x6A530D10)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_system.o --omf_browse g474app\user_system.crf --depend g474app\user_system.d)
 I (..\Code\UserApp\user_system.h)(0x6A522F69)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1671,23 +1479,21 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
 I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
-I (../Code/UserBsp/bsp_adc.h)(0x6A526C49)
-I (..\Code\UserApp\user_foc.h)(0x6A522FAB)
+I (../Code/UserBsp/bsp_adc.h)(0x6A530378)
+I (..\Code\UserApp\user_foc.h)(0x6A533499)
 I (..\Code\UserApp\user_motor.h)(0x6A5268C9)
 F (..\Code\UserApp\user_time.c)(0x6A522FB2)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\user_time.o --omf_browse g474app\user_time.crf --depend g474app\user_time.d)
 I (..\Code\UserApp\user_time.h)(0x6A522FB5)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1722,8 +1528,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
@@ -1731,12 +1535,12 @@ I (../Code/UserBsp/RTT/SEGGER_RTT_Conf.h)(0x6A4A7006)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (..\Code\UserApp\user_system.h)(0x6A522F69)
-F (..\Code\UserBsp\bsp_adc.c)(0x6A526C49)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\bsp_adc.o --omf_browse g474app\bsp_adc.crf --depend g474app\bsp_adc.d)
-I (..\Code\UserBsp\bsp_adc.h)(0x6A526C49)
+F (..\Code\UserBsp\bsp_adc.c)(0x6A53A31B)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\bsp_adc.o --omf_browse g474app\bsp_adc.crf --depend g474app\bsp_adc.d)
+I (..\Code\UserBsp\bsp_adc.h)(0x6A530378)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1771,8 +1575,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
@@ -1781,12 +1583,12 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x60252376)
 I (../Core/Inc/adc.h)(0x69BBDEBA)
 I (../Code/UserApp/user_motor.h)(0x6A5268C9)
-F (..\Code\UserBsp\bsp_pwm.c)(0x6A526B84)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\bsp_pwm.o --omf_browse g474app\bsp_pwm.crf --depend g474app\bsp_pwm.d)
-I (..\Code\UserBsp\bsp_pwm.h)(0x6A4E45BC)
+F (..\Code\UserBsp\bsp_pwm.c)(0x6A53A31B)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\bsp_pwm.o --omf_browse g474app\bsp_pwm.crf --depend g474app\bsp_pwm.d)
+I (..\Code\UserBsp\bsp_pwm.h)(0x6A52FD62)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1821,8 +1623,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
@@ -1835,7 +1635,7 @@ I (..\Code\UserBsp\bsp_hall.h)(0x6A4E45CE)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1870,8 +1670,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
@@ -1883,7 +1681,7 @@ I (..\Code\UserBsp\bsp_lcd.h)(0x6A4E593D)
 I (../Code/user_global.h)(0x6A4F9CF7)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1918,8 +1716,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Code/Task.h)(0x6A4E451B)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Code/UserBsp/RTT/SEGGER_RTT.h)(0x669A65BE)
@@ -1936,7 +1732,7 @@ I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdint.h)(0x6025237E)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -1970,13 +1766,11 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 F (..\Code\UserBsp\st7789v\st7789v.c)(0x6A4E593D)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Code -I ../Code/UserApp -I ../Code/UserBsp -I ../Code/UserBsp/ws2812 -I ../Code/UserDrv -I ../Code/UserBsp/RTT-I.\RTE\_g474app-ID:\App\Keil\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include-D__UVISION_VERSION="541" -DSTM32G474xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G474xx -D__TARGET_FPU_VFP-o g474app\st7789v.o --omf_browse g474app\st7789v.crf --depend g474app\st7789v.d)
 I (../Code/UserBsp/st7789v/st7789v.h)(0x6A4E593D)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -2011,8 +1805,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (D:\App\Keil\Keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (../Core/Inc/spi.h)(0x69BBDEBB)
 I (../Core/Inc/gpio.h)(0x69BBDEBA)
@@ -2034,7 +1826,7 @@ F (..\Code\UserBsp\ws2812\bsp_ws2812.c)(0x6A4E5F5B)(--c99 -c --cpu Cortex-M4.fp.
 I (..\Code\UserBsp\ws2812\bsp_ws2812.h)(0x6A4E4D55)
 I (../Core/Inc/main.h)(0x6A4E4C6F)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x681B6F06)
-I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A52F8BF)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6A53A1AA)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x681B6F06)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x681B6F06)
@@ -2069,6 +1861,4 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x681B6F06)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x681B6F06)
-I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x681B6F06)
 I (../Core/Inc/tim.h)(0x6A4E4C6F)

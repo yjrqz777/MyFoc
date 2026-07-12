@@ -78,7 +78,7 @@ void UserSystem_Init(void)
     tSysData.enuState = E_SYS_STATE_INIT;
     tSysData.u32PowerOnTimes = 0u;
     tSysData.u32OpenTimes = 0u;
-    SEGGER_RTT_WriteString(0, "Ia,Ib,Ic,Id,Iq,s_iq_ref,iq_ref_target,oc_fault,fault_ia,fault_ib,fault_ic\r\n");
+    SEGGER_RTT_WriteString(0, "Ia,Ib,Ic,Id,Iq,s_iq_ref,iq_ref_target,oc_fault,fault_ia,fault_ib,fault_ic,rawA,rawB,rawC\r\n");
 }
 
 
@@ -112,6 +112,9 @@ uint16_t PtTaskSystem(void)
         tCurrentDecimal3 fault_ib;
         tCurrentDecimal3 fault_ic;
         DQCurrent_t dq;
+        uint16_t raw_a;
+        uint16_t raw_b;
+        uint16_t raw_c;
 
         PT_WAIT_UNTIL(SYSTEM_TIME_MS / OS_TICK_MS);
 
@@ -148,8 +151,11 @@ uint16_t PtTaskSystem(void)
         fault_ia = UserSystem_CurrentToDecimal3(UserMotor_GetFaultIa());
         fault_ib = UserSystem_CurrentToDecimal3(UserMotor_GetFaultIb());
         fault_ic = UserSystem_CurrentToDecimal3(UserMotor_GetFaultIc());
+        raw_a = BspAdc_GetInjectedRaw(0u);
+        raw_b = BspAdc_GetInjectedRaw(1u);
+        raw_c = BspAdc_GetInjectedRaw(2u);
 
-        SEGGER_RTT_printf(0, "%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%u,%s%u.%03u,%s%u.%03u,%s%u.%03u\r\n",
+        SEGGER_RTT_printf(0, "%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%u,%u,%u\r\n",
                           ia.sign, (unsigned)ia.integer, (unsigned)ia.fraction,
                           ib.sign, (unsigned)ib.integer, (unsigned)ib.fraction,
                           ic.sign, (unsigned)ic.integer, (unsigned)ic.fraction,
@@ -160,7 +166,8 @@ uint16_t PtTaskSystem(void)
                           (unsigned)UserMotor_IsOverCurrentFault(),
                           fault_ia.sign, (unsigned)fault_ia.integer, (unsigned)fault_ia.fraction,
                           fault_ib.sign, (unsigned)fault_ib.integer, (unsigned)fault_ib.fraction,
-                          fault_ic.sign, (unsigned)fault_ic.integer, (unsigned)fault_ic.fraction);
+                          fault_ic.sign, (unsigned)fault_ic.integer, (unsigned)fault_ic.fraction,
+                          (unsigned)raw_a, (unsigned)raw_b, (unsigned)raw_c);
     }
 
     PT_END();

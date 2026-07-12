@@ -33,6 +33,7 @@ typedef enum
 } BspAdc2Channel_t;
 
 HAL_StatusTypeDef BspAdc_StartInjected(void);
+void BspAdc_RestartCurrentOffsetCalibration(void);
 uint8_t BspAdc_UpdateInjected(ADC_HandleTypeDef *hadc);
 uint16_t BspAdc_GetInjectedRaw(uint8_t index);
 float BspAdc_GetCurrentOffsetRaw(uint8_t index);
