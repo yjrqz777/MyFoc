@@ -11,7 +11,8 @@
 
 #include "user_global.h"
 
-#define BUTTON_TIME_MS  5    // ms - timer interrupt interval
+/** @brief 按键扫描调度周期（毫秒） */
+#define BUTTON_TIME_MS  5
 
 void buttons_init(void);
 uint8_t UserButton_GetRawMask(void);

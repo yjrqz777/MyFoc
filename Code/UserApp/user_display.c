@@ -63,6 +63,11 @@ void UserDisplay_Init(void)
 }
 
 
+/**
+ * @brief  系统初始化状态下的显示处理
+ * @note   设置 WS2812 为黄色（RGB 全亮），
+ *         在 LCD 上显示 "FOC" 标题（仅首次执行）
+ */
 void DisplayInit(void)
 {
     static uint8_t init_done = 0u;
@@ -77,6 +82,12 @@ void DisplayInit(void)
         LCD_ShowChineseTEST(0, 0, "FOC", BLACK, WHITE, 80,135, 0);
     }
 }
+
+/**
+ * @brief  上电状态下的显示处理
+ * @note   设置 WS2812 为红色，
+ *         在 LCD 上显示作者信息（仅首次执行）
+ */
 void DisplayPowerOn(void)
 {
     static uint8_t init_done = 0u;
@@ -90,10 +101,16 @@ void DisplayPowerOn(void)
         init_done = 1;
         LCD_ShowString(0, 0, "YJRQZ777", BLACK, WHITE, 16, 0);
     }
-    
+
 }
 
-
+/**
+ * @brief  运行状态下的显示处理
+ * @note   设置 WS2812 为绿色，按周期刷新 LCD：
+ *         - 左列：电位器 ADC 值、Iq 参考值和目标值
+ *         - 中列：按键 2 按下状态、运行计数器
+ *         实际刷新间隔 100ms（累积显示周期后输出）
+ */
 void DisplayRunning(void)
 {
     static uint8_t u8timecount = 0u;
@@ -104,7 +121,7 @@ void DisplayRunning(void)
     uint16_t iq_target_ma;
     (void)dq;
 
-    
+
     tDisData.u8color[0] = 0;
     tDisData.u8color[1] = DISPLAY_WS2812_LEVEL;
     tDisData.u8color[2] = 0;
@@ -115,34 +132,22 @@ void DisplayRunning(void)
     }
     u8timecount = 0;
 
-
-    /* 左列：Hall + ADC */
-    // BspLcd_ShowUInt(0, 24, hall_state, 1);
+    /* 左列：电位器 ADC + Iq 参考值 */
     BspLcd_ShowUInt(0, 48, BspAdc2_GetRaw(BSP_ADC2_POT), 4);
     iq_ref_ma = (uint16_t)(UserMotor_GetIqRef() * 1000.0f);
     iq_target_ma = (uint16_t)(UserMotor_GetIqRefTarget() * 1000.0f);
     BspLcd_ShowUInt(0, 72, iq_ref_ma, 4);
     BspLcd_ShowUInt(0, 96, iq_target_ma, 4);
-    // BspLcd_ShowUInt(0, 48, BspAdc_GetInjectedRaw(0), 4);
-    // BspLcd_ShowUInt(0, 72, BspAdc_GetInjectedRaw(1), 4);
-    // BspLcd_ShowUInt(0, 96, BspAdc_GetInjectedRaw(2), 4);
-    // BspLcd_ShowUInt(0, 120, BspAdc_GetInjectedRaw(3), 4);
 
-    /* 中列：按键状态 */
-    // BspLcd_ShowUInt(96, 24, UserButton_GetPressedMask(), 2);
-    // BspLcd_ShowUInt(96, 0, UserButton_GetPressed(1), 1);
+    /* 中列：按键状态 + 运行计数器 */
     BspLcd_ShowUInt(96, 0, UserButton_GetPressed(2), 1);
     BspLcd_ShowUInt(120, 0, u8timecount2++, 6);
-    // BspLcd_ShowUInt(96, 96, UserButton_GetPressed(3), 1);
-    // BspLcd_ShowUInt(96, 120, UserButton_GetPressed(4), 1);
-
-    /* 右列：按键事件 */
-    // BspLcd_ShowUInt(144, 48, UserButton_GetLastEvent(1), 1);
-    // BspLcd_ShowUInt(144, 72, UserButton_GetLastEvent(2), 1);
-    // BspLcd_ShowUInt(144, 96, UserButton_GetLastEvent(3), 1);
-    // BspLcd_ShowUInt(144, 120, UserButton_GetLastEvent(4), 1);
 }
 
+/**
+ * @brief  关闭状态下的显示处理
+ * @note   当前为空操作，预留用于关闭显示或进入低功耗模式
+ */
 void DisplayOff(void)
 {
     // UserDisplay_Update100ms();

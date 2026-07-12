@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dac.h"
 #include "dma.h"
 #include "spi.h"
 #include "tim.h"
@@ -127,11 +128,25 @@ int main(void)
   MX_TIM7_Init();
   MX_SPI1_Init();
   MX_TIM2_Init();
+  MX_DAC1_Init();
   /* USER CODE BEGIN 2 */
+
+HAL_DAC_SetValue(&hdac1,
+                 DAC_CHANNEL_1,
+                 DAC_ALIGN_12B_R,
+                 2048u);
+HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
+/* 等待DAC、U6和电流采样运放稳定 */
+HAL_Delay(100u);
+
   DebugRtt_Init();
   UserMotor_Init();
 
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+
+
+
+
   if (UserMotor_Start() != HAL_OK)
   {
       Error_Handler();
@@ -217,6 +232,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
+  {
+    uint32_t lr_value;
+    register uint32_t lr_reg __ASM("lr");
+    lr_value = lr_reg;
+    SEGGER_RTT_WriteString(0, "\r\n*** Error_Handler *** ");
+    /* LR 保存了调用 Error_Handler 后的返回地址，可结合 .map 文件定位调用位置 */
+    SEGGER_RTT_printf(0, "Caller=0x%08lX\r\n", (unsigned long)lr_value);
+  }
   __disable_irq();
   while (1)
   {
@@ -235,8 +258,13 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  (void)file;
-  (void)line;
+  SEGGER_RTT_WriteString(0, "\r\n*** ASSERT FAILED *** ");
+  SEGGER_RTT_WriteString(0, (const char *)file);
+  SEGGER_RTT_printf(0, " Line=%lu\r\n", (unsigned long)line);
+  __disable_irq();
+  while (1)
+  {
+  }
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

@@ -22,6 +22,10 @@ void UserMotor_FastLoop(void);
 float UserMotor_GetOpenLoopTheta(void);
 float UserMotor_GetIqRef(void);
 float UserMotor_GetIqRefTarget(void);
+uint8_t UserMotor_IsOverCurrentFault(void);
+float UserMotor_GetFaultIa(void);
+float UserMotor_GetFaultIb(void);
+float UserMotor_GetFaultIc(void);
 
 #ifdef __cplusplus
 }

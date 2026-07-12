@@ -1,10 +1,12 @@
-/***************************************************************************************************
- * Author: yjrqz777 3210551161@qq.com
- * Date: 2026-03-19
- * Description: FOC电流闭环控制头文件
- * FilePath: \Myfoc2\Code\UserApp\user_foc.h
- * @YJRQZ777
-***************************************************************************************************/
+/**
+ * @file    user_foc.h
+ * @brief   FOC 电流闭环控制头文件
+ *******************************************************************************
+ * @note    声明 FOC 核心数据结构和对外接口。
+ *          FOC 流程：Clarke → Park → PI 调节 → 逆 Park → 逆 Clarke
+ *          控制周期 20kHz（50us），由 ADC1 注入转换完成中断驱动。
+ *******************************************************************************
+ */
 
 #ifndef __USERFOC_H__
 #define __USERFOC_H__
@@ -15,51 +17,63 @@ extern "C" {
 
 #include "user_global.h"
 
-/***************************************************************************************************
- * 函数声明
-***************************************************************************************************/
-
-/**
- * @brief FOC电流闭环主控制函数
- * @param ia, ib, ic - 采样的三相电流（单位：A）
- * @param theta - 转子位置角（单位：弧度，0~2π）
- * @return none
- * @note 调用频率：10kHz（100µs），应在TIM6中断中调用
- */
-void FOC_CurrentLoop(float ia, float ib, float ic, float theta);
-void FOC_Reset(void);
-
-/**
- * @brief 获取FOC输出的三相电压
- * @param none
- * @return 三相电压结构体（单位：V或PWM占空比）
- */
-typedef struct {
+/** @brief 三相调制电压，范围与 BspPwm_SetVoltageABC 一致（-100 ~ 100） */
+typedef struct
+{
     float ua;
     float ub;
     float uc;
 } ThreePhaseVoltage_t;
 
-ThreePhaseVoltage_t FOC_GetThreePhaseVoltage(void);
-
-/**
- * @brief 设置FOC目标电流
- * @param id_ref - 目标直轴电流（通常为0A）
- * @param iq_ref - 目标交轴电流（控制转矩，单位：A）
- * @return none
- */
-void FOC_SetCurrentReference(float id_ref, float iq_ref);
-
-/**
- * @brief 获取FOC实际的dq轴电流
- * @param none
- * @return dq轴电流结构体
- */
-typedef struct {
+/** @brief dq 轴电流，单位 A */
+typedef struct
+{
     float d;
     float q;
 } DQCurrent_t;
 
+/** @brief 单次电流环输入 */
+typedef struct
+{
+    float ia;
+    float ib;
+    float ic;
+    float theta;
+    float id_ref;
+    float iq_ref;
+} FOC_CurrentLoopInput_t;
+
+/** @brief 单次电流环输出 */
+typedef struct
+{
+    ThreePhaseVoltage_t voltage;
+    DQCurrent_t current;
+} FOC_CurrentLoopOutput_t;
+
+/**
+ * @brief 复位 FOC 动态状态和电流参考值
+ * @note  应在启动 ADC 注入转换前调用，避免与快速环中断并发
+ */
+void FOC_Reset(void);
+
+/**
+ * @brief 执行一次 FOC 电流闭环
+ * @param[in] input 三相电流、电角度和 dq 电流参考值
+ * @param[out] output 三相调制电压和实际 dq 电流，可传 NULL
+ * @note 由 TIM1 CH4 触发的 ADC1 注入转换完成中断调用，标称频率 20 kHz
+ */
+void FOC_RunCurrentLoop(const FOC_CurrentLoopInput_t *input, FOC_CurrentLoopOutput_t *output);
+
+/** @brief 兼容接口：使用已设置的参考值执行一次电流环 */
+void FOC_CurrentLoop(float ia, float ib, float ic, float theta);
+
+/** @brief 设置兼容接口使用的 dq 电流参考值 */
+void FOC_SetCurrentReference(float id_ref, float iq_ref);
+
+/** @brief 获取最近一次闭环计算的三相调制电压 */
+ThreePhaseVoltage_t FOC_GetThreePhaseVoltage(void);
+
+/** @brief 获取最近一次闭环计算的 dq 轴电流 */
 DQCurrent_t FOC_GetDQCurrent(void);
 
 #ifdef __cplusplus

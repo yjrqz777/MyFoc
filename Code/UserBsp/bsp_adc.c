@@ -19,6 +19,7 @@
 #define BSP_ADC_FULL_SCALE          4095.0f
 #define BSP_ADC_CURRENT_SHUNT_OHM   0.010f
 #define BSP_ADC_CURRENT_GAIN        30.0f
+#define BSP_ADC_PHASE_CURRENT_SIGN  (-1.0f)
 
 /**
  * @brief 注入通道采样原始值缓冲（ISR 中更新）
@@ -40,6 +41,12 @@ static const uint32_t s_adc2_channel_map[BSP_ADC2_REGULAR_CHANNELS] = {
     ADC_CHANNEL_11,    /* PC5: VBUS */
 };
 
+/**
+ * @brief  复位 ADC 零电流偏移累积
+ * @note   清零各通道偏移和值和采样计数，
+ *         偏移准备标志置 0，等待重新累积。
+ *         在 ADC 启动注入采样时调用。
+ */
 static void BspAdc_ResetCurrentOffset(void)
 {
     uint8_t index;
@@ -68,6 +75,15 @@ static float BspAdc_RawToCurrent(uint16_t raw, float offset)
     return ((float)raw - offset) * adc_scale;
 }
 
+/**
+ * @brief  读取 ADC2 单个通道值（阻塞轮询模式）
+ * @param[in]  adc_channel   ADC 通道号（如 ADC_CHANNEL_6）
+ * @param[out] raw           原始 ADC 值（12-bit，0~4095）
+ * @retval HAL_OK   读取成功
+ * @retval other    HAL 错误码
+ * @note   每次调用均重新配置通道和启动转换，适用于低速轮询。
+ *         超时时间由 BSP_ADC2_POLL_TIMEOUT_MS 定义。
+ */
 static HAL_StatusTypeDef BspAdc2_ReadChannel(uint32_t adc_channel, uint16_t *raw)
 {
     ADC_ChannelConfTypeDef config = {0};
@@ -166,6 +182,14 @@ uint8_t BspAdc_UpdateInjected(ADC_HandleTypeDef *hadc)
     return 1u;
 }
 
+/**
+ * @brief  ADC1 注入转换完成中断回调（HAL 库重写）
+ * @param[in] hadc  ADC 句柄指针
+ * @note   由 TIM1 CH4 触发 ADC1 注入转换，转换完成后硬件触发此回调。
+ *         在回调中更新采样缓冲并执行电机快速控制环。
+ *         此函数运行在中断上下文中，必须保持高效。
+ *         控制频率由 TIM1 配置决定，标称 20kHz。
+ */
 void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
     if (BspAdc_UpdateInjected(hadc) != 0u)
@@ -188,11 +212,52 @@ uint16_t BspAdc_GetInjectedRaw(uint8_t index)
     return s_injected_raw[index];
 }
 
+/**
+ * @brief  查询 ADC 零电流偏移校准是否完成
+ * @retval 1  偏移校准已完成，电流采样值可用
+ * @retval 0  偏移收集中，电流值尚不可靠
+ * @note   采集 1024 个样本后自动置位
+ */
+
+/**
+ * @brief  Get calibrated zero-current offset in ADC counts.
+ * @param[in] index  Injected channel index: 0=Ia, 1=Ib, 2=Ic, 3=Ibus
+ * @return Offset average in raw ADC counts; returns 0 for invalid index.
+ */
+float BspAdc_GetCurrentOffsetRaw(uint8_t index)
+{
+    if (index >= BSP_ADC_INJECTED_CHANNELS)
+    {
+        return 0.0f;
+    }
+
+    return s_current_offset[index];
+}
+
+/**
+ * @brief  Get calibrated zero-current offset voltage.
+ * @param[in] index  Injected channel index: 0=Ia, 1=Ib, 2=Ic, 3=Ibus
+ * @return Offset voltage in V; returns 0 for invalid index.
+ */
+float BspAdc_GetCurrentOffsetVoltage(uint8_t index)
+{
+    return (BspAdc_GetCurrentOffsetRaw(index) * BSP_ADC_REF_VOLTAGE) / BSP_ADC_FULL_SCALE;
+}
+
 uint8_t BspAdc_IsCurrentOffsetReady(void)
 {
     return s_offset_ready;
 }
 
+/**
+ * @brief  轮询更新所有 ADC2 通道值
+ * @retval HAL_OK      所有通道更新成功
+ * @retval HAL_ERROR   校准失败
+ * @retval other       通道读取失败时的 HAL 错误码
+ * @note   包含 ADC2 自校准（仅首次执行），然后依次读取
+ *         各通道：SHA、SHB、SHC、POT、VBUS
+ *         在 foreground 任务中调用，不在中断中使用。
+ */
 HAL_StatusTypeDef BspAdc2_UpdateAll(void)
 {
     HAL_StatusTypeDef status;
@@ -222,6 +287,12 @@ HAL_StatusTypeDef BspAdc2_UpdateAll(void)
     return HAL_OK;
 }
 
+/**
+ * @brief  获取指定 ADC2 通道的原始采样值
+ * @param[in] channel  通道枚举（SHA/SHB/SHC/POT/VBUS）
+ * @return 原始 ADC 值（0~4095），无效通道返回 0
+ * @note   返回最近一次 BspAdc2_UpdateAll() 采集的值
+ */
 uint16_t BspAdc2_GetRaw(BspAdc2Channel_t channel)
 {
     if ((uint8_t)channel >= BSP_ADC2_REGULAR_CHANNELS)
@@ -232,6 +303,11 @@ uint16_t BspAdc2_GetRaw(BspAdc2Channel_t channel)
     return s_adc2_regular_raw[(uint8_t)channel];
 }
 
+/**
+ * @brief  获取指定 ADC2 通道的电压值
+ * @param[in] channel  通道枚举（SHA/SHB/SHC/POT/VBUS）
+ * @return 电压值（V），计算公式：raw * 3.3V / 4095
+ */
 float BspAdc2_GetVoltage(BspAdc2Channel_t channel)
 {
     return ((float)BspAdc2_GetRaw(channel) * BSP_ADC_REF_VOLTAGE) / BSP_ADC_FULL_SCALE;
@@ -243,7 +319,7 @@ float BspAdc2_GetVoltage(BspAdc2Channel_t channel)
  */
 float BspAdc_GetIa(void)
 {
-    return BspAdc_RawToCurrent(s_injected_raw[0], s_current_offset[0]);
+    return BSP_ADC_PHASE_CURRENT_SIGN * BspAdc_RawToCurrent(s_injected_raw[0], s_current_offset[0]);
 }
 
 /**
@@ -252,7 +328,7 @@ float BspAdc_GetIa(void)
  */
 float BspAdc_GetIb(void)
 {
-    return BspAdc_RawToCurrent(s_injected_raw[1], s_current_offset[1]);
+    return BSP_ADC_PHASE_CURRENT_SIGN * BspAdc_RawToCurrent(s_injected_raw[1], s_current_offset[1]);
 }
 
 /**
@@ -261,7 +337,7 @@ float BspAdc_GetIb(void)
  */
 float BspAdc_GetIc(void)
 {
-    return BspAdc_RawToCurrent(s_injected_raw[2], s_current_offset[2]);
+    return BSP_ADC_PHASE_CURRENT_SIGN * BspAdc_RawToCurrent(s_injected_raw[2], s_current_offset[2]);
 }
 
 /**

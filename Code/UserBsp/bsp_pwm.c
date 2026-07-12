@@ -11,6 +11,13 @@
 #include "bsp_pwm.h"
 #include "tim.h"
 
+/* ADC trigger position in TIM1 period.
+ * Keep it at the PWM center for this low-side current-sense board; moving it
+ * to the zero-vector area made fixed-vector phase-current signs invalid.
+ */
+#define BSP_PWM_ADC_TRIGGER_NUMERATOR    1u
+#define BSP_PWM_ADC_TRIGGER_DENOMINATOR  2u
+
 /**
  * @brief  CCR 比较值限幅
  * @param[in] value    待限幅的整型值
@@ -45,6 +52,10 @@ HAL_StatusTypeDef BspPwm_Start(void)
     uint16_t pwm_zero = (uint16_t)(BspPwm_GetPeriod() / 2u);
 
     BspPwm_SetCompare(pwm_zero, pwm_zero, pwm_zero);
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_4,
+                         (uint32_t)(((uint32_t)BspPwm_GetPeriod() *
+                                     BSP_PWM_ADC_TRIGGER_NUMERATOR) /
+                                     BSP_PWM_ADC_TRIGGER_DENOMINATOR));
 
     if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1)    != HAL_OK) return HAL_ERROR;
     if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1) != HAL_OK) return HAL_ERROR;

@@ -17,16 +17,18 @@
 extern "C" {
 #endif
 
+/** @brief 显示状态-函数映射表项（将系统状态映射到对应的显示处理函数） */
 typedef struct tDisplayFunDataDef
 {
-    enuSysState enuState;
-    void (*fun)(void);
+    enuSysState enuState;       /**< 系统状态 */
+    void (*fun)(void);          /**< 对应的显示处理函数指针 */
 } tDisplayFunDataDef;
 
+/** @brief 显示数据全局结构体 */
 typedef struct tDisDataDef
 {
-    uint8_t u8color[3];
-    uint16_t u16RGB;
+    uint8_t u8color[3];         /**< WS2812 RGB 颜色值，索引 [R, G, B] */
+    uint16_t u16RGB;            /**< 备用 RGB 颜色值 */
 } tDisDataDef;
 
 extern tDisDataDef tDisData;
