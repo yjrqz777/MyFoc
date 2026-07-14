@@ -403,16 +403,18 @@ void TIM7_DAC_IRQHandler(void)
 /* USER CODE BEGIN 1 */
 
 /**
-  * @brief TIM1 capture/compare interrupt; CH4 down-count compare is the ADC sample trigger.
+  * @brief TIM1 capture/compare interrupt; CH4 up-count compare is the ADC sample trigger.
   */
 void TIM1_CC_IRQHandler(void)
 {
+  /*
   if ((__HAL_TIM_GET_FLAG(&htim1, TIM_FLAG_CC4) != RESET) &&
       (__HAL_TIM_GET_IT_SOURCE(&htim1, TIM_IT_CC4) != RESET) &&
-      ((TIM1->CR1 & TIM_CR1_DIR) != 0u))
+      ((TIM1->CR1 & TIM_CR1_DIR) == 0u))
   {
     HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_10);
   }
+  */
 
   HAL_TIM_IRQHandler(&htim1);
 }

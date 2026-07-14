@@ -11,15 +11,15 @@
 #include "bsp_pwm.h"
 #include "tim.h"
 
-/* ADC trigger position for low-side shunt current sensing.
- * TIM1 uses center-aligned mode 1, so the CC4 trigger is generated while the
- * counter is counting down. PWM1 complementary low-side outputs are active
- * while CNT is greater than each phase CCR. The FOC modulation limit keeps
- * phase CCR1/2/3 at or below 60% of ARR, therefore CCR4=70% of ARR samples
- * while all three low-side MOSFETs are on. At 10 kHz this leaves at least
- * 5 us before the first phase switching edge, enough for all injected ranks.
+/* ADC 低侧采样电阻电流采样触发位置。
+ * TIM1 使用中心对齐模式 2，因此 CH4 比较事件在计数器向上计数时产生。
+ * 当 CNT 向上越过各相 CCR 后，PWM1 对应的互补低侧输出进入有效状态。
+ * FOC 调制将 CCR1/CCR2/CCR3 限制在 ARR 的 60% 以内；将 CCR4 设置为
+ * ARR 的 80%，可使 ADC 在最后一路低侧 MOSFET 开启至少 10 us 后采样。
+ * 此采样点同时位于三相低侧 MOSFET 的公共导通区内，并避开开关边沿、
+ * 死区和电流放大器建立过程。
  */
-#define BSP_PWM_ADC_TRIGGER_NUMERATOR    7u
+#define BSP_PWM_ADC_TRIGGER_NUMERATOR    8u
 #define BSP_PWM_ADC_TRIGGER_DENOMINATOR  10u
 
 /**
