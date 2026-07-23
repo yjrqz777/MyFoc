@@ -28,7 +28,7 @@
 static volatile uint16_t s_injected_raw[BSP_ADC_INJECTED_CHANNELS] = {0};
 static volatile uint16_t s_adc2_regular_raw[BSP_ADC2_REGULAR_CHANNELS] = {0};
 static volatile uint32_t s_offset_sum[BSP_ADC_INJECTED_CHANNELS] = {0};
-static volatile float s_current_offset[BSP_ADC_INJECTED_CHANNELS] = {2048.0f, 2048.0f, 2048.0f, 2048.0f};
+static volatile float s_current_offset[BSP_ADC_INJECTED_CHANNELS] = {2048.0f, 2048.0f, 2048.0f};
 static volatile uint16_t s_offset_samples = 0u;
 static volatile uint8_t s_offset_ready = 0u;
 static uint8_t s_adc2_calibrated = 0u;
@@ -179,7 +179,7 @@ uint8_t BspAdc_UpdateInjected(ADC_HandleTypeDef *hadc)
     s_injected_raw[0] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_1);
     s_injected_raw[1] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_2);
     s_injected_raw[2] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_3);
-    s_injected_raw[3] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_4);
+    // s_injected_raw[3] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_4);
 
     if (s_offset_ready == 0u)
     {

@@ -30,6 +30,7 @@
 #include "Task.h"
 #include <stdio.h>
 #include "bsp_adc.h"
+#include "bsp_ws2812.h"
 #include "user_button.h"
 #include "user_display.h"
 #include "user_motor.h"
@@ -138,12 +139,15 @@ HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
 HAL_Delay(100u);
 
   DebugRtt_Init();
+
+  /* Send the initial-state color before motor startup can block the task loop. */
+  BspWs2812_Init();
+  if (BspWs2812_WriteColor(32u, 255u, 0u) != HAL_OK)
+  {
+      SEGGER_RTT_WriteString(0, "WS2812 start failed\r\n");
+  }
+  // HAL_Delay(1000u);
   UserMotor_Init();
-
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-
-
-
 
   if (UserMotor_Start() != HAL_OK)
   {
@@ -151,6 +155,16 @@ HAL_Delay(100u);
   }
 
   HAL_TIM_Base_Start_IT(&htim7);
+
+
+  /* Fixed-PWM PA5 test (do not enable while using the WS2812 DMA driver). */
+// HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);  // 启动PWM输出
+
+// __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 106);  // 设置约50%占空比
+
+// HAL_Delay(1000u);
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

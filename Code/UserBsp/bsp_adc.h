@@ -17,7 +17,7 @@ extern "C" {
 #include "user_global.h"
 
 /** @brief ADC 注入通道总数（Ia, Ib, Ic, Ibus） */
-#define BSP_ADC_INJECTED_CHANNELS 4u
+#define BSP_ADC_INJECTED_CHANNELS 3u
 
 /** @brief ADC2 常规通道总数（SHA, SHB, SHC, POT, VBUS） */
 #define BSP_ADC2_REGULAR_CHANNELS 5u

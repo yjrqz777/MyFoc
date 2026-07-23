@@ -308,6 +308,7 @@ HAL_StatusTypeDef UserMotor_Start(void)
 
     /* Enable all legs at the same 50% duty, producing zero line voltage. */
     BspPwm_SetVoltageABC(0.0f, 0.0f, 0.0f);
+    // BspPwm_SetVoltageABC(-100.0f, -100.0f, -100.0f);
     status = BspPwm_StartPowerOutputs();
     if (status != HAL_OK)
     {
@@ -357,19 +358,20 @@ USER_MOTOR_FAST_CODE void UserMotor_FastLoop(void)
     (void)output;
 #endif
 
-    if ((BspAdc_IsCurrentOffsetReady() == 0u) ||
-        (s_motor.power_output_enabled == 0u))
-    {
-        BspPwm_SetVoltageABC(0.0f, 0.0f, 0.0f);
-        return;
-    }
+    // if ((BspAdc_IsCurrentOffsetReady() == 0u) ||
+    //     (s_motor.power_output_enabled == 0u))
+    // {
+    //     BspPwm_SetVoltageABC(0.0f, 0.0f, 0.0f);
+    //     return;
+    // }
 
-#if (USER_MOTOR_DEBUG_ZERO_VECTOR_PWM != 0u)
-    /* Keep all three phase duties at 50% while ADC sampling remains active. */
-    BspPwm_SetVoltageABC(0.0f, 0.0f, 0.0f);
+// #if (USER_MOTOR_DEBUG_ZERO_VECTOR_PWM != 0u)
+//     /* Keep all three phase duties at 50% while ADC sampling remains active. */
+//     BspPwm_SetVoltageABC(0.0f, 0.0f, 0.0f);
+//     return;
+// #endif
+BspPwm_SetVoltageABC(-100.0f, -100.0f, -100.0f);
     return;
-#endif
-
 #if ((USER_MOTOR_DEBUG_OPEN_VOLTAGE != 0u) || (USER_MOTOR_DEBUG_FIXED_VECTOR != 0u)) && (USER_MOTOR_DEBUG_FORCE_ENABLE != 0u)
     iq_ref_target = USER_MOTOR_IQ_REF_MAX;
 #else

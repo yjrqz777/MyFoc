@@ -24,30 +24,12 @@
 
 tDisDataDef tDisData;
 
-#define DISPLAY_WS2812_LEVEL 255u
+#define DISPLAY_WS2812_LEVEL 25u
 
 static void UserDisplay_SetWs2812Color(uint8_t red, uint8_t green, uint8_t blue)
 {
-    static uint8_t last_valid = 0u;
-    static uint8_t last_red = 0u;
-    static uint8_t last_green = 0u;
-    static uint8_t last_blue = 0u;
-
-    if ((last_valid != 0u) &&
-        (last_red == red) &&
-        (last_green == green) &&
-        (last_blue == blue))
-    {
-        return;
-    }
-
-    if (BspWs2812_WriteColor(red, green, blue) == HAL_OK)
-    {
-        last_valid = 1u;
-        last_red = red;
-        last_green = green;
-        last_blue = blue;
-    }
+    /* Refresh periodically so the short WS2812 frame remains observable. */
+    (void)BspWs2812_WriteColor(red, green, blue);
 }
 
 /** @brief 显示更新周期（毫秒） */
@@ -59,9 +41,9 @@ static void UserDisplay_SetWs2812Color(uint8_t red, uint8_t green, uint8_t blue)
 void UserDisplay_Init(void)
 {
     BspLcd_Init();
-    // BspWs2812_Init();
+    BspWs2812_Init();
 }
-
+static uint8_t PowerOninit_done = 0u;
 
 /**
  * @brief  系统初始化状态下的显示处理
@@ -90,15 +72,15 @@ void DisplayInit(void)
  */
 void DisplayPowerOn(void)
 {
-    static uint8_t init_done = 0u;
 
     tDisData.u8color[0] = DISPLAY_WS2812_LEVEL;
     tDisData.u8color[1] = 0;
     tDisData.u8color[2] = 0;
 
-    if (init_done == 0)
+    if (PowerOninit_done == 0)
     {
-        init_done = 1;
+        PowerOninit_done = 1;
+        LCD_ShowChineseTEST(0, 0, "FOC", BLACK, WHITE, 80,135, 0);
         LCD_ShowString(0, 0, "YJRQZ777", BLACK, WHITE, 16, 0);
     }
 
@@ -113,6 +95,7 @@ void DisplayPowerOn(void)
  */
 void DisplayRunning(void)
 {
+    PowerOninit_done = 0u;
     static uint8_t u8timecount = 0u;
     static uint16_t u8timecount2 = 0u;
     uint8_t hall_state = BspHall_GetState();
@@ -190,7 +173,7 @@ uint16_t PtTaskDisplay(void)
             }
         }
         // SEGGER_RTT_printf(0, "%d,%d,%d\r\n", tSysData.enuState,tSysData.u32OpenTimes, tSysData.u32PowerOnTimes);
-        // UserDisplay_SetWs2812Color(tDisData.u8color[0], tDisData.u8color[1], tDisData.u8color[2]);
+        UserDisplay_SetWs2812Color(tDisData.u8color[0], tDisData.u8color[1], tDisData.u8color[2]);
 
         // DisPlayDrive();
 

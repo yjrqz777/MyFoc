@@ -1,0 +1,2 @@
+Error: *** Project 'g474app', Target 'g474app' requires 'ARM' Toolchain which is not installed.
+Build Time Elapsed:  00:00:00

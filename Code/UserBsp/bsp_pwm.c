@@ -2,37 +2,63 @@
  * @file    bsp_pwm.c
  * @brief   PWM 底层驱动实现 — 三相六路 PWM 输出控制
  *******************************************************************************
- * @note    TIM1 高级定时器，中心对齐模式，死区由 CubeMX 配置
- *          电压标幺值转 CCP 比较值公式：
- *          CCR = PWM/2 + (Voltage / 100.0) * PWM/2
+ * @note    TIM1 高级定时器，中心对齐模式 2，死区由 CubeMX 配置
+ *          PWM 模式 2：CNT < CCR 时低侧导通，谷点（CNT=0）附近三相低侧
+ *          公共导通，用于低侧采样电阻电流采样。
+ *          电压标幺值转 CCR 比较值公式（PWM 模式 2，占空比反向）：
+ *          CCR = PWM/2 - (Voltage / 100.0) * PWM/2
  *******************************************************************************
  */
 
 #include "bsp_pwm.h"
 #include "tim.h"
 
-/* ADC 低侧采样电阻电流采样触发位置。
- * TIM1 使用中心对齐模式 2，因此 CH4 比较事件在计数器向上计数时产生。
- * 当 CNT 向上越过各相 CCR 后，PWM1 对应的互补低侧输出进入有效状态。
- * FOC 调制将 CCR1/CCR2/CCR3 限制在 ARR 的 60% 以内；将 CCR4 设置为
- * ARR 的 80%，可使 ADC 在最后一路低侧 MOSFET 开启至少 10 us 后采样。
- * 此采样点同时位于三相低侧 MOSFET 的公共导通区内，并避开开关边沿、
- * 死区和电流放大器建立过程。
+/* ADC 低侧采样电阻电流采样触发位置（谷点采样方案）。
+ *
+ * PWM 模式 2 + 中心对齐模式 2：CNT < CCR 时互补低侧输出有效（低侧导通），
+ * 三相低侧在 CNT=0（谷点）附近形成公共导通窗口（零矢量 000）。
+ *
+ * TIM1 中心对齐模式 2，CH4 比较事件仅在向上计数时产生。
+ * CCR4 设为从 CNT=0 起的可配置延时值，向上计数越过 CCR4 时触发 ADC1 注入组。
+ *
+ * 采样时序约束：
+ *   samplePoint + adcTime + margin < min(CCR_A, CCR_B, CCR_C)
+ *
+ * 即 ADC 采样保持必须在最小相 CCR 之前完成，确保采样期间三相低侧均导通。
+ * BspPwm_LimitCompare 将 CCR 下限限制为 BSP_PWM_ADC_CCR_MIN 以满足此约束。
+ *
+ * 谷点低侧导通时间估算：以最小相 CCR 为例，低侧在向下计数越过 CCR 时开启，
+ * 到 CNT=0 已导通 CCR 个计数，加上向上计数到 CCR4 的延时，总导通时间充足。
  */
-#define BSP_PWM_ADC_TRIGGER_NUMERATOR    8u
-#define BSP_PWM_ADC_TRIGGER_DENOMINATOR  10u
+
+/** @brief ADC 采样触发点（从 CNT=0 向上计数后的延时，定时器计数值）
+ *         500 ticks ≈ 2.9 us @170 MHz */
+#define BSP_PWM_ADC_SAMPLE_POINT_TICKS   500u
+
+/** @brief ADC 注入组 4 通道转换时间（定时器计数值，约 1.2 us @170 MHz） */
+#define BSP_PWM_ADC_CONV_TIME_TICKS      200u
+
+/** @brief 采样安全裕量（定时器计数值，约 1.2 us @170 MHz） */
+#define BSP_PWM_ADC_MARGIN_TICKS         200u
+
+/** @brief CCR 下限：确保采样完成前三相低侧均处于导通状态 */
+#define BSP_PWM_ADC_CCR_MIN  (BSP_PWM_ADC_SAMPLE_POINT_TICKS + \
+                              BSP_PWM_ADC_CONV_TIME_TICKS +    \
+                              BSP_PWM_ADC_MARGIN_TICKS)
 
 /**
  * @brief  CCR 比较值限幅
  * @param[in] value    待限幅的整型值
  * @param[in] pwm_max  定时器周期（ARR 值）
- * @return 限幅后的有效 CCR 值（0 ~ pwm_max）
+ * @return 限幅后的有效 CCR 值（CCR_MIN ~ pwm_max）
+ * @note   下限 BSP_PWM_ADC_CCR_MIN 确保谷点采样窗口：
+ *         samplePoint + adcTime + margin < min(CCR_A, CCR_B, CCR_C)
  */
 static uint16_t BspPwm_LimitCompare(int32_t value, uint16_t pwm_max)
 {
-    if (value < 0)
+    if (value < (int32_t)BSP_PWM_ADC_CCR_MIN)
     {
-        return 0u;
+        return BSP_PWM_ADC_CCR_MIN;
     }
 
     if (value > (int32_t)pwm_max)
@@ -44,18 +70,17 @@ static uint16_t BspPwm_LimitCompare(int32_t value, uint16_t pwm_max)
 }
 
 /**
- * @brief  启动所有 PWM 通道输出
- * @note   每个通道先启主通道再启互补通道，最后启 CH4
- * @retval HAL_OK          所有通道启动成功
- * @retval HAL_ERROR       某通道启动失败（立即返回）
+ * @brief  启动 ADC 触发输出（CH4 谷点采样触发）
+ * @note   CCR4 设为 BSP_PWM_ADC_SAMPLE_POINT_TICKS，计数器从 0 向上
+ *         计数越过 CCR4 时触发 ADC1 注入组
+ * @retval HAL_OK          CH4 启动成功
+ * @retval HAL_ERROR       CH4 启动失败
  * @retval HAL_BUSY        外设忙
  * @see    BspPwm_Stop
  */
 HAL_StatusTypeDef BspPwm_StartAdcTrigger(void)
 {
-    uint16_t trigger = (uint16_t)(((uint32_t)BspPwm_GetPeriod() *
-                                   BSP_PWM_ADC_TRIGGER_NUMERATOR) /
-                                   BSP_PWM_ADC_TRIGGER_DENOMINATOR);
+    uint16_t trigger = BSP_PWM_ADC_SAMPLE_POINT_TICKS;
 
     __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_4, trigger);
     HAL_NVIC_SetPriority(TIM1_CC_IRQn, 0u, 0u);
@@ -165,18 +190,21 @@ void BspPwm_SetCompare(uint16_t ccr1, uint16_t ccr2, uint16_t ccr3)
  * @param[in] ua  A 相电压标幺值（-100 ~ 100）
  * @param[in] ub  B 相电压标幺值（-100 ~ 100）
  * @param[in] uc  C 相电压标幺值（-100 ~ 100）
- * @note   转换公式：CCR = PWM/2 + (U/100) * PWM/2
- *         -100 → 0%（最大负电压），0 → 50%（零电压），+100 → 100%（最大正电压）
- *         输出值自动限幅至 [0, PWM_PERIOD]
+ * @note   转换公式（PWM 模式 2，占空比反向）：
+ *         CCR = PWM/2 - (U/100) * PWM/2
+ *         +100 → CCR=0（高侧全开，最大正电压），0 → CCR=PWM/2（零电压），
+ *         -100 → CCR=PWM（高侧全关，最大负电压）
+ *         CCR 下限被限制为 BSP_PWM_ADC_CCR_MIN，确保谷点采样窗口
+ *         输出值自动限幅至 [CCR_MIN, PWM_PERIOD]
  */
 void BspPwm_SetVoltageABC(float ua, float ub, float uc)
 {
     uint16_t pwm_max = BspPwm_GetPeriod();
     float pwm_half = (float)pwm_max * 0.5f;
 
-    int32_t ccr1 = (int32_t)(pwm_half + (ua / 100.0f) * pwm_half);
-    int32_t ccr2 = (int32_t)(pwm_half + (ub / 100.0f) * pwm_half);
-    int32_t ccr3 = (int32_t)(pwm_half + (uc / 100.0f) * pwm_half);
+    int32_t ccr1 = (int32_t)(pwm_half - (ua / 100.0f) * pwm_half);
+    int32_t ccr2 = (int32_t)(pwm_half - (ub / 100.0f) * pwm_half);
+    int32_t ccr3 = (int32_t)(pwm_half - (uc / 100.0f) * pwm_half);
 
     BspPwm_SetCompare(BspPwm_LimitCompare(ccr1, pwm_max),
                       BspPwm_LimitCompare(ccr2, pwm_max),
