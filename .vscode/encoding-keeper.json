@@ -5,7 +5,11 @@
     "Core/Src/tim.c": "UTF-8",
     "Core/Src/main.c": "UTF-8",
     "Code/UserBsp/ws2812/bsp_ws2812.c": "UTF-8",
-    "doc/new_ws2812.md": "UTF-8"
+    "doc/new_ws2812.md": "UTF-8",
+    "Code/UserBsp/bsp_adc.h": "UTF-8",
+    "Code/UserBsp/bsp_adc.c": "UTF-8",
+    "Code/UserApp/user_foc.c": "UTF-8",
+    "Code/UserApp/user_foc.h": "UTF-8"
   },
   "folders": {}
 }

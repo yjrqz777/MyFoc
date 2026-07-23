@@ -122,21 +122,24 @@ uint16_t PtTaskSystem(void)
 
         if ((offset_printed == 0u) && (BspAdc_IsCurrentOffsetReady() != 0u))
         {
-            tCurrentDecimal3 off_a = UserSystem_CurrentToDecimal3(BspAdc_GetCurrentOffsetVoltage(0u));
-            tCurrentDecimal3 off_b = UserSystem_CurrentToDecimal3(BspAdc_GetCurrentOffsetVoltage(1u));
-            tCurrentDecimal3 off_c = UserSystem_CurrentToDecimal3(BspAdc_GetCurrentOffsetVoltage(2u));
-            tCurrentDecimal3 off_bus = UserSystem_CurrentToDecimal3(BspAdc_GetCurrentOffsetVoltage(3u));
-            uint16_t raw_a = (uint16_t)(BspAdc_GetCurrentOffsetRaw(0u) + 0.5f);
-            uint16_t raw_b = (uint16_t)(BspAdc_GetCurrentOffsetRaw(1u) + 0.5f);
-            uint16_t raw_c = (uint16_t)(BspAdc_GetCurrentOffsetRaw(2u) + 0.5f);
-            uint16_t raw_bus = (uint16_t)(BspAdc_GetCurrentOffsetRaw(3u) + 0.5f);
+            BspAdc_CalDebug_t dbg;
 
-            SEGGER_RTT_printf(0, "ADC_OFFSET_V,rawA=%u,rawB=%u,rawC=%u,rawBus=%u,VA=%s%u.%03u,VB=%s%u.%03u,VC=%s%u.%03u,VBusOff=%s%u.%03u\r\n",
-                              (unsigned)raw_a, (unsigned)raw_b, (unsigned)raw_c, (unsigned)raw_bus,
-                              off_a.sign, (unsigned)off_a.integer, (unsigned)off_a.fraction,
-                              off_b.sign, (unsigned)off_b.integer, (unsigned)off_b.fraction,
-                              off_c.sign, (unsigned)off_c.integer, (unsigned)off_c.fraction,
-                              off_bus.sign, (unsigned)off_bus.integer, (unsigned)off_bus.fraction);
+            BspAdc_GetCalDebug(&dbg);
+
+            SEGGER_RTT_printf(0, "CAL_DONE,retry=%u,state=%u\r\n",
+                              (unsigned)dbg.retry_count, (unsigned)dbg.state);
+            SEGGER_RTT_printf(0, "CAL_A,off=%u,min=%u,max=%u,span=%u,drift=%d\r\n",
+                              (unsigned)dbg.offset[0], (unsigned)dbg.min_raw[0],
+                              (unsigned)dbg.max_raw[0], (unsigned)dbg.span[0],
+                              (int)dbg.drift[0]);
+            SEGGER_RTT_printf(0, "CAL_B,off=%u,min=%u,max=%u,span=%u,drift=%d\r\n",
+                              (unsigned)dbg.offset[1], (unsigned)dbg.min_raw[1],
+                              (unsigned)dbg.max_raw[1], (unsigned)dbg.span[1],
+                              (int)dbg.drift[1]);
+            SEGGER_RTT_printf(0, "CAL_C,off=%u,min=%u,max=%u,span=%u,drift=%d\r\n",
+                              (unsigned)dbg.offset[2], (unsigned)dbg.min_raw[2],
+                              (unsigned)dbg.max_raw[2], (unsigned)dbg.span[2],
+                              (int)dbg.drift[2]);
             offset_printed = 1u;
         }
 

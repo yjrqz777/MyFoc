@@ -1,2 +1,35 @@
-Error: *** Project 'g474app', Target 'g474app' requires 'ARM' Toolchain which is not installed.
-Build Time Elapsed:  00:00:00
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'F:\keil\mdk\ARM\ARMCC\Bin'
+Build target 'g474app'
+compiling adc.c...
+compiling tim.c...
+compiling main.c...
+compiling user_system.c...
+..\Code\UserApp\user_system.c(170): warning:  #111-D: statement is unreachable
+      PT_END();
+..\Code\UserApp\user_system.c(97): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_system.c(97): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_system.c: 3 warnings, 0 errors
+compiling user_foc.c...
+compiling bsp_pwm.c...
+compiling user_motor.c...
+..\Code\UserApp\user_motor.c(109): warning:  #177-D: function "UserMotor_RampFloat"  was declared but never referenced
+  static float UserMotor_RampFloat(float current, float target, float step)
+..\Code\UserApp\user_motor.c(135): warning:  #177-D: function "UserMotor_SetOpenLoopVoltageVector"  was declared but never referenced
+  static void UserMotor_SetOpenLoopVoltageVector(float theta, float voltage)
+..\Code\UserApp\user_motor.c: 2 warnings, 0 errors
+compiling bsp_adc.c...
+compiling user_display.c...
+..\Code\UserApp\user_display.c(181): warning:  #111-D: statement is unreachable
+      PT_END();
+..\Code\UserApp\user_display.c(155): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_display.c(155): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_display.c: 3 warnings, 0 errors
+linking...
+Program Size: Code=31320 RO-data=19516 RW-data=288 ZI-data=5332  
+FromELF: creating hex file...
+"g474app\g474app.axf" - 0 Error(s), 8 Warning(s).
+Build Time Elapsed:  00:00:28
