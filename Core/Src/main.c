@@ -66,7 +66,7 @@ int fgetc(FILE *f)
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-static uint8_t rtt_jscope_up_buffer[1024];
+static uint8_t u8RttJscopeUpBuffer[1024];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -77,11 +77,11 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-static void DebugRtt_Init(void)
+static void UsrDebugRttInit(void)
 {
     SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
-    SEGGER_RTT_ConfigUpBuffer(1, "JScope_f32", rtt_jscope_up_buffer,
-                              sizeof(rtt_jscope_up_buffer), SEGGER_RTT_MODE_NO_BLOCK_TRIM);
+    SEGGER_RTT_ConfigUpBuffer(1, "JScope_f32", u8RttJscopeUpBuffer,
+                              sizeof(u8RttJscopeUpBuffer), SEGGER_RTT_MODE_NO_BLOCK_TRIM);
     SEGGER_RTT_WriteString(0, "Motor control startup\r\n");
 }
 
@@ -130,26 +130,34 @@ int main(void)
   MX_DAC1_Init();
   /* USER CODE BEGIN 2 */
 
-HAL_DAC_SetValue(&hdac1,
-                 DAC_CHANNEL_1,
-                 DAC_ALIGN_12B_R,
-                 2048u);
-HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
+// HAL_DAC_SetValue(&hdac1,
+//                  DAC_CHANNEL_1,
+//                  DAC_ALIGN_12B_R,
+//                  2048u);
+// HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
 /* 等待DAC、U6和电流采样运放稳定 */
 HAL_Delay(100u);
 
-  DebugRtt_Init();
+  UsrDebugRttInit();
 
   /* Send the initial-state color before motor startup can block the task loop. */
-  BspWs2812_Init();
-  if (BspWs2812_WriteColor(32u, 255u, 0u) != HAL_OK)
+  BspWs2812Init();
+  if (BspWs2812WriteColor(32u, 20u, 0u) != HAL_OK)
   {
       SEGGER_RTT_WriteString(0, "WS2812 start failed\r\n");
   }
-  // HAL_Delay(1000u);
-  UserMotor_Init();
+  HAL_Delay(100u);
+  HAL_StatusTypeDef MotorStatus;
 
-  if (UserMotor_Start() != HAL_OK)
+  UsrMotorInit();
+
+  MotorStatus = UsrMotorStart();
+
+  SEGGER_RTT_printf(0,
+                    "UsrMotorStart status=%d\r\n",
+                    (int)MotorStatus);
+
+  if (MotorStatus != HAL_OK)
   {
       Error_Handler();
   }
@@ -171,10 +179,10 @@ HAL_Delay(100u);
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    PT_TASK_REG(0, PtTaskDisplay);
-    PT_TASK_REG(1, PtTaskButton);
-    PT_TASK_REG(2, PtTaskSystem);
-    PT_TASK_REG(3, PtTaskTime);
+    PT_TASK_REG(0, UsrDisplayTask);
+    PT_TASK_REG(1, UsrButtonTask);
+    PT_TASK_REG(2, UsrSystemTask);
+    PT_TASK_REG(3, UsrTimeTask);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -244,14 +252,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  {
-    uint32_t lr_value;
-    register uint32_t lr_reg __ASM("lr");
-    lr_value = lr_reg;
-    SEGGER_RTT_WriteString(0, "\r\n*** Error_Handler *** ");
-    /* LR 保存了调用 Error_Handler 后的返回地址，可结合 .map 文件定位调用位置 */
-    SEGGER_RTT_printf(0, "Caller=0x%08lX\r\n", (unsigned long)lr_value);
-  }
+  /* ARMCC does not reliably expose LR through a C register variable here. */
+  SEGGER_RTT_WriteString(0, "\r\n*** Error_Handler ***\r\n");
   __disable_irq();
   while (1)
   {

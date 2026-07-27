@@ -7,8 +7,8 @@
  *******************************************************************************
  */
 
-#ifndef __GLOBAL_H__
-#define __GLOBAL_H__
+#ifndef __USER_GLOBAL_H__
+#define __USER_GLOBAL_H__
 
 #include "main.h"
 #include "Task.h"
@@ -25,6 +25,52 @@
 #define USER_MOTOR_CCMRAM     __attribute__((section(".ccmram")))
 #define USER_MOTOR_FAST_CODE  __attribute__((section(".fastcode")))
 #endif
+
+#define ABS_DIFF(a, b) ((a)>(b)?(a)-(b):(b)-(a))
+#define INCEX(X) (X = (++X == 0) ? (--X) : (X)) // 自加数 限制max
+#define DECEX(X) (X = (X > 0) ? (--X) : (0))    // 自减数 限制min
+#define INCEX_PLUS(X, MAX)  ((X) = ((X) < (MAX) ? ((X) + 1) : (MAX)))
+
+#define U16_HI(x)   ((unsigned char)(((unsigned int)(x) >> 8) & 0xFF))
+#define U16_LO(x)   ((unsigned char)(((unsigned int)(x)      ) & 0xFF))
+
+typedef void (*FuncPtr)(void);
+typedef void (*FuncPtrParam)(void *);
+
+typedef union uByteToBitDef
+{
+    unsigned char u8Byte;
+    struct {
+        unsigned char bit0 : 1;
+        unsigned char bit1 : 1;
+        unsigned char bit2 : 1;
+        unsigned char bit3 : 1;
+        unsigned char bit4 : 1;
+        unsigned char bit5 : 1;
+        unsigned char bit6 : 1;
+        unsigned char bit7 : 1;
+    } bits;  // 添加结构体名称
+} uByteToBitDef;
+
+typedef union uByteToLongDef
+{
+    unsigned char u8Byte[4];
+    unsigned long u32Data;
+} uByteToLongDef;
+
+
+typedef union uShortToLongDef
+{
+    unsigned short u16Byte[2];
+    unsigned long u32Data;
+} uShortToLongDef;
+
+typedef union uByteToShortgDef
+{
+    unsigned char u8Byte[2];
+    unsigned short u16Data;
+} uByteToShortgDef;
+
 /**
  * @name   8-bit 位模式常量 0x00~0x0F
  * @{
@@ -347,4 +393,4 @@
 #define _1111_1111 0xFF
 /** @} */
 
-#endif /* __GLOBAL_H__ */
+#endif /* __USER_GLOBAL_H__ */

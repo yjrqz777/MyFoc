@@ -15,7 +15,7 @@
  * @brief  初始化系统计时数据
  * @note   清零上电计时和开机计时，在系统启动时调用一次
  */
-void UserTime_Init(void)
+void UsrTimeInit(void)
 {
     tSysData.u32PowerOnTimes = 0u;
     tSysData.u32OpenTimes = 0u;
@@ -23,48 +23,47 @@ void UserTime_Init(void)
 
 /**
  * @brief  更新系统时间计数和状态机
- * @note   按 TIME_TIME_MS 周期调用，执行以下逻辑：
+ * @note   按 USR_TIME_TASK_INTERVAL_MS 周期调用，执行以下逻辑：
  *         - 累计上电时间（u32PowerOnTimes）
  *         - 上电 100ms 后将系统状态从 INIT 切换至 POWER_ON
  *         - 当状态达到 RUNNING 后累计开机时间（u32OpenTimes）
- * @see    PtTaskTime
+ * @see    UsrTimeTask
  */
-void UserSysTimeUpdate(void)
+void UsrTimeUpdate(void)
 {
-    tSysData.u32PowerOnTimes += TIME_TIME_MS;
+    tSysData.u32PowerOnTimes += USR_TIME_TASK_INTERVAL_MS;
 
-    if (tSysData.enuState == E_SYS_STATE_INIT && tSysData.u32PowerOnTimes > 100u)
+    if ((tSysData.eState == E_SYS_STATE_INIT) && (tSysData.u32PowerOnTimes > 100u))
     {
-        tSysData.enuState = E_SYS_STATE_POWER_ON;
+        tSysData.eState = E_SYS_STATE_POWER_ON;
     }
 
-    if (tSysData.enuState < E_SYS_STATE_RUNNING)
+    if (tSysData.eState < E_SYS_STATE_RUNNING)
     {
         return;
     }
 
-    tSysData.u32OpenTimes += TIME_TIME_MS;
+    tSysData.u32OpenTimes += USR_TIME_TASK_INTERVAL_MS;
 }
 
 /**
  * @brief  Protothread 系统时间协程任务
  * @return PT 状态码
- * @note   首次进入时初始化计时，之后按 TIME_TIME_MS 周期
- *         调 UserSysTimeUpdate() 更新系统计时
+ * @note   首次进入时初始化计时，之后按 USR_TIME_TASK_INTERVAL_MS 周期
+ *         调 UsrTimeUpdate() 更新系统计时
  */
-uint16_t PtTaskTime(void)
+uint16_t UsrTimeTask(void)
 {
     PT_BEGIN()
     {
-        UserTime_Init();
+        UsrTimeInit();
     }
 
     while (1)
     {
-        PT_WAIT_UNTIL(TIME_TIME_MS / OS_TICK_MS);
-        UserSysTimeUpdate();
+        PT_WAIT_UNTIL(USR_TIME_TASK_INTERVAL_MS / OS_TICK_MS);
+        UsrTimeUpdate();
     }
 
     PT_END();
 }
-

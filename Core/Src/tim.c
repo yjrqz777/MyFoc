@@ -63,7 +63,6 @@ void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-  /**/
   sConfigOC.OCMode = TIM_OCMODE_PWM2;
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
@@ -83,6 +82,7 @@ void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 50;
   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
   {
@@ -249,7 +249,7 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* tim_pwmHandle)
     __HAL_RCC_TIM2_CLK_ENABLE();
 
     /* TIM2 DMA Init */
-    /* TIM2_CH1 Init — WS2812 使用 CC1 DMA 请求 + Circular 模式 (doc/new_ws2812.md §7) */
+    /* TIM2_CH1 Init */
     hdma_tim2_ch1.Instance = DMA1_Channel2;
     hdma_tim2_ch1.Init.Request = DMA_REQUEST_TIM2_CH1;
     hdma_tim2_ch1.Init.Direction = DMA_MEMORY_TO_PERIPH;
@@ -322,6 +322,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
     /**TIM1 GPIO Configuration
+    PC3     ------> TIM1_CH4
     PB13     ------> TIM1_CH1N
     PB14     ------> TIM1_CH2N
     PB15     ------> TIM1_CH3N

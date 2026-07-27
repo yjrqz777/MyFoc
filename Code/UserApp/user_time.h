@@ -3,7 +3,7 @@
  * @brief   系统时间管理任务头文件
  *******************************************************************************
  * @note    提供系统计时功能，包括上电计时和开机计时。
- *          TIME_TIME_MS 决定时间任务的调度周期。
+ *          USR_TIME_TASK_INTERVAL_MS 决定时间任务的调度周期。
  *******************************************************************************
  */
 
@@ -13,7 +13,10 @@
 #include "user_global.h"
 
 /** @brief 时间任务调度周期（毫秒） */
-#define TIME_TIME_MS 10
+#define USR_TIME_TASK_INTERVAL_MS (10u)
 
-uint16_t PtTaskTime(void);
+void UsrTimeInit(void);
+void UsrTimeUpdate(void);
+uint16_t UsrTimeTask(void);
+
 #endif /* __USER_TIME_H__ */

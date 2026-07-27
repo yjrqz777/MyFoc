@@ -11,7 +11,7 @@
  *
  *          谷点采样时序约束 (doc §5, 用户要求第8点)：
  *            CCR4 + ADC_SAMPLE_TICKS + BLANK_TICKS <= min(CCR1, CCR2, CCR3)
- *          BspPwm_LimitCompare 将 CCR 下限限制为 CS_CCR_MIN 以满足此约束。
+ *          BspPwmLimitCompare 将 CCR 下限限制为 CS_CCR_MIN 以满足此约束。
  *
  *          电压标幺值转 CCR 公式（PWM 模式 2，占空比反向）：
  *            CCR = PWM/2 - (Voltage / 100.0) * PWM/2
@@ -24,25 +24,25 @@
 
 /**
  * @brief  CCR 比较值限幅
- * @param[in] value    待限幅的整型值
- * @param[in] pwm_max  定时器周期（ARR 值）
- * @return 限幅后的有效 CCR 值（CS_CCR_MIN ~ pwm_max）
+ * @param[in] s32Value    待限幅的整型值
+ * @param[in] u16PwmMax  定时器周期（ARR 值）
+ * @return 限幅后的有效 CCR 值（CS_CCR_MIN ~ u16PwmMax）
  * @note   下限 CS_CCR_MIN 确保谷点采样窗口：
  *         CCR4 + ADC_SAMPLE_TICKS + BLANK_TICKS <= min(CCR1, CCR2, CCR3)
  */
-static uint16_t BspPwm_LimitCompare(int32_t value, uint16_t pwm_max)
+static uint16_t BspPwmLimitCompare(int32_t s32Value, uint16_t u16PwmMax)
 {
-    if (value < (int32_t)CS_CCR_MIN)
+    if (s32Value < (int32_t)CS_CCR_MIN)
     {
         return (uint16_t)CS_CCR_MIN;
     }
 
-    if (value > (int32_t)pwm_max)
+    if (s32Value > (int32_t)u16PwmMax)
     {
-        return pwm_max;
+        return u16PwmMax;
     }
 
-    return (uint16_t)value;
+    return (uint16_t)s32Value;
 }
 
 /**
@@ -53,7 +53,7 @@ static uint16_t BspPwm_LimitCompare(int32_t value, uint16_t pwm_max)
  * @retval HAL_ERROR       CH4 启动失败
  * @retval HAL_BUSY        外设忙
  */
-HAL_StatusTypeDef BspPwm_StartAdcTrigger(void)
+HAL_StatusTypeDef BspPwmStartAdcTrigger(void)
 {
     __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_4, CS_ADC_TRIGGER_CCR);
     HAL_NVIC_SetPriority(TIM1_CC_IRQn, 0u, 0u);
@@ -61,12 +61,12 @@ HAL_StatusTypeDef BspPwm_StartAdcTrigger(void)
     return HAL_TIM_PWM_Start_IT(&htim1, TIM_CHANNEL_4);
 }
 
-HAL_StatusTypeDef BspPwm_StartPowerOutputs(void)
+HAL_StatusTypeDef BspPwmStartPowerOutputs(void)
 {
-    uint16_t pwm_zero = (uint16_t)(BspPwm_GetPeriod() / 2u);
+    uint16_t PwmZero = (uint16_t)(BspPwmGetPeriod() / 2u);
 
     /* Always enable the bridge from a zero-voltage command. */
-    BspPwm_SetCompare(pwm_zero, pwm_zero, pwm_zero);
+    BspPwmSetCompare(PwmZero, PwmZero, PwmZero);
 
     if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
     {
@@ -98,29 +98,29 @@ HAL_StatusTypeDef BspPwm_StartPowerOutputs(void)
     return HAL_OK;
 }
 
-HAL_StatusTypeDef BspPwm_Start(void)
+HAL_StatusTypeDef BspPwmStart(void)
 {
-    HAL_StatusTypeDef status;
+    HAL_StatusTypeDef Status;
 
-    status = BspPwm_StartAdcTrigger();
-    if (status != HAL_OK)
+    Status = BspPwmStartAdcTrigger();
+    if (Status != HAL_OK)
     {
-        return status;
+        return Status;
     }
 
-    status = BspPwm_StartPowerOutputs();
-    if (status != HAL_OK)
+    Status = BspPwmStartPowerOutputs();
+    if (Status != HAL_OK)
     {
-        BspPwm_Stop();
+        BspPwmStop();
     }
 
-    return status;
+    return Status;
 }
 
 /**
  * @brief  停止所有 PWM 通道输出（逆序停止）
  */
-void BspPwm_Stop(void)
+void BspPwmStop(void)
 {
     (void)HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_4);
 
@@ -136,7 +136,7 @@ void BspPwm_Stop(void)
  * @brief  获取 PWM 定时器周期值
  * @return 自动重装载寄存器（ARR）的值
  */
-uint16_t BspPwm_GetPeriod(void)
+uint16_t BspPwmGetPeriod(void)
 {
     return (uint16_t)__HAL_TIM_GET_AUTORELOAD(&htim1);
 }
@@ -147,59 +147,59 @@ uint16_t BspPwm_GetPeriod(void)
  * @note   用于采样窗口有效性检查 (doc §5)：
  *         CCR4 + ADC_SAMPLE_TICKS + BLANK_TICKS <= min(CCR1, CCR2, CCR3)
  */
-uint16_t BspPwm_GetMinCompare(void)
+uint16_t BspPwmGetMinCompare(void)
 {
-    uint16_t ccr1 = (uint16_t)__HAL_TIM_GetCompare(&htim1, TIM_CHANNEL_1);
-    uint16_t ccr2 = (uint16_t)__HAL_TIM_GetCompare(&htim1, TIM_CHANNEL_2);
-    uint16_t ccr3 = (uint16_t)__HAL_TIM_GetCompare(&htim1, TIM_CHANNEL_3);
-    uint16_t min_ccr = ccr1;
+    uint16_t Ccr1 = (uint16_t)__HAL_TIM_GetCompare(&htim1, TIM_CHANNEL_1);
+    uint16_t Ccr2 = (uint16_t)__HAL_TIM_GetCompare(&htim1, TIM_CHANNEL_2);
+    uint16_t Ccr3 = (uint16_t)__HAL_TIM_GetCompare(&htim1, TIM_CHANNEL_3);
+    uint16_t MinCcr = Ccr1;
 
-    if (ccr2 < min_ccr)
+    if (Ccr2 < MinCcr)
     {
-        min_ccr = ccr2;
+        MinCcr = Ccr2;
     }
-    if (ccr3 < min_ccr)
+    if (Ccr3 < MinCcr)
     {
-        min_ccr = ccr3;
+        MinCcr = Ccr3;
     }
 
-    return min_ccr;
+    return MinCcr;
 }
 
 /**
  * @brief  直接设置三相 PWM 比较寄存器
- * @param[in] ccr1  CH1 比较值（A 相上管）
- * @param[in] ccr2  CH2 比较值（B 相上管）
- * @param[in] ccr3  CH3 比较值（C 相上管）
+ * @param[in] u16Ccr1  CH1 比较值（A 相上管）
+ * @param[in] u16Ccr2  CH2 比较值（B 相上管）
+ * @param[in] u16Ccr3  CH3 比较值（C 相上管）
  */
-void BspPwm_SetCompare(uint16_t ccr1, uint16_t ccr2, uint16_t ccr3)
+void BspPwmSetCompare(uint16_t u16Ccr1, uint16_t u16Ccr2, uint16_t u16Ccr3)
 {
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, ccr1);
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_2, ccr2);
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, ccr3);
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, u16Ccr1);
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_2, u16Ccr2);
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, u16Ccr3);
 }
 
 /**
  * @brief  以电压标幺值设置三相 PWM 占空比
- * @param[in] ua  A 相电压标幺值（-100 ~ 100）
- * @param[in] ub  B 相电压标幺值（-100 ~ 100）
- * @param[in] uc  C 相电压标幺值（-100 ~ 100）
+ * @param[in] f32Ua  A 相电压标幺值（-100 ~ 100）
+ * @param[in] f32Ub  B 相电压标幺值（-100 ~ 100）
+ * @param[in] f32Uc  C 相电压标幺值（-100 ~ 100）
  * @note   转换公式（PWM 模式 2，占空比反向）：
  *         CCR = PWM/2 - (U/100) * PWM/2
  *         +100 → CCR=0（高侧全开），0 → CCR=PWM/2（零电压），
  *         -100 → CCR=PWM（高侧全关，低侧全开）
  *         CCR 下限被限制为 CS_CCR_MIN，确保谷点采样窗口
  */
-void BspPwm_SetVoltageABC(float ua, float ub, float uc)
+void BspPwmSetVoltageAbc(float f32Ua, float f32Ub, float f32Uc)
 {
-    uint16_t pwm_max = BspPwm_GetPeriod();
-    float pwm_half = (float)pwm_max * 0.5f;
+    uint16_t PwmMax = BspPwmGetPeriod();
+    float PwmHalf = (float)PwmMax * 0.5f;
 
-    int32_t ccr1 = (int32_t)(pwm_half - (ua / 100.0f) * pwm_half);
-    int32_t ccr2 = (int32_t)(pwm_half - (ub / 100.0f) * pwm_half);
-    int32_t ccr3 = (int32_t)(pwm_half - (uc / 100.0f) * pwm_half);
+    int32_t Ccr1 = (int32_t)(PwmHalf - (f32Ua / 100.0f) * PwmHalf);
+    int32_t Ccr2 = (int32_t)(PwmHalf - (f32Ub / 100.0f) * PwmHalf);
+    int32_t Ccr3 = (int32_t)(PwmHalf - (f32Uc / 100.0f) * PwmHalf);
 
-    BspPwm_SetCompare(BspPwm_LimitCompare(ccr1, pwm_max),
-                      BspPwm_LimitCompare(ccr2, pwm_max),
-                      BspPwm_LimitCompare(ccr3, pwm_max));
+    BspPwmSetCompare(BspPwmLimitCompare(Ccr1, PwmMax),
+                      BspPwmLimitCompare(Ccr2, PwmMax),
+                      BspPwmLimitCompare(Ccr3, PwmMax));
 }

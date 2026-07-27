@@ -14,7 +14,7 @@
  * @retval 0  低电平
  * @retval 1  高电平
  */
-uint8_t BspHall_ReadA(void)
+uint8_t BspHallReadA(void)
 {
     return (uint8_t)HAL_GPIO_ReadPin(HALL_A_GPIO_Port, HALL_A_Pin);
 }
@@ -24,7 +24,7 @@ uint8_t BspHall_ReadA(void)
  * @retval 0  低电平
  * @retval 1  高电平
  */
-uint8_t BspHall_ReadB(void)
+uint8_t BspHallReadB(void)
 {
     return (uint8_t)HAL_GPIO_ReadPin(HALL_B_GPIO_Port, HALL_B_Pin);
 }
@@ -34,47 +34,48 @@ uint8_t BspHall_ReadB(void)
  * @retval 0  低电平
  * @retval 1  高电平
  */
-uint8_t BspHall_ReadC(void)
+uint8_t BspHallReadC(void)
 {
     return (uint8_t)HAL_GPIO_ReadPin(HALL_C_GPIO_Port, HALL_C_Pin);
 }
 
 /**
  * @brief  读取三个 Hall 引脚电平并打包为结构体
- * @return BspHallPins_t 结构体
+ * @return tBspHallPinsDef 结构体
  */
-BspHallPins_t BspHall_ReadPins(void)
+tBspHallPinsDef BspHallReadPins(void)
 {
-    BspHallPins_t pins;
+    tBspHallPinsDef Pins;
 
-    pins.a = BspHall_ReadA();
-    pins.b = BspHall_ReadB();
-    pins.c = BspHall_ReadC();
+    Pins.u8A = BspHallReadA();
+    Pins.u8B = BspHallReadB();
+    Pins.u8C = BspHallReadC();
 
-    return pins;
+    return Pins;
 }
 
 /**
  * @brief  获取 Hall 状态码（组合三位 Hall 电平为 3-bit 值）
  * @return 状态码（0~7）
- * @note   bit0 = a 相, bit1 = b 相, bit2 = c 相
+ * @note   bit0 = A 相, bit1 = B 相, bit2 = C 相
  *         有效扇区范围：1~6
  */
-uint8_t BspHall_GetState(void)
+uint8_t BspHallGetState(void)
 {
-    BspHallPins_t pins = BspHall_ReadPins();
-    return (uint8_t)(pins.a | (pins.b << 1) | (pins.c << 2));
+    tBspHallPinsDef Pins = BspHallReadPins();
+
+    return (uint8_t)(Pins.u8A | (Pins.u8B << 1) | (Pins.u8C << 2));
 }
 
 /**
  * @brief  判断 Hall 状态是否有效
- * @param[in] state  Hall 状态码（0~7）
+ * @param[in] u8State  Hall 状态码（0~7）
  * @retval 1  有效（状态在 1~6 之间）
  * @retval 0  无效（状态为 0 或 7，对应全部低或全部高）
  * @note   正常情况下 Hall 传感器不会输出 000 或 111
  */
-uint8_t BspHall_IsValidState(uint8_t state)
+uint8_t BspHallIsValidState(uint8_t u8State)
 {
-    state &= 0x07u;
-    return (state != 0x00u) && (state != 0x07u);
+    u8State &= 0x07u;
+    return (u8State != 0x00u) && (u8State != 0x07u);
 }

@@ -137,7 +137,7 @@ TIM1 向上计数到 CCR4=500
 HAL_ADCEx_InjectedConvCpltCallback()
               │
               ▼
-      UserMotor_FastLoop()
+      UsrMotorFastLoop()
 ```
 
 ADC1 仍使用以下外部触发配置：
@@ -184,13 +184,13 @@ CCR = PWM/2 - (V/100) * PWM/2;
 当前电机启动流程先启动 ADC 注入采样和 TIM1 CH4，再进行静态零偏校准，之后才开启三相功率输出：
 
 ```text
-BspAdc_StartInjected()
+BspAdcStartInjected()
         ↓
-BspPwm_StartAdcTrigger()
+BspPwmStartAdcTrigger()
         ↓
 关闭功率桥进行零偏校准
         ↓
-BspPwm_StartPowerOutputs()
+BspPwmStartPowerOutputs()
 ```
 
 ## 9. CubeMX 同步说明

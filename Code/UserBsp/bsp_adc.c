@@ -8,7 +8,7 @@
  *
  *          偏置校准采用非阻塞状态机 (doc §9)：
  *          SETTLE → DISCARD → ACCUMULATE → CALCULATE → READY
- *          中断中仅做累计和 min/max 更新，除法和检查在 BspAdc_Process() 中执行。
+ *          中断中仅做累计和 min/max 更新，除法和检查在 BspAdcProcess() 中执行。
  *          校准完成后在 READY 状态每周期计算有符号电流码并检查采样窗口有效性。
  *******************************************************************************
  */
@@ -18,16 +18,16 @@
 #include "adc.h"
 #include "user_motor.h"
 
-#define BSP_ADC2_POLL_TIMEOUT_MS    2u
-#define BSP_ADC_REF_VOLTAGE         3.3f
-#define BSP_ADC_CONVERSION_STEPS    4096.0f
-#define BSP_ADC_FULL_SCALE          4095.0f
-#define BSP_ADC_CURRENT_SHUNT_OHM   0.010f
-#define BSP_ADC_CURRENT_GAIN        30.0f
+#define BSP_ADC2_POLL_TIMEOUT_MS    (2u)
+#define BSP_ADC_REF_VOLTAGE         (3.3f)
+#define BSP_ADC_CONVERSION_STEPS    (4096.0f)
+#define BSP_ADC_FULL_SCALE          (4095.0f)
+#define BSP_ADC_CURRENT_SHUNT_OHM   (0.010f)
+#define BSP_ADC_CURRENT_GAIN        (30.0f)
 #define BSP_ADC_PHASE_CURRENT_SIGN  (-1.0f)
 
 /* ---- ADC2 通道映射 ---- */
-static const uint32_t s_adc2_channel_map[BSP_ADC2_REGULAR_CHANNELS] = {
+static const uint32_t u32Adc2ChannelMap[BSP_ADC2_REGULAR_CHANNELS] = {
     ADC_CHANNEL_6,     /* PC0: SHA */
     ADC_CHANNEL_7,     /* PC1: SHB */
     ADC_CHANNEL_8,     /* PC2: SHC */
@@ -40,38 +40,38 @@ static const uint32_t s_adc2_channel_map[BSP_ADC2_REGULAR_CHANNELS] = {
  * ===================================================================== */
 
 /** @brief 注入通道采样原始值缓冲（ISR 中更新） */
-static volatile uint16_t s_injected_raw[BSP_ADC_INJECTED_CHANNELS] = {0};
+static volatile uint16_t u16InjectedRaw[BSP_ADC_INJECTED_CHANNELS] = {0};
 
 /** @brief ADC2 常规通道原始值 */
-static volatile uint16_t s_adc2_regular_raw[BSP_ADC2_REGULAR_CHANNELS] = {0};
+static volatile uint16_t u16Adc2RegularRaw[BSP_ADC2_REGULAR_CHANNELS] = {0};
 
 /** @brief 零电流偏置（ADC counts），校准前默认 2048 */
-static volatile uint16_t s_current_offset[BSP_ADC_INJECTED_CHANNELS] = {2048u, 2048u, 2048u};
+static volatile uint16_t u16CurrentOffset[BSP_ADC_INJECTED_CHANNELS] = {2048u, 2048u, 2048u};
 
 /** @brief 有符号电流码 (raw - offset)，ISR 中在 READY 状态更新 */
-static volatile int32_t s_current_code[BSP_ADC_INJECTED_CHANNELS] = {0};
+static volatile int32_t s32CurrentCode[BSP_ADC_INJECTED_CHANNELS] = {0};
 
 /** @brief 本周期采样窗口有效标志 */
-static volatile uint8_t s_sample_valid = 0u;
+static volatile uint8_t u8SampleValid = 0u;
 
 /* ---- 校准累计数据（ISR 写，Process 读）---- */
-static volatile uint64_t s_cal_sum_first_half[BSP_ADC_INJECTED_CHANNELS] = {0};
-static volatile uint64_t s_cal_sum_second_half[BSP_ADC_INJECTED_CHANNELS] = {0};
-static volatile uint16_t s_cal_min[BSP_ADC_INJECTED_CHANNELS] = {0};
-static volatile uint16_t s_cal_max[BSP_ADC_INJECTED_CHANNELS] = {0};
-static volatile uint16_t s_cal_sample_count = 0u;
+static volatile uint64_t u64CalSumFirstHalf[BSP_ADC_INJECTED_CHANNELS] = {0};
+static volatile uint64_t u64CalSumSecondHalf[BSP_ADC_INJECTED_CHANNELS] = {0};
+static volatile uint16_t u16CalMin[BSP_ADC_INJECTED_CHANNELS] = {0};
+static volatile uint16_t u16CalMax[BSP_ADC_INJECTED_CHANNELS] = {0};
+static volatile uint16_t u16CalSampleCount = 0u;
 
 /* ---- 校准调试信息 ---- */
-static volatile uint16_t s_cal_span[BSP_ADC_INJECTED_CHANNELS] = {0};
-static volatile int16_t s_cal_drift[BSP_ADC_INJECTED_CHANNELS] = {0};
+static volatile uint16_t u16CalSpan[BSP_ADC_INJECTED_CHANNELS] = {0};
+static volatile int16_t s16CalDrift[BSP_ADC_INJECTED_CHANNELS] = {0};
 
 /* ---- 状态机 ---- */
-static volatile BspAdc_CalState_t s_cal_state = CS_CAL_IDLE;
-static volatile uint8_t s_cal_retry_count = 0u;
-static volatile uint32_t s_cal_settle_start_tick = 0u;
+static volatile eBspAdcCalStateDef eCalState = E_BSP_ADC_CAL_IDLE;
+static volatile uint8_t u8CalRetryCount = 0u;
+static volatile uint32_t u32CalSettleStartTick = 0u;
 
 /* ---- ADC2 校准标志 ---- */
-static uint8_t s_adc2_calibrated = 0u;
+static uint8_t u8Adc2Calibrated = 0u;
 
 /* ===================================================================== *
  *  内部函数
@@ -81,20 +81,20 @@ static uint8_t s_adc2_calibrated = 0u;
  * @brief  复位校准累计数据
  * @note   清零各通道累计值、min/max，为新一轮校准做准备。
  */
-static void BspAdc_ResetCalibrationData(void)
+static void BspAdcResetCalibrationData(void)
 {
     uint8_t i;
 
     for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
     {
-        s_cal_sum_first_half[i] = 0u;
-        s_cal_sum_second_half[i] = 0u;
-        s_cal_min[i] = 0xFFFFu;
-        s_cal_max[i] = 0u;
-        s_current_offset[i] = 2048u;
+        u64CalSumFirstHalf[i] = 0u;
+        u64CalSumSecondHalf[i] = 0u;
+        u16CalMin[i] = 0xFFFFu;
+        u16CalMax[i] = 0u;
+        u16CurrentOffset[i] = 2048u;
     }
 
-    s_cal_sample_count = 0u;
+    u16CalSampleCount = 0u;
 }
 
 /**
@@ -102,48 +102,48 @@ static void BspAdc_ResetCalibrationData(void)
  * @param[in] code  有符号电流码 (raw - offset)
  * @return 实际电流值（A）
  */
-static float BspAdc_CodeToCurrent(int32_t code)
+static float BspAdcCodeToCurrent(int32_t s32Code)
 {
-    static const float adc_scale = BSP_ADC_REF_VOLTAGE / BSP_ADC_CONVERSION_STEPS /
+    static const float f32AdcScale = BSP_ADC_REF_VOLTAGE / BSP_ADC_CONVERSION_STEPS /
                                    BSP_ADC_CURRENT_SHUNT_OHM / BSP_ADC_CURRENT_GAIN;
-    return (float)code * adc_scale;
+    return (float)s32Code * f32AdcScale;
 }
 
 /**
  * @brief  读取 ADC2 单个通道值（阻塞轮询模式）
  */
-static HAL_StatusTypeDef BspAdc2_ReadChannel(uint32_t adc_channel, uint16_t *raw)
+static HAL_StatusTypeDef BspAdc2ReadChannel(uint32_t u32AdcChannel, uint16_t *pu16Raw)
 {
-    ADC_ChannelConfTypeDef config = {0};
-    HAL_StatusTypeDef status;
+    ADC_ChannelConfTypeDef Config = {0};
+    HAL_StatusTypeDef Status;
 
-    config.Channel = adc_channel;
-    config.Rank = ADC_REGULAR_RANK_1;
-    config.SamplingTime = ADC_SAMPLETIME_47CYCLES_5;
-    config.SingleDiff = ADC_SINGLE_ENDED;
-    config.OffsetNumber = ADC_OFFSET_NONE;
-    config.Offset = 0;
+    Config.Channel = u32AdcChannel;
+    Config.Rank = ADC_REGULAR_RANK_1;
+    Config.SamplingTime = ADC_SAMPLETIME_47CYCLES_5;
+    Config.SingleDiff = ADC_SINGLE_ENDED;
+    Config.OffsetNumber = ADC_OFFSET_NONE;
+    Config.Offset = 0;
 
-    status = HAL_ADC_ConfigChannel(&hadc2, &config);
-    if (status != HAL_OK)
+    Status = HAL_ADC_ConfigChannel(&hadc2, &Config);
+    if (Status != HAL_OK)
     {
-        return status;
+        return Status;
     }
 
-    status = HAL_ADC_Start(&hadc2);
-    if (status != HAL_OK)
+    Status = HAL_ADC_Start(&hadc2);
+    if (Status != HAL_OK)
     {
-        return status;
+        return Status;
     }
 
-    status = HAL_ADC_PollForConversion(&hadc2, BSP_ADC2_POLL_TIMEOUT_MS);
-    if (status == HAL_OK)
+    Status = HAL_ADC_PollForConversion(&hadc2, BSP_ADC2_POLL_TIMEOUT_MS);
+    if (Status == HAL_OK)
     {
-        *raw = (uint16_t)HAL_ADC_GetValue(&hadc2);
+        *pu16Raw = (uint16_t)HAL_ADC_GetValue(&hadc2);
     }
 
     (void)HAL_ADC_Stop(&hadc2);
-    return status;
+    return Status;
 }
 
 /**
@@ -153,10 +153,10 @@ static HAL_StatusTypeDef BspAdc2_ReadChannel(uint32_t adc_channel, uint16_t *raw
  * @note   检查条件 (doc §5, 用户要求第8点)：
  *         CCR4 + ADC_SAMPLE_TICKS + BLANK_TICKS <= min(CCR1, CCR2, CCR3)
  */
-static uint8_t BspAdc_CheckSampleValid(void)
+static uint8_t BspAdcCheckSampleValid(void)
 {
-    uint16_t min_ccr = BspPwm_GetMinCompare();
-    return (min_ccr >= CS_CCR_MIN) ? 1u : 0u;
+    uint16_t MinCcr = BspPwmGetMinCompare();
+    return (MinCcr >= CS_CCR_MIN) ? 1u : 0u;
 }
 
 /* ===================================================================== *
@@ -169,45 +169,45 @@ static uint8_t BspAdc_CheckSampleValid(void)
  * @retval HAL_ERROR    校准失败
  * @retval HAL_BUSY     外设忙
  * @note   初始化状态机为 IDLE，偏置设为默认 2048。
- *         之后需调用 BspAdc_CalibrationStart() 开始偏置校准。
+ *         之后需调用 BspAdcCalibrationStart() 开始偏置校准。
  */
-HAL_StatusTypeDef BspAdc_StartInjected(void)
+HAL_StatusTypeDef BspAdcStartInjected(void)
 {
-    HAL_StatusTypeDef status;
+    HAL_StatusTypeDef Status;
     uint8_t i;
 
-    s_cal_state = CS_CAL_IDLE;
-    s_cal_retry_count = 0u;
-    s_sample_valid = 0u;
+    eCalState = E_BSP_ADC_CAL_IDLE;
+    u8CalRetryCount = 0u;
+    u8SampleValid = 0u;
 
     for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
     {
-        s_current_offset[i] = 2048u;
-        s_current_code[i] = 0;
-        s_injected_raw[i] = 0u;
+        u16CurrentOffset[i] = 2048u;
+        s32CurrentCode[i] = 0;
+        u16InjectedRaw[i] = 0u;
     }
 
-    status = HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
-    if (status != HAL_OK)
+    Status = HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+    if (Status != HAL_OK)
     {
-        return status;
+        return Status;
     }
 
-    status = HAL_ADCEx_InjectedStart_IT(&hadc1);
-    return status;
+    Status = HAL_ADCEx_InjectedStart_IT(&hadc1);
+    return Status;
 }
 
 /**
  * @brief  启动偏置校准状态机
  * @note   先将状态设为 IDLE（阻止 ISR 累计），再复位数据，最后进入 SETTLE。
- *         调用前必须确保：驱动器 EN 关闭、功率 PWM 未启动、TIM1_CH4 触发已运行。
+ *         调用前必须确保：TIM1_CH4 触发已运行、三相命令为零电压且电机无实际相电流；允许功率 PWM 以三相相同占空比运行。
  */
-void BspAdc_CalibrationStart(void)
+void BspAdcCalibrationStart(void)
 {
-    s_cal_state = CS_CAL_IDLE;  /* 先停止 ISR 累计 */
-    BspAdc_ResetCalibrationData();
-    s_cal_settle_start_tick = HAL_GetTick();
-    s_cal_state = CS_CAL_SETTLE;
+    eCalState = E_BSP_ADC_CAL_IDLE;  /* 先停止 ISR 累计 */
+    BspAdcResetCalibrationData();
+    u32CalSettleStartTick = HAL_GetTick();
+    eCalState = E_BSP_ADC_CAL_SETTLE;
 }
 
 /**
@@ -217,81 +217,84 @@ void BspAdc_CalibrationStart(void)
  *         否则重试（最多 CS_CAL_MAX_RETRY 次），超限则 ERROR。
  *         中断中不做除法或浮点运算 (doc §13)。
  */
-void BspAdc_Process(void)
+void BspAdcProcess(void)
 {
-    switch (s_cal_state)
+    switch (eCalState)
     {
-        case CS_CAL_SETTLE:
-            if ((HAL_GetTick() - s_cal_settle_start_tick) >= CS_CAL_SETTLE_TIME_MS)
+        case E_BSP_ADC_CAL_SETTLE:
+            if ((HAL_GetTick() - u32CalSettleStartTick) >= CS_CAL_SETTLE_TIME_MS)
             {
-                s_cal_sample_count = 0u;
-                s_cal_state = CS_CAL_DISCARD;
+                u16CalSampleCount = 0u;
+                eCalState = E_BSP_ADC_CAL_DISCARD;
             }
             break;
 
-        case CS_CAL_CALCULATE:
+        case E_BSP_ADC_CAL_CALCULATE:
         {
             uint8_t i;
-            uint8_t check_failed = 0u;
+            uint8_t CheckFailed = 0u;
 
             for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
             {
-                uint32_t total = (uint32_t)s_cal_sum_first_half[i] +
-                                 (uint32_t)s_cal_sum_second_half[i];
-                uint16_t offset = (uint16_t)((total + (CS_CAL_SAMPLE_COUNT / 2u)) /
+                uint32_t Total = (uint32_t)u64CalSumFirstHalf[i] +
+                                 (uint32_t)u64CalSumSecondHalf[i];
+                uint16_t Offset = (uint16_t)((Total + (CS_CAL_SAMPLE_COUNT / 2u)) /
                                               CS_CAL_SAMPLE_COUNT);
-                uint16_t span = (uint16_t)(s_cal_max[i] - s_cal_min[i]);
-                uint16_t first_avg = (uint16_t)(s_cal_sum_first_half[i] /
+                uint16_t Span = (uint16_t)(u16CalMax[i] - u16CalMin[i]);
+                uint16_t FirstAverage = (uint16_t)(u64CalSumFirstHalf[i] /
                                                  (CS_CAL_SAMPLE_COUNT / 2u));
-                uint16_t second_avg = (uint16_t)(s_cal_sum_second_half[i] /
+                uint16_t SecondAverage = (uint16_t)(u64CalSumSecondHalf[i] /
                                                   (CS_CAL_SAMPLE_COUNT / 2u));
-                int16_t drift = (int16_t)first_avg - (int16_t)second_avg;
-                if (drift < 0)
+                int16_t Drift = (int16_t)FirstAverage - (int16_t)SecondAverage;
+                if (Drift < 0)
                 {
-                    drift = (int16_t)(-drift);
+                    Drift = (int16_t)(-Drift);
                 }
 
                 /* 记录调试信息 */
-                s_current_offset[i] = offset;
-                s_cal_span[i] = span;
-                s_cal_drift[i] = drift;
+                u16CurrentOffset[i] = Offset;
+                u16CalSpan[i] = Span;
+                s16CalDrift[i] = Drift;
 
                 /* 范围检查 (doc §15.1) */
-                if ((offset < CS_CAL_OFFSET_MIN) || (offset > CS_CAL_OFFSET_MAX))
+                if ((Offset < CS_CAL_OFFSET_MIN) || (Offset > CS_CAL_OFFSET_MAX))
                 {
-                    check_failed = 1u;
+                    SEGGER_RTT_WriteString(0, "Current offset out of range\r\n");
+                    CheckFailed = 1u;
                 }
 
                 /* 噪声跨度检查 (doc §15.2) */
-                if (span > CS_CAL_MAX_SPAN)
+                if (Span > CS_CAL_MAX_SPAN)
                 {
-                    check_failed = 1u;
+                    SEGGER_RTT_WriteString(0, "Current noise span too large\r\n");
+                    CheckFailed = 1u;
                 }
 
                 /* 均值漂移检查 (doc §15.3) */
-                if ((uint16_t)drift > CS_CAL_DRIFT_LIMIT)
+                if ((uint16_t)Drift > CS_CAL_DRIFT_LIMIT)
                 {
-                    check_failed = 1u;
+                    SEGGER_RTT_WriteString(0, "Current average drift too large\r\n");
+                    CheckFailed = 1u;
                 }
             }
 
-            if (check_failed == 0u)
+            if (CheckFailed == 0u)
             {
-                s_cal_state = CS_CAL_READY;
+                eCalState = E_BSP_ADC_CAL_READY;
             }
             else
             {
-                s_cal_retry_count++;
-                if (s_cal_retry_count >= CS_CAL_MAX_RETRY)
+                u8CalRetryCount++;
+                if (u8CalRetryCount >= CS_CAL_MAX_RETRY)
                 {
-                    s_cal_state = CS_CAL_ERROR;
+                    eCalState = E_BSP_ADC_CAL_ERROR;
                 }
                 else
                 {
                     /* 重试：重新等待稳定 */
-                    BspAdc_ResetCalibrationData();
-                    s_cal_settle_start_tick = HAL_GetTick();
-                    s_cal_state = CS_CAL_SETTLE;
+                    BspAdcResetCalibrationData();
+                    u32CalSettleStartTick = HAL_GetTick();
+                    eCalState = E_BSP_ADC_CAL_SETTLE;
                 }
             }
             break;
@@ -305,88 +308,88 @@ void BspAdc_Process(void)
 
 /**
  * @brief  更新注入组采样缓冲（在 HAL_ADCEx_InjectedConvCpltCallback 中调用）
- * @param[in] hadc  ADC 句柄指针
+ * @param[in] ptAdc  ADC 句柄指针
  * @retval 1  可执行 FOC（仅 READY 状态）
  * @retval 0  不执行 FOC
  * @note   ISR 中仅做：读取原始值、累计、更新 min/max、计算有符号码、检查采样窗口。
  *         禁止在中断中执行除法、浮点运算、复杂判断、日志打印 (doc §13)。
  */
-uint8_t BspAdc_UpdateInjected(ADC_HandleTypeDef *hadc)
+uint8_t BspAdcUpdateInjected(ADC_HandleTypeDef *ptAdc)
 {
     uint8_t i;
 
-    if ((hadc == NULL) || (hadc->Instance != ADC1))
+    if ((ptAdc == NULL) || (ptAdc->Instance != ADC1))
     {
         return 0u;
     }
 
-    s_injected_raw[0] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_1);
-    s_injected_raw[1] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_2);
-    s_injected_raw[2] = (uint16_t)HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_3);
+    u16InjectedRaw[0] = (uint16_t)HAL_ADCEx_InjectedGetValue(ptAdc, ADC_INJECTED_RANK_1);
+    u16InjectedRaw[1] = (uint16_t)HAL_ADCEx_InjectedGetValue(ptAdc, ADC_INJECTED_RANK_2);
+    u16InjectedRaw[2] = (uint16_t)HAL_ADCEx_InjectedGetValue(ptAdc, ADC_INJECTED_RANK_3);
 
-    switch (s_cal_state)
+    switch (eCalState)
     {
-        case CS_CAL_DISCARD:
-            s_cal_sample_count++;
-            if (s_cal_sample_count >= CS_CAL_DISCARD_COUNT)
+        case E_BSP_ADC_CAL_DISCARD:
+            u16CalSampleCount++;
+            if (u16CalSampleCount >= CS_CAL_DISCARD_COUNT)
             {
                 /* 进入累计阶段前复位累计数据 */
                 for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
                 {
-                    s_cal_sum_first_half[i] = 0u;
-                    s_cal_sum_second_half[i] = 0u;
-                    s_cal_min[i] = 0xFFFFu;
-                    s_cal_max[i] = 0u;
+                    u64CalSumFirstHalf[i] = 0u;
+                    u64CalSumSecondHalf[i] = 0u;
+                    u16CalMin[i] = 0xFFFFu;
+                    u16CalMax[i] = 0u;
                 }
-                s_cal_sample_count = 0u;
-                s_cal_state = CS_CAL_ACCUMULATE;
+                u16CalSampleCount = 0u;
+                eCalState = E_BSP_ADC_CAL_ACCUMULATE;
             }
             break;
 
-        case CS_CAL_ACCUMULATE:
+        case E_BSP_ADC_CAL_ACCUMULATE:
         {
-            uint8_t is_first_half = (s_cal_sample_count < (CS_CAL_SAMPLE_COUNT / 2u)) ? 1u : 0u;
+            uint8_t IsFirstHalf = (u16CalSampleCount < (CS_CAL_SAMPLE_COUNT / 2u)) ? 1u : 0u;
 
             for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
             {
-                uint16_t raw = s_injected_raw[i];
+                uint16_t Raw = u16InjectedRaw[i];
 
-                if (is_first_half != 0u)
+                if (IsFirstHalf != 0u)
                 {
-                    s_cal_sum_first_half[i] += raw;
+                    u64CalSumFirstHalf[i] += Raw;
                 }
                 else
                 {
-                    s_cal_sum_second_half[i] += raw;
+                    u64CalSumSecondHalf[i] += Raw;
                 }
 
-                if (raw < s_cal_min[i])
+                if (Raw < u16CalMin[i])
                 {
-                    s_cal_min[i] = raw;
+                    u16CalMin[i] = Raw;
                 }
-                if (raw > s_cal_max[i])
+                if (Raw > u16CalMax[i])
                 {
-                    s_cal_max[i] = raw;
+                    u16CalMax[i] = Raw;
                 }
             }
 
-            s_cal_sample_count++;
-            if (s_cal_sample_count >= CS_CAL_SAMPLE_COUNT)
+            u16CalSampleCount++;
+            if (u16CalSampleCount >= CS_CAL_SAMPLE_COUNT)
             {
-                s_cal_state = CS_CAL_CALCULATE;
+                eCalState = E_BSP_ADC_CAL_CALCULATE;
             }
             break;
         }
 
-        case CS_CAL_READY:
+        case E_BSP_ADC_CAL_READY:
             /* 正常 FOC 阶段：计算有符号电流码 (doc §16.2) */
             for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
             {
-                s_current_code[i] = (int32_t)s_injected_raw[i] -
-                                     (int32_t)s_current_offset[i];
+                s32CurrentCode[i] = (int32_t)u16InjectedRaw[i] -
+                                     (int32_t)u16CurrentOffset[i];
             }
             /* 检查采样窗口有效性 (doc §5, §6) */
-            s_sample_valid = BspAdc_CheckSampleValid();
+            u8SampleValid = BspAdcCheckSampleValid();
             return 1u;
 
         default:
@@ -399,156 +402,156 @@ uint8_t BspAdc_UpdateInjected(ADC_HandleTypeDef *hadc)
 
 /**
  * @brief  ADC1 注入转换完成中断回调（HAL 库重写）
- * @param[in] hadc  ADC 句柄指针
+ * @param[in] ptAdc  ADC 句柄指针
  * @note   由 TIM1_CH4 → TRGO2 触发 ADC1 注入转换，转换完成后硬件触发此回调。
  *         在回调中更新采样缓冲，READY 状态下执行电机快速控制环。
  *         控制频率由 TIM1 配置决定，标称 20 kHz。
  */
-void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
+void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *ptAdc)
 {
-    if (BspAdc_UpdateInjected(hadc) != 0u)
+    if (BspAdcUpdateInjected(ptAdc) != 0u)
     {
-        UserMotor_FastLoop();
+        UsrMotorFastLoop();
     }
 }
 
 /* ---- 原始值 / 偏置 / 电流码查询 ---- */
 
-uint16_t BspAdc_GetInjectedRaw(uint8_t index)
+uint16_t BspAdcGetInjectedRaw(uint8_t u8Index)
 {
-    if (index >= BSP_ADC_INJECTED_CHANNELS)
+    if (u8Index >= BSP_ADC_INJECTED_CHANNELS)
     {
         return 0u;
     }
-    return s_injected_raw[index];
+    return u16InjectedRaw[u8Index];
 }
 
-uint16_t BspAdc_GetCurrentOffsetRaw(uint8_t index)
+uint16_t BspAdcGetCurrentOffsetRaw(uint8_t u8Index)
 {
-    if (index >= BSP_ADC_INJECTED_CHANNELS)
+    if (u8Index >= BSP_ADC_INJECTED_CHANNELS)
     {
         return 0u;
     }
-    return s_current_offset[index];
+    return u16CurrentOffset[u8Index];
 }
 
-float BspAdc_GetCurrentOffsetVoltage(uint8_t index)
+float BspAdcGetCurrentOffsetVoltage(uint8_t u8Index)
 {
-    if (index >= BSP_ADC_INJECTED_CHANNELS)
+    if (u8Index >= BSP_ADC_INJECTED_CHANNELS)
     {
         return 0.0f;
     }
-    return ((float)s_current_offset[index] * BSP_ADC_REF_VOLTAGE) / BSP_ADC_FULL_SCALE;
+    return ((float)u16CurrentOffset[u8Index] * BSP_ADC_REF_VOLTAGE) / BSP_ADC_FULL_SCALE;
 }
 
-int32_t BspAdc_GetCurrentCode(uint8_t index)
+int32_t BspAdcGetCurrentCode(uint8_t u8Index)
 {
-    if (index >= BSP_ADC_INJECTED_CHANNELS)
+    if (u8Index >= BSP_ADC_INJECTED_CHANNELS)
     {
         return 0;
     }
-    return s_current_code[index];
+    return s32CurrentCode[u8Index];
 }
 
-uint8_t BspAdc_IsCurrentOffsetReady(void)
+uint8_t BspAdcIsCurrentOffsetReady(void)
 {
-    return (s_cal_state == CS_CAL_READY) ? 1u : 0u;
+    return (eCalState == E_BSP_ADC_CAL_READY) ? 1u : 0u;
 }
 
-BspAdc_CalState_t BspAdc_GetCalState(void)
+eBspAdcCalStateDef BspAdcGetCalState(void)
 {
-    return s_cal_state;
+    return eCalState;
 }
 
-uint8_t BspAdc_IsSampleValid(void)
+uint8_t BspAdcIsSampleValid(void)
 {
-    return s_sample_valid;
+    return u8SampleValid;
 }
 
 /* ---- 三相电流 ---- */
 
-float BspAdc_GetIa(void)
+float BspAdcGetIa(void)
 {
-    return BSP_ADC_PHASE_CURRENT_SIGN * BspAdc_CodeToCurrent(s_current_code[0]);
+    return BSP_ADC_PHASE_CURRENT_SIGN * BspAdcCodeToCurrent(s32CurrentCode[0]);
 }
 
-float BspAdc_GetIb(void)
+float BspAdcGetIb(void)
 {
-    return BSP_ADC_PHASE_CURRENT_SIGN * BspAdc_CodeToCurrent(s_current_code[1]);
+    return BSP_ADC_PHASE_CURRENT_SIGN * BspAdcCodeToCurrent(s32CurrentCode[1]);
 }
 
-float BspAdc_GetIc(void)
+float BspAdcGetIc(void)
 {
-    return BSP_ADC_PHASE_CURRENT_SIGN * BspAdc_CodeToCurrent(s_current_code[2]);
+    return BSP_ADC_PHASE_CURRENT_SIGN * BspAdcCodeToCurrent(s32CurrentCode[2]);
 }
 
 /* ---- 校准调试信息 ---- */
 
-void BspAdc_GetCalDebug(BspAdc_CalDebug_t *info)
+void BspAdcGetCalDebug(tBspAdcCalDebugDef *ptInfo)
 {
     uint8_t i;
 
-    if (info == NULL)
+    if (ptInfo == NULL)
     {
         return;
     }
 
     for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
     {
-        info->min_raw[i] = s_cal_min[i];
-        info->max_raw[i] = s_cal_max[i];
-        info->span[i] = s_cal_span[i];
-        info->offset[i] = s_current_offset[i];
-        info->drift[i] = s_cal_drift[i];
+        ptInfo->u16MinRaw[i] = u16CalMin[i];
+        ptInfo->u16MaxRaw[i] = u16CalMax[i];
+        ptInfo->u16Span[i] = u16CalSpan[i];
+        ptInfo->u16Offset[i] = u16CurrentOffset[i];
+        ptInfo->s16Drift[i] = s16CalDrift[i];
     }
 
-    info->retry_count = s_cal_retry_count;
-    info->state = s_cal_state;
+    ptInfo->u8RetryCount = u8CalRetryCount;
+    ptInfo->eState = eCalState;
 }
 
 /* ===================================================================== *
  *  ADC2 接口（保持不变）
  * ===================================================================== */
 
-HAL_StatusTypeDef BspAdc2_UpdateAll(void)
+HAL_StatusTypeDef BspAdc2UpdateAll(void)
 {
-    HAL_StatusTypeDef status;
-    uint8_t index;
-    uint16_t raw;
+    HAL_StatusTypeDef Status;
+    uint8_t Index;
+    uint16_t Raw;
 
-    if (s_adc2_calibrated == 0u)
+    if (u8Adc2Calibrated == 0u)
     {
-        status = HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
-        if (status != HAL_OK)
+        Status = HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+        if (Status != HAL_OK)
         {
-            return status;
+            return Status;
         }
-        s_adc2_calibrated = 1u;
+        u8Adc2Calibrated = 1u;
     }
 
-    for (index = 0u; index < BSP_ADC2_REGULAR_CHANNELS; index++)
+    for (Index = 0u; Index < BSP_ADC2_REGULAR_CHANNELS; Index++)
     {
-        status = BspAdc2_ReadChannel(s_adc2_channel_map[index], &raw);
-        if (status != HAL_OK)
+        Status = BspAdc2ReadChannel(u32Adc2ChannelMap[Index], &Raw);
+        if (Status != HAL_OK)
         {
-            return status;
+            return Status;
         }
-        s_adc2_regular_raw[index] = raw;
+        u16Adc2RegularRaw[Index] = Raw;
     }
 
     return HAL_OK;
 }
 
-uint16_t BspAdc2_GetRaw(BspAdc2Channel_t channel)
+uint16_t BspAdc2GetRaw(eBspAdc2ChannelDef eChannel)
 {
-    if ((uint8_t)channel >= BSP_ADC2_REGULAR_CHANNELS)
+    if ((uint8_t)eChannel >= BSP_ADC2_REGULAR_CHANNELS)
     {
         return 0u;
     }
-    return s_adc2_regular_raw[(uint8_t)channel];
+    return u16Adc2RegularRaw[(uint8_t)eChannel];
 }
 
-float BspAdc2_GetVoltage(BspAdc2Channel_t channel)
+float BspAdc2GetVoltage(eBspAdc2ChannelDef eChannel)
 {
-    return ((float)BspAdc2_GetRaw(channel) * BSP_ADC_REF_VOLTAGE) / BSP_ADC_FULL_SCALE;
+    return ((float)BspAdc2GetRaw(eChannel) * BSP_ADC_REF_VOLTAGE) / BSP_ADC_FULL_SCALE;
 }

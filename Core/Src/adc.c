@@ -108,15 +108,6 @@ void MX_ADC1_Init(void)
   {
     Error_Handler();
   }
-
-  /** Configure Injected Channel
-  */
-  sConfigInjected.InjectedChannel = ADC_CHANNEL_4;
-  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_4;
-  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */

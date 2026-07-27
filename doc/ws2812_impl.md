@@ -68,7 +68,7 @@ IDLE → DATA → RESET → DRAIN → IDLE
 + 额外安全低电平
 ```
 
-- RGB 显存仅保存颜色（`BspWs2812_Color_t`），发送时才展开为 CCR。
+- RGB 显存仅保存颜色（`tBspWs2812ColorDef`），发送时才展开为 CCR。
 - 半区边界可能落在某颗 LED 中间，通过 `led_index` / `bit_index` 游程断点续编。
 
 ## 6. 停止时机（DRAIN）
@@ -118,15 +118,15 @@ ISR 中用直接寄存器操作停止（不调用 `HAL_TIM_PWM_Stop_DMA`，因�
 
 | 接口 | 说明 |
 |------|------|
-| `BspWs2812_Init()` | 计算 CCR/Reset Slot，确保输出为低 |
-| `BspWs2812_SetColor(r,g,b)` | 设置第 0 颗 LED 颜色 |
-| `BspWs2812_SetColorIndex(idx,r,g,b)` | 设置指定 LED 颜色 |
-| `BspWs2812_Show()` | 异步启动发送，返回 OK/BUSY/ERROR |
-| `BspWs2812_WriteColor(r,g,b)` | SetColor + Show 便捷接口 |
-| `BspWs2812_Clear()` | 清空 RGB 显存 |
-| `BspWs2812_IsBusy()` | 查询发送状态 |
-| `BspWs2812_OnComplete()` | 发送完成回调（弱定义） |
-| `BspWs2812_OnError()` | 错误回调（弱定义） |
+| `BspWs2812Init()` | 计算 CCR/Reset Slot，确保输出为低 |
+| `BspWs2812SetColor(r,g,b)` | 设置第 0 颗 LED 颜色 |
+| `BspWs2812SetColorIndex(idx,r,g,b)` | 设置指定 LED 颜色 |
+| `BspWs2812Show()` | 异步启动发送，返回 OK/BUSY/ERROR |
+| `BspWs2812WriteColor(r,g,b)` | SetColor + Show 便捷接口 |
+| `BspWs2812Clear()` | 清空 RGB 显存 |
+| `BspWs2812IsBusy()` | 查询发送状态 |
+| `BspWs2812OnComplete()` | 发送完成回调（弱定义） |
+| `BspWs2812OnError()` | 错误回调（弱定义） |
 
 ## 11. 与旧实现的主要差异
 
@@ -141,7 +141,7 @@ ISR 中用直接寄存器操作停止（不调用 `HAL_TIM_PWM_Stop_DMA`，因�
 | Reset 处理 | 固定 64 Slot | 可配置，默认 300us |
 | 前导低电平 | 无（靠预装 2 bit） | 4 个 Slot |
 | 停止时机 | TC 立即停 | DRAIN 等半区发送完 |
-| 完成回调 | 无 | `BspWs2812_OnComplete` |
+| 完成回调 | 无 | `BspWs2812OnComplete` |
 
 ## 12. 验证要点
 

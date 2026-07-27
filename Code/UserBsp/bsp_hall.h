@@ -16,19 +16,20 @@ extern "C" {
 
 #include "user_global.h"
 
-/** @brief Hall 传感器三引脚电平（a/b/c 对应 Hall A/B/C） */
-typedef struct {
-    uint8_t a;
-    uint8_t b;
-    uint8_t c;
-} BspHallPins_t;
+/** @brief Hall 传感器三引脚电平（u8A/u8B/u8C 对应 Hall A/B/C） */
+typedef struct tBspHallPinsDef
+{
+    uint8_t u8A;
+    uint8_t u8B;
+    uint8_t u8C;
+} tBspHallPinsDef;
 
-BspHallPins_t BspHall_ReadPins(void);
-uint8_t BspHall_ReadA(void);
-uint8_t BspHall_ReadB(void);
-uint8_t BspHall_ReadC(void);
-uint8_t BspHall_GetState(void);
-uint8_t BspHall_IsValidState(uint8_t state);
+tBspHallPinsDef BspHallReadPins(void);
+uint8_t BspHallReadA(void);
+uint8_t BspHallReadB(void);
+uint8_t BspHallReadC(void);
+uint8_t BspHallGetState(void);
+uint8_t BspHallIsValidState(uint8_t u8State);
 
 #ifdef __cplusplus
 }

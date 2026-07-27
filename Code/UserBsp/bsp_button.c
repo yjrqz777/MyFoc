@@ -20,32 +20,43 @@ static Button* head_handle = NULL;
 static void button_handler(Button* handle);
 static inline uint8_t button_read_level(Button* handle);
 
-uint8_t BspButton_ReadLevel(uint8_t button_id)
+uint8_t BspButtonReadLevel(uint8_t u8ButtonId)
 {
-	switch (button_id) {
-	case 1:
+	switch (u8ButtonId) {
+	case 1u:
 		return (uint8_t)HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin);
-	case 2:
+	case 2u:
 		return (uint8_t)HAL_GPIO_ReadPin(KEY2_GPIO_Port, KEY2_Pin);
-	case 3:
+	case 3u:
 		return (uint8_t)HAL_GPIO_ReadPin(KEY3_GPIO_Port, KEY3_Pin);
-	case 4:
+	case 4u:
 		return (uint8_t)HAL_GPIO_ReadPin(KEY4_GPIO_Port, KEY4_Pin);
 	default:
 		return 0u;
 	}
 }
 
+uint8_t BspButtonGetRawMask(void)
+{
+	uint8_t RawMask = 0u;
+
+	if (BspButtonReadLevel(1u) != 0u) RawMask |= 0x01u;
+	if (BspButtonReadLevel(2u) != 0u) RawMask |= 0x02u;
+	if (BspButtonReadLevel(3u) != 0u) RawMask |= 0x04u;
+	if (BspButtonReadLevel(4u) != 0u) RawMask |= 0x08u;
+
+	return RawMask;
+}
+
+/* user_button.c 冻结实现使用的真实兼容符号。 */
+uint8_t BspButton_ReadLevel(uint8_t u8ButtonId)
+{
+    return BspButtonReadLevel(u8ButtonId);
+}
+
 uint8_t BspButton_GetRawMask(void)
 {
-	uint8_t mask = 0u;
-
-	if (BspButton_ReadLevel(1u) != 0u) mask |= 0x01u;
-	if (BspButton_ReadLevel(2u) != 0u) mask |= 0x02u;
-	if (BspButton_ReadLevel(3u) != 0u) mask |= 0x04u;
-	if (BspButton_ReadLevel(4u) != 0u) mask |= 0x08u;
-
-	return mask;
+    return BspButtonGetRawMask();
 }
 
 /**

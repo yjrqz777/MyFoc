@@ -15,8 +15,8 @@ extern "C" {
 
 #include "user_global.h"
 
-void BspLcd_Init(void);
-void BspLcd_ShowUInt(uint16_t x, uint16_t y, uint32_t value, uint8_t len);
+void BspLcdInit(void);
+void BspLcdShowUInt(uint16_t u16X, uint16_t u16Y, uint32_t u32Value, uint8_t u8Length);
 
 #ifdef __cplusplus
 }

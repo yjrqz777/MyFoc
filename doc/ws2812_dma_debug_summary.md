@@ -8,7 +8,7 @@
 
 1. PA5 没有波形，WS2812 不亮。
 2. 恢复波形后，输出时序不符合 WS2812 协议。
-3. 发送 `BspWs2812_WriteColor(32u, 32u, 0u)` 时，测得：
+3. 发送 `BspWs2812WriteColor(32u, 32u, 0u)` 时，测得：
 
 ```text
 约 400 ns 高 + 920 ns 低
@@ -107,7 +107,7 @@ CCR1 = (212 * 56) / 100 = 118
 启动阶段调用：
 
 ```c
-BspWs2812_WriteColor(32u, 32u, 0u);
+BspWs2812WriteColor(32u, 32u, 0u);
 ```
 
 接口参数顺序为 RGB：

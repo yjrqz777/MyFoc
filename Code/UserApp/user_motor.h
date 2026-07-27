@@ -16,16 +16,16 @@ extern "C" {
 
 #include "user_global.h"
 
-void UserMotor_Init(void);
-HAL_StatusTypeDef UserMotor_Start(void);
-void UserMotor_FastLoop(void);
-float UserMotor_GetOpenLoopTheta(void);
-float UserMotor_GetIqRef(void);
-float UserMotor_GetIqRefTarget(void);
-uint8_t UserMotor_IsOverCurrentFault(void);
-float UserMotor_GetFaultIa(void);
-float UserMotor_GetFaultIb(void);
-float UserMotor_GetFaultIc(void);
+void UsrMotorInit(void);
+HAL_StatusTypeDef UsrMotorStart(void);
+void UsrMotorFastLoop(void);
+float UsrMotorGetOpenLoopTheta(void);
+float UsrMotorGetIqRef(void);
+float UsrMotorGetIqRefTarget(void);
+uint8_t UsrMotorIsOverCurrentFault(void);
+float UsrMotorGetFaultIa(void);
+float UsrMotorGetFaultIb(void);
+float UsrMotorGetFaultIc(void);
 
 #ifdef __cplusplus
 }

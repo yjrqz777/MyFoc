@@ -16,14 +16,14 @@ extern "C" {
 
 #include "user_global.h"
 
-HAL_StatusTypeDef BspPwm_Start(void);
-HAL_StatusTypeDef BspPwm_StartAdcTrigger(void);
-HAL_StatusTypeDef BspPwm_StartPowerOutputs(void);
-void BspPwm_Stop(void);
-uint16_t BspPwm_GetPeriod(void);
-uint16_t BspPwm_GetMinCompare(void);
-void BspPwm_SetCompare(uint16_t ccr1, uint16_t ccr2, uint16_t ccr3);
-void BspPwm_SetVoltageABC(float ua, float ub, float uc);
+HAL_StatusTypeDef BspPwmStart(void);
+HAL_StatusTypeDef BspPwmStartAdcTrigger(void);
+HAL_StatusTypeDef BspPwmStartPowerOutputs(void);
+void BspPwmStop(void);
+uint16_t BspPwmGetPeriod(void);
+uint16_t BspPwmGetMinCompare(void);
+void BspPwmSetCompare(uint16_t u16Ccr1, uint16_t u16Ccr2, uint16_t u16Ccr3);
+void BspPwmSetVoltageAbc(float f32Ua, float f32Ub, float f32Uc);
 
 #ifdef __cplusplus
 }
