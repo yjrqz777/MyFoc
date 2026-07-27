@@ -26,6 +26,13 @@
 #define BSP_ADC_CURRENT_GAIN        (30.0f)
 #define BSP_ADC_PHASE_CURRENT_SIGN  (-1.0f)
 
+/* ---- ADC1 相电流通道映射 ---- */
+static const uint32_t u32Adc1PhaseChannelMap[BSP_ADC_INJECTED_CHANNELS] = {
+    ADC_CHANNEL_1,     /* PA0: Ia */
+    ADC_CHANNEL_2,     /* PA1: Ib */
+    ADC_CHANNEL_3,     /* PA2: Ic */
+};
+
 /* ---- ADC2 通道映射 ---- */
 static const uint32_t u32Adc2ChannelMap[BSP_ADC2_REGULAR_CHANNELS] = {
     ADC_CHANNEL_6,     /* PC0: SHA */
@@ -34,6 +41,10 @@ static const uint32_t u32Adc2ChannelMap[BSP_ADC2_REGULAR_CHANNELS] = {
     ADC_CHANNEL_5,     /* PC4: POT */
     ADC_CHANNEL_11,    /* PC5: VBUS */
 };
+
+#if (BSP_ADC_INJECTED_CHANNELS != 3u)
+#error "BspAdcPreOffset currently supports exactly three ADC1 phase-current channels"
+#endif
 
 /* ===================================================================== *
  *  运行时变量
@@ -107,6 +118,43 @@ static float BspAdcCodeToCurrent(int32_t s32Code)
     static const float f32AdcScale = BSP_ADC_REF_VOLTAGE / BSP_ADC_CONVERSION_STEPS /
                                    BSP_ADC_CURRENT_SHUNT_OHM / BSP_ADC_CURRENT_GAIN;
     return (float)s32Code * f32AdcScale;
+}
+
+/**
+ * @brief  读取 ADC1 单个相电流通道值（阻塞轮询模式）
+ */
+static HAL_StatusTypeDef BspAdc1ReadPhaseChannel(uint32_t u32AdcChannel, uint16_t * pu16Raw)
+{
+    ADC_ChannelConfTypeDef Config = {0};
+    HAL_StatusTypeDef Status;
+
+    Config.Channel = u32AdcChannel;
+    Config.Rank = ADC_REGULAR_RANK_1;
+    Config.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
+    Config.SingleDiff = ADC_SINGLE_ENDED;
+    Config.OffsetNumber = ADC_OFFSET_NONE;
+    Config.Offset = 0;
+
+    Status = HAL_ADC_ConfigChannel(&hadc1, &Config);
+    if (Status != HAL_OK)
+    {
+        return Status;
+    }
+
+    Status = HAL_ADC_Start(&hadc1);
+    if (Status != HAL_OK)
+    {
+        return Status;
+    }
+
+    Status = HAL_ADC_PollForConversion(&hadc1, BSP_ADC_PRE_OFFSET_POLL_TIMEOUT_MS);
+    if (Status == HAL_OK)
+    {
+        *pu16Raw = (uint16_t)HAL_ADC_GetValue(&hadc1);
+    }
+
+    (void)HAL_ADC_Stop(&hadc1);
+    return Status;
 }
 
 /**
@@ -554,4 +602,55 @@ uint16_t BspAdc2GetRaw(eBspAdc2ChannelDef eChannel)
 float BspAdc2GetVoltage(eBspAdc2ChannelDef eChannel)
 {
     return ((float)BspAdc2GetRaw(eChannel) * BSP_ADC_REF_VOLTAGE) / BSP_ADC_FULL_SCALE;
+}
+
+/**
+ * @brief  启动前使用 ADC1 普通轮询方式预采样三相零电流偏置
+ * @note   本函数会临时停止 ADC1 注入中断采样，按 BSP_ADC_PRE_OFFSET_SAMPLE_COUNT
+ *         对 Ia/Ib/Ic 三个 ADC1 通道求平均，并在结束时恢复注入中断采样。
+ *         后续 BspAdcCalibrationStart() 仍会执行 PWM 环境下的正式注入校准。
+ */
+void BspAdcPreOffset(void)
+{
+    uint64_t u64Sum[BSP_ADC_INJECTED_CHANNELS] = {0u};
+    HAL_StatusTypeDef Status;
+    uint32_t SampleIndex;
+    uint16_t Raw;
+    uint8_t i;
+
+    Status = HAL_ADCEx_InjectedStop_IT(&hadc1);
+    if (Status != HAL_OK)
+    {
+        Error_Handler();
+    }
+
+    for (SampleIndex = 0u; SampleIndex < BSP_ADC_PRE_OFFSET_SAMPLE_COUNT; SampleIndex++)
+    {
+        for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
+        {
+            Status = BspAdc1ReadPhaseChannel(u32Adc1PhaseChannelMap[i], &Raw);
+            if (Status != HAL_OK)
+            {
+                (void)HAL_ADCEx_InjectedStart_IT(&hadc1);
+                Error_Handler();
+            }
+            u64Sum[i] += Raw;
+        }
+    }
+
+    for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
+    {
+        u16CurrentOffset[i] = (uint16_t)(u64Sum[i] / BSP_ADC_PRE_OFFSET_SAMPLE_COUNT);
+        u16InjectedRaw[i] = u16CurrentOffset[i];
+        s32CurrentCode[i] = 0;
+    }
+
+    u8SampleValid = 0u;
+    eCalState = E_BSP_ADC_CAL_READY;
+
+    Status = HAL_ADCEx_InjectedStart_IT(&hadc1);
+    if (Status != HAL_OK)
+    {
+        Error_Handler();
+    }
 }

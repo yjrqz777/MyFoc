@@ -27,27 +27,6 @@ Project File Date:  07/23/2026
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\App\Keil\Keil_v5\ARM\ARMCC\Bin'
 Build target 'g474app'
-compiling bsp_hall.c...
-compiling user_button_fun.c...
-compiling user_display.c...
-..\Code\UserApp\user_display.c(178): warning:  #111-D: statement is unreachable
-      PT_END();
-..\Code\UserApp\user_display.c(153): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
-      PT_BEGIN()
-..\Code\UserApp\user_display.c(153): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
-      PT_BEGIN()
-..\Code\UserApp\user_display.c: 3 warnings, 0 errors
-compiling user_time.c...
-..\Code\UserApp\user_time.c(68): warning:  #111-D: statement is unreachable
-      PT_END();
-..\Code\UserApp\user_time.c(57): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
-      PT_BEGIN()
-..\Code\UserApp\user_time.c(57): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
-      PT_BEGIN()
-..\Code\UserApp\user_time.c: 3 warnings, 0 errors
-compiling bsp_ws2812.c...
-compiling bsp_lcd.c...
-compiling main.c...
 compiling user_system.c...
 ..\Code\UserApp\user_system.c(176): warning:  #111-D: statement is unreachable
       PT_END();
@@ -57,26 +36,26 @@ compiling user_system.c...
       PT_BEGIN()
 ..\Code\UserApp\user_system.c: 3 warnings, 0 errors
 compiling bsp_pwm.c...
+compiling main.c...
+compiling bsp_adc.c...
 compiling user_motor.c...
 ..\Code\UserApp\user_motor.c(112): warning:  #177-D: function "UsrMotorRampFloat"  was declared but never referenced
   static float UsrMotorRampFloat(float f32Current, float f32Target, float f32Step)
 ..\Code\UserApp\user_motor.c(138): warning:  #177-D: function "UsrMotorSetOpenLoopVoltageVector"  was declared but never referenced
   static void UsrMotorSetOpenLoopVoltageVector(float f32Theta, float f32Voltage)
 ..\Code\UserApp\user_motor.c: 2 warnings, 0 errors
-compiling user_foc.c...
-compiling user_button.c...
-..\Code\UserApp\user_button.c(214): warning:  #111-D: statement is unreachable
+compiling user_display.c...
+..\Code\UserApp\user_display.c(178): warning:  #111-D: statement is unreachable
       PT_END();
-..\Code\UserApp\user_button.c(203): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
+..\Code\UserApp\user_display.c(153): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
       PT_BEGIN()
-..\Code\UserApp\user_button.c(203): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
+..\Code\UserApp\user_display.c(153): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
       PT_BEGIN()
-..\Code\UserApp\user_button.c: 3 warnings, 0 errors
-compiling bsp_adc.c...
+..\Code\UserApp\user_display.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=32024 RO-data=19504 RW-data=292 ZI-data=5336  
+Program Size: Code=32416 RO-data=19516 RW-data=292 ZI-data=5336  
 FromELF: creating hex file...
-"g474app\g474app.axf" - 0 Error(s), 14 Warning(s).
+"g474app\g474app.axf" - 0 Error(s), 8 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -99,7 +78,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@6.1.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:06
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

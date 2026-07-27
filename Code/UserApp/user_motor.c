@@ -331,7 +331,10 @@ HAL_StatusTypeDef UsrMotorStart(void)
         return Status;
     }
 
-    /* 2. 启动 TIM1_CH4 内部触发。 */
+    /* 2. 临时停止注入采样，使用 ADC1 普通轮询预采样零电流偏置。 */
+    BspAdcPreOffset();
+
+    /* 3. 启动 TIM1_CH4 内部触发。 */
     Status = BspPwmStartAdcTrigger();
     if (Status != HAL_OK)
     {
@@ -343,7 +346,7 @@ HAL_StatusTypeDef UsrMotorStart(void)
 
 #if (USER_MOTOR_DEBUG_ADC_ONLY == 0u)
     /*
-     * 3. 在真实开关环境下校准：
+     * 4. 在真实开关环境下校准：
      *    先固定三相 50% 零矢量并启动功率 PWM。power output enabled
      *    仍保持为 0，校准完成前快速环不能输出非零电压。
      */
@@ -359,10 +362,10 @@ HAL_StatusTypeDef UsrMotorStart(void)
     }
 #endif
 
-    /* 4. 等待模拟链路稳定，并在当前采样环境中累计零电流偏置。 */
+    /* 5. 等待模拟链路稳定，并在当前采样环境中累计零电流偏置。 */
     BspAdcCalibrationStart();
 
-    /* 5. 等待校准完成。 */
+    /* 6. 等待校准完成。 */
     Status = UsrMotorWaitForCurrentOffset();
     if (Status != HAL_OK)
     {

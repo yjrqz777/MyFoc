@@ -52,6 +52,14 @@ extern "C" {
 #define BSP_ADC_INJECTED_CHANNELS  (3u)          /* ADC1 注入通道数 (Ia, Ib, Ic) */
 #define BSP_ADC2_REGULAR_CHANNELS  (5u)          /* ADC2 常规通道数 (SHA, SHB, SHC, POT, VBUS) */
 
+/* ---- 启动前普通轮询零偏采样 ---- */
+#define BSP_ADC_PRE_OFFSET_SAMPLE_COUNT    (1024u) /* 启动前普通轮询零偏采样次数 */
+#define BSP_ADC_PRE_OFFSET_POLL_TIMEOUT_MS (2u)    /* 启动前普通轮询单次转换超时 (ms) */
+
+#if (BSP_ADC_PRE_OFFSET_SAMPLE_COUNT == 0u)
+#error "BSP_ADC_PRE_OFFSET_SAMPLE_COUNT must be greater than 0"
+#endif
+
 /* ===================================================================== *
  *  校准状态机 (doc §9)
  * ===================================================================== */
@@ -101,6 +109,7 @@ typedef struct tBspAdcCalDebugDef
  * @note   清除校准状态，设置偏置为默认值 2048。之后需调用 BspAdcCalibrationStart() 开始校准。
  */
 HAL_StatusTypeDef BspAdcStartInjected(void);
+void BspAdcPreOffset(void);
 
 /**
  * @brief  启动偏置校准状态机
