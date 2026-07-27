@@ -24,69 +24,33 @@ extern "C" {
  * ===================================================================== */
 
 /* ---- TIM1 / PWM (doc §3, §23) ---- */
-/** @brief TIM1 计数时钟 (Hz)，须与 CubeMX Clock Configuration 一致 */
-#define CS_TIM1_CLOCK_HZ           (170000000u)
-
-/** @brief PWM 开关频率 (Hz) */
-#define CS_PWM_FREQUENCY_HZ        (20000u)
-
-/** @brief TIM1 预分频 */
-#define CS_PWM_PRESCALER           (0u)
-
-/** @brief TIM1 自动重装值 ARR = fTIM / (2 * fPWM * (PSC+1)) - 1 */
-#define CS_PWM_ARR                 (4249u)
+#define CS_TIM1_CLOCK_HZ           (170000000u)  /* TIM1 计数时钟 (Hz)，须与 CubeMX Clock Configuration 一致 */
+#define CS_PWM_FREQUENCY_HZ        (20000u)      /* PWM 开关频率 (Hz) */
+#define CS_PWM_PRESCALER           (0u)          /* TIM1 预分频 */
+#define CS_PWM_ARR                 (4249u)       /* TIM1 自动重装值 ARR = fTIM / (2 * fPWM * (PSC+1)) - 1 */
 
 /* ---- ADC (doc §4, §23) ---- */
-/** @brief ADC 时钟 (Hz)，170 MHz / 4 = 42.5 MHz */
-#define CS_ADC_CLOCK_HZ            (42500000u)
-
-/** @brief ADC 采样保持时间对应的 TIM1 计数数 (12.5 cycles @ 42.5 MHz = 50 ticks) */
-#define CS_ADC_SAMPLE_TICKS        (50u)
-
-/** @brief ADC 触发点 CCR4，谷点后延时 (CNT=0 向上计数到此值时触发) */
-#define CS_ADC_TRIGGER_CCR         (50u)
+#define CS_ADC_CLOCK_HZ            (42500000u)   /* ADC 时钟 (Hz)，170 MHz / 4 = 42.5 MHz */
+#define CS_ADC_SAMPLE_TICKS        (50u)         /* ADC 采样保持时间对应的 TIM1 计数数 (12.5 cycles @ 42.5 MHz = 50 ticks) */
+#define CS_ADC_TRIGGER_CCR         (50u)         /* ADC 触发点 CCR4，谷点后延时 (CNT=0 向上计数到此值时触发) */
 
 /* ---- 消隐 / 安全裕量 (doc §5) ---- */
-/** @brief 总消隐时间对应的 TIM1 计数数 (死区 + 驱动延迟 + MOS开关 + 振铃 + 运放建立) */
-#define CS_BLANK_TICKS             (150u)
-
-/** @brief CCR 下限 = CCR4 + 采样保持 + 消隐，保证采样窗口有效 */
-#define CS_CCR_MIN                 (CS_ADC_TRIGGER_CCR + CS_ADC_SAMPLE_TICKS + CS_BLANK_TICKS)
+#define CS_BLANK_TICKS             (150u)        /* 总消隐时间对应的 TIM1 计数数 (死区 + 驱动延迟 + MOS开关 + 振铃 + 运放建立) */
+#define CS_CCR_MIN                 (CS_ADC_TRIGGER_CCR + CS_ADC_SAMPLE_TICKS + CS_BLANK_TICKS) /* CCR 下限 = CCR4 + 采样保持 + 消隐，保证采样窗口有效 */
 
 /* ---- 偏置校准 (doc §11~§15, §23) ---- */
-/** @brief 模拟链路稳定等待时间 (ms) */
-#define CS_CAL_SETTLE_TIME_MS      (20u)
-
-/** @brief 丢弃启动阶段样本数 */
-#define CS_CAL_DISCARD_COUNT       (128u)
-
-/** @brief 累计偏置样本数 (2 的幂，便于移位除法) */
-#define CS_CAL_SAMPLE_COUNT        (1024u)
-
-/** @brief Maximum allowed per-channel calibration noise span (LSB).
- *  @note 64 LSB leaves margin above the measured 39-46 LSB min/max span.
- *        Offset range and half-to-half drift remain independent checks.
- */
-#define CS_CAL_MAX_SPAN            (64u)
-
-/** @brief 偏置下限 (20% * 4095) */
-#define CS_CAL_OFFSET_MIN          (819u)
-
-/** @brief 偏置上限 (80% * 4095) */
-#define CS_CAL_OFFSET_MAX          (3276u)
-
-/** @brief 前后半段均值漂移最大值 (LSB) */
-#define CS_CAL_DRIFT_LIMIT         (8u)
-
-/** @brief 校准失败最大重试次数 */
-#define CS_CAL_MAX_RETRY           (3u)
+#define CS_CAL_SETTLE_TIME_MS      (20u)         /* 模拟链路稳定等待时间 (ms) */
+#define CS_CAL_DISCARD_COUNT       (128u)        /* 丢弃启动阶段样本数 */
+#define CS_CAL_SAMPLE_COUNT        (1024u)       /* 累计偏置样本数 (2 的幂，便于移位除法) */
+#define CS_CAL_MAX_SPAN            (64u)         /* 单通道校准噪声跨度上限 (LSB)，独立于偏置范围和前后半段漂移检查 */
+#define CS_CAL_OFFSET_MIN          (819u)        /* 偏置下限 (20% * 4095) */
+#define CS_CAL_OFFSET_MAX          (3276u)       /* 偏置上限 (80% * 4095) */
+#define CS_CAL_DRIFT_LIMIT         (8u)          /* 前后半段均值漂移最大值 (LSB) */
+#define CS_CAL_MAX_RETRY           (3u)          /* 校准失败最大重试次数 */
 
 /* ---- 通道数 ---- */
-/** @brief ADC1 注入通道数 (Ia, Ib, Ic) */
-#define BSP_ADC_INJECTED_CHANNELS  (3u)
-
-/** @brief ADC2 常规通道数 (SHA, SHB, SHC, POT, VBUS) */
-#define BSP_ADC2_REGULAR_CHANNELS  (5u)
+#define BSP_ADC_INJECTED_CHANNELS  (3u)          /* ADC1 注入通道数 (Ia, Ib, Ic) */
+#define BSP_ADC2_REGULAR_CHANNELS  (5u)          /* ADC2 常规通道数 (SHA, SHB, SHC, POT, VBUS) */
 
 /* ===================================================================== *
  *  校准状态机 (doc §9)
