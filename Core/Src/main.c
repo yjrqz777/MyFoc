@@ -130,16 +130,23 @@ int main(void)
   MX_DAC1_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_Delay(100u);
+  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+  HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+
 // HAL_DAC_SetValue(&hdac1,
 //                  DAC_CHANNEL_1,
 //                  DAC_ALIGN_12B_R,
 //                  2048u);
 // HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
 /* 等待DAC、U6和电流采样运放稳定 */
-HAL_Delay(100u);
-
+// HAL_Delay(100u);
+  // BspAdcPreOffset();
+  // BspAdcPreOffset();
   UsrDebugRttInit();
-
+  // HAL_Delay(500u);
+  // BspAdcPreOffset();
+  HAL_Delay(100u);
   /* Send the initial-state color before motor startup can block the task loop. */
   BspWs2812Init();
   if (BspWs2812WriteColor(32u, 20u, 0u) != HAL_OK)
@@ -252,12 +259,175 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* ARMCC does not reliably expose LR through a C register variable here. */
-  SEGGER_RTT_WriteString(0, "\r\n*** Error_Handler ***\r\n");
+
+  uint32_t ipsr;
+  uint32_t primask;
+  uint32_t control;
+  uint32_t msp;
+  uint32_t psp;
+  uint32_t icsr;
+
+  primask = __get_PRIMASK();
+
   __disable_irq();
+  __DSB();
+  __ISB();
+
+  ipsr    = __get_IPSR();
+  control = __get_CONTROL();
+  msp     = __get_MSP();
+  psp     = __get_PSP();
+  icsr    = SCB->ICSR;
+
+  SEGGER_RTT_WriteString(0,
+                         "\r\n"
+                         "========================================\r\n"
+                         "*** Error_Handler ***\r\n"
+                         "========================================\r\n");
+
+  SEGGER_RTT_printf(0,
+                    "Tick       : %u ms\r\n",
+                    (unsigned int)HAL_GetTick());
+
+  SEGGER_RTT_printf(0,
+                    "CPUID      : 0x%08X\r\n",
+                    (unsigned int)SCB->CPUID);
+
+  SEGGER_RTT_printf(0,
+                    "IPSR       : 0x%08X\r\n",
+                    (unsigned int)ipsr);
+
+  if (ipsr == 0U)
+  {
+    SEGGER_RTT_WriteString(0,
+                           "Context    : Thread mode\r\n");
+  }
+  else if (ipsr >= 16U)
+  {
+    SEGGER_RTT_printf(0,
+                      "Context    : External IRQ, IRQn = %u\r\n",
+                      (unsigned int)(ipsr - 16U));
+  }
+  else
+  {
+    SEGGER_RTT_printf(0,
+                      "Context    : System exception %u\r\n",
+                      (unsigned int)ipsr);
+  }
+
+  SEGGER_RTT_printf(0,
+                    "MSP        : 0x%08X\r\n",
+                    (unsigned int)msp);
+
+  SEGGER_RTT_printf(0,
+                    "PSP        : 0x%08X\r\n",
+                    (unsigned int)psp);
+
+  SEGGER_RTT_printf(0,
+                    "CONTROL    : 0x%08X\r\n",
+                    (unsigned int)control);
+
+  SEGGER_RTT_printf(0,
+                    "PRIMASK    : 0x%08X\r\n",
+                    (unsigned int)primask);
+
+  SEGGER_RTT_printf(0,
+                    "ICSR       : 0x%08X\r\n",
+                    (unsigned int)icsr);
+
+  SEGGER_RTT_printf(0,
+                    "VECTACTIVE : %u\r\n",
+                    (unsigned int)(icsr & 0x1FFU));
+
+  SEGGER_RTT_printf(0,
+                    "VECTPENDING: %u\r\n",
+                    (unsigned int)((icsr >> 12U) & 0x1FFU));
+
+  SEGGER_RTT_printf(0,
+                    "SHCSR      : 0x%08X\r\n",
+                    (unsigned int)SCB->SHCSR);
+
+#if defined(__CORTEX_M) && (__CORTEX_M >= 3U) && (__CORTEX_M != 23U)
+
+  {
+    uint32_t cfsr = SCB->CFSR;
+
+    SEGGER_RTT_WriteString(0,
+                           "------------ Fault status ------------\r\n");
+
+    SEGGER_RTT_printf(0,
+                      "BASEPRI    : 0x%08X\r\n",
+                      (unsigned int)__get_BASEPRI());
+
+    SEGGER_RTT_printf(0,
+                      "FAULTMASK  : 0x%08X\r\n",
+                      (unsigned int)__get_FAULTMASK());
+
+    SEGGER_RTT_printf(0,
+                      "CFSR       : 0x%08X\r\n",
+                      (unsigned int)cfsr);
+
+    SEGGER_RTT_printf(0,
+                      "MMFSR      : 0x%02X\r\n",
+                      (unsigned int)(cfsr & 0xFFU));
+
+    SEGGER_RTT_printf(0,
+                      "BFSR       : 0x%02X\r\n",
+                      (unsigned int)((cfsr >> 8U) & 0xFFU));
+
+    SEGGER_RTT_printf(0,
+                      "UFSR       : 0x%04X\r\n",
+                      (unsigned int)((cfsr >> 16U) & 0xFFFFU));
+
+    SEGGER_RTT_printf(0,
+                      "HFSR       : 0x%08X\r\n",
+                      (unsigned int)SCB->HFSR);
+
+    SEGGER_RTT_printf(0,
+                      "DFSR       : 0x%08X\r\n",
+                      (unsigned int)SCB->DFSR);
+
+    SEGGER_RTT_printf(0,
+                      "AFSR       : 0x%08X\r\n",
+                      (unsigned int)SCB->AFSR);
+
+    if ((cfsr & (1UL << 7U)) != 0U)
+    {
+      SEGGER_RTT_printf(0,
+                        "MMFAR      : 0x%08X valid\r\n",
+                        (unsigned int)SCB->MMFAR);
+    }
+    else
+    {
+      SEGGER_RTT_WriteString(0,
+                             "MMFAR      : invalid\r\n");
+    }
+
+    if ((cfsr & (1UL << 15U)) != 0U)
+    {
+      SEGGER_RTT_printf(0,
+                        "BFAR       : 0x%08X valid\r\n",
+                        (unsigned int)SCB->BFAR);
+    }
+    else
+    {
+      SEGGER_RTT_WriteString(0,
+                             "BFAR       : invalid\r\n");
+    }
+  }
+
+#endif
+
+  SEGGER_RTT_WriteString(0,
+                         "========================================\r\n"
+                         "System halted\r\n"
+                         "========================================\r\n");
+
   while (1)
   {
+    __NOP();
   }
+
   /* USER CODE END Error_Handler_Debug */
 }
 

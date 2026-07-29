@@ -10,6 +10,7 @@
 
 #include "user_system.h"
 #include "bsp_adc.h"
+#include "bsp_hall.h"
 #include "user_foc.h"
 #include "user_motor.h"
 tSysDataDef tSysData;
@@ -171,6 +172,12 @@ uint16_t UsrSystemTask(void)
                           FaultPhaseBCurrent.pcSign, (unsigned)FaultPhaseBCurrent.u32Integer, (unsigned)FaultPhaseBCurrent.u32Fraction,
                           FaultPhaseCCurrent.pcSign, (unsigned)FaultPhaseCCurrent.u32Integer, (unsigned)FaultPhaseCCurrent.u32Fraction,
                           (unsigned)RawPhaseA, (unsigned)RawPhaseB, (unsigned)RawPhaseC);
+
+        SEGGER_RTT_printf(0, "HALL,state=%u,valid=%u,angle=%d,speed=%d\r\n",
+                          (unsigned)BspHallGetState(),
+                          (unsigned)BspHallIsAngleValid(),
+                          (int)(BspHallGetElectricalAngle() * 57.2958f),
+                          (int)(BspHallGetElectricalSpeed() * 1000.0f));
     }
 
     PT_END();

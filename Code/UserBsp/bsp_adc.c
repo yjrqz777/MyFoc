@@ -235,11 +235,11 @@ HAL_StatusTypeDef BspAdcStartInjected(void)
         u16InjectedRaw[i] = 0u;
     }
 
-    Status = HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
-    if (Status != HAL_OK)
-    {
-        return Status;
-    }
+    // Status = HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+    // if (Status != HAL_OK)
+    // {
+    //     return Status;
+    // }
 
     Status = HAL_ADCEx_InjectedStart_IT(&hadc1);
     return Status;
@@ -308,6 +308,7 @@ void BspAdcProcess(void)
                 if ((Offset < CS_CAL_OFFSET_MIN) || (Offset > CS_CAL_OFFSET_MAX))
                 {
                     SEGGER_RTT_WriteString(0, "Current offset out of range\r\n");
+                    SEGGER_RTT_printf(0, "Offset: %d,%d\r\n",i, Offset);
                     CheckFailed = 1u;
                 }
 
@@ -374,7 +375,7 @@ uint8_t BspAdcUpdateInjected(ADC_HandleTypeDef *ptAdc)
     u16InjectedRaw[0] = (uint16_t)HAL_ADCEx_InjectedGetValue(ptAdc, ADC_INJECTED_RANK_1);
     u16InjectedRaw[1] = (uint16_t)HAL_ADCEx_InjectedGetValue(ptAdc, ADC_INJECTED_RANK_2);
     u16InjectedRaw[2] = (uint16_t)HAL_ADCEx_InjectedGetValue(ptAdc, ADC_INJECTED_RANK_3);
-
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_10);
     switch (eCalState)
     {
         case E_BSP_ADC_CAL_DISCARD:
@@ -401,7 +402,7 @@ uint8_t BspAdcUpdateInjected(ADC_HandleTypeDef *ptAdc)
             for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
             {
                 uint16_t Raw = u16InjectedRaw[i];
-
+                // SEGGER_RTT_printf(0, "Raw: %d,%d,%d\r\n", i, Raw, IsFirstHalf);
                 if (IsFirstHalf != 0u)
                 {
                     u64CalSumFirstHalf[i] += Raw;
@@ -617,25 +618,88 @@ void BspAdcPreOffset(void)
     uint32_t SampleIndex;
     uint16_t Raw;
     uint8_t i;
-
+    uint32_t value_rank1 = 0;
+    uint32_t value_rank2 = 0;
+    uint32_t value_rank3 = 0;
+    ADC_InjectionConfTypeDef sConfigInjected = {0};
     Status = HAL_ADCEx_InjectedStop_IT(&hadc1);
     if (Status != HAL_OK)
     {
+        SEGGER_RTT_printf(0, "ADC1 stop failed 1\r\n");
         Error_Handler();
+
     }
+
+  /** Configure Injected Channel
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_1;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_1;
+  sConfigInjected.InjectedSamplingTime = ADC_SAMPLETIME_12CYCLES_5;
+  sConfigInjected.InjectedSingleDiff = ADC_SINGLE_ENDED;
+  sConfigInjected.InjectedOffsetNumber = ADC_OFFSET_NONE;
+  sConfigInjected.InjectedOffset = 0;
+  sConfigInjected.InjectedNbrOfConversion = 3;
+  sConfigInjected.InjectedDiscontinuousConvMode = DISABLE;
+  sConfigInjected.AutoInjectedConv = DISABLE;
+  sConfigInjected.QueueInjectedContext = DISABLE;
+  sConfigInjected.ExternalTrigInjecConv = ADC_INJECTED_SOFTWARE_START;
+  sConfigInjected.ExternalTrigInjecConvEdge = ADC_EXTERNALTRIGINJECCONV_EDGE_NONE;
+  sConfigInjected.InjecOversamplingMode = DISABLE;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Injected Channel
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_2;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_2;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Injected Channel
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_3;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_3;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+
+
+
 
     for (SampleIndex = 0u; SampleIndex < BSP_ADC_PRE_OFFSET_SAMPLE_COUNT; SampleIndex++)
     {
-        for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
+        /* 1. 启动注入组转换（非中断模式） */
+        if (HAL_ADCEx_InjectedStart(&hadc1) != HAL_OK)
         {
-            Status = BspAdc1ReadPhaseChannel(u32Adc1PhaseChannelMap[i], &Raw);
-            if (Status != HAL_OK)
-            {
-                (void)HAL_ADCEx_InjectedStart_IT(&hadc1);
-                Error_Handler();
-            }
-            u64Sum[i] += Raw;
+            /* 启动失败处理 */
+                        SEGGER_RTT_printf(0, "ADC1 start failed 2\r\n");
+            Error_Handler();
+
         }
+
+        /* 2. 轮询等待转换完成，超时时间设为100ms */
+        if (HAL_ADCEx_InjectedPollForConversion(&hadc1, 100) == HAL_OK)
+        {
+            /* 3. 转换完成，读取各通道数据 */
+            value_rank1 = HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_1);
+            value_rank2 = HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_2);
+            value_rank3 = HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_3);
+        }
+        else
+        {
+            /* 转换超时或出错处理 */
+                        SEGGER_RTT_printf(0, "ADC1 poll failed 3\r\n");
+            Error_Handler();
+        }
+        u64Sum[0] += value_rank1;
+        u64Sum[1] += value_rank2;
+        u64Sum[2] += value_rank3;
     }
 
     for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
@@ -645,12 +709,48 @@ void BspAdcPreOffset(void)
         s32CurrentCode[i] = 0;
     }
 
+
+    SEGGER_RTT_printf(0, "ADC1 pre-offset: %d %d %d\r\n", u16CurrentOffset[0],
+                      u16CurrentOffset[1], u16CurrentOffset[2]);
     u8SampleValid = 0u;
     eCalState = E_BSP_ADC_CAL_READY;
 
-    Status = HAL_ADCEx_InjectedStart_IT(&hadc1);
-    if (Status != HAL_OK)
-    {
-        Error_Handler();
-    }
+
+  /* 恢复硬件触发：必须按 RANK_1 → RANK_2 → RANK_3 顺序重新配置全部 3 个 rank。
+   * HAL 的上下文队列机制要求 InjectedNbrOfConversion 次调用构成一个完整上下文，
+   * 缺少任一 rank 会使对应 JSQx 槽位保持为 0（即 ADC_CHANNEL_0），导致采样错误通道。 */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_1;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_1;
+  sConfigInjected.ExternalTrigInjecConv = ADC_EXTERNALTRIGINJEC_T1_TRGO2;
+  sConfigInjected.ExternalTrigInjecConvEdge = ADC_EXTERNALTRIGINJECCONV_EDGE_RISING;
+  sConfigInjected.InjecOversamplingMode = DISABLE;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Injected Channel
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_2;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_2;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Injected Channel
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_3;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_3;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+
+    // Status = HAL_ADCEx_InjectedStart_IT(&hadc1);
+    // if (Status != HAL_OK)
+    // {
+    //     Error_Handler();
+    // }
 }
