@@ -11,10 +11,7 @@
 #include "user_system.h"
 #include "bsp_adc.h"
 #include "bsp_hall.h"
-<<<<<<< HEAD
 #include "bsp_mt6816ct_acd.h"
-=======
->>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
 #include "user_foc.h"
 #include "user_motor.h"
 tSysDataDef tSysData;
@@ -192,7 +189,6 @@ uint16_t UsrSystemTask(void)
         //     u8OffsetPrinted = 1u;
         // }
 
-<<<<<<< HEAD
         // u8RttPrintDivider++;
         // if (u8RttPrintDivider >= USER_SYSTEM_RTT_PRINT_DIVIDER)
         // {
@@ -223,27 +219,6 @@ uint16_t UsrSystemTask(void)
         //                       (int)(BspHallGetOffset() * 57.2958f),
         //                       (unsigned)UsrMotorIsOverCurrentFault());
         // }
-=======
-        SEGGER_RTT_printf(0, "%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%u,%s%u.%03u,%s%u.%03u,%s%u.%03u,%u,%u,%u\r\n",
-                          PhaseACurrent.pcSign, (unsigned)PhaseACurrent.u32Integer, (unsigned)PhaseACurrent.u32Fraction,
-                          PhaseBCurrent.pcSign, (unsigned)PhaseBCurrent.u32Integer, (unsigned)PhaseBCurrent.u32Fraction,
-                          PhaseCCurrent.pcSign, (unsigned)PhaseCCurrent.u32Integer, (unsigned)PhaseCCurrent.u32Fraction,
-                          DirectCurrent.pcSign, (unsigned)DirectCurrent.u32Integer, (unsigned)DirectCurrent.u32Fraction,
-                          QuadratureCurrent.pcSign, (unsigned)QuadratureCurrent.u32Integer, (unsigned)QuadratureCurrent.u32Fraction,
-                          QuadratureReference.pcSign, (unsigned)QuadratureReference.u32Integer, (unsigned)QuadratureReference.u32Fraction,
-                          QuadratureTarget.pcSign, (unsigned)QuadratureTarget.u32Integer, (unsigned)QuadratureTarget.u32Fraction,
-                          (unsigned)UsrMotorIsOverCurrentFault(),
-                          FaultPhaseACurrent.pcSign, (unsigned)FaultPhaseACurrent.u32Integer, (unsigned)FaultPhaseACurrent.u32Fraction,
-                          FaultPhaseBCurrent.pcSign, (unsigned)FaultPhaseBCurrent.u32Integer, (unsigned)FaultPhaseBCurrent.u32Fraction,
-                          FaultPhaseCCurrent.pcSign, (unsigned)FaultPhaseCCurrent.u32Integer, (unsigned)FaultPhaseCCurrent.u32Fraction,
-                          (unsigned)RawPhaseA, (unsigned)RawPhaseB, (unsigned)RawPhaseC);
-
-        SEGGER_RTT_printf(0, "HALL,state=%u,valid=%u,angle=%d,speed=%d\r\n",
-                          (unsigned)BspHallGetState(),
-                          (unsigned)BspHallIsAngleValid(),
-                          (int)(BspHallGetElectricalAngle() * 57.2958f),
-                          (int)(BspHallGetElectricalSpeed() * 1000.0f));
->>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
     }
 
     PT_END();

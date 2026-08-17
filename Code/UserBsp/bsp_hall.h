@@ -67,7 +67,6 @@ float BspHallGetElectricalSpeed(void);
  */
 uint8_t BspHallIsAngleValid(void);
 
-<<<<<<< HEAD
 /* ---- Hall 角度偏移标定 ---- */
 
 /**
@@ -91,8 +90,6 @@ uint8_t BspHallIsOffsetCalibrated(void);
  */
 float BspHallGetOffset(void);
 
-=======
->>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
 #ifdef __cplusplus
 }
 #endif

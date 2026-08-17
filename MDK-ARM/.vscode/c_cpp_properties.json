@@ -3,7 +3,6 @@
         {
             "name": "g474app",
             "includePath": [
-<<<<<<< HEAD
                 "e:\\github\\foc\\MyFoc\\Core\\Inc",
                 "e:\\github\\foc\\MyFoc\\Drivers\\STM32G4xx_HAL_Driver\\Inc",
                 "e:\\github\\foc\\MyFoc\\Drivers\\STM32G4xx_HAL_Driver\\Inc\\Legacy",
@@ -21,25 +20,6 @@
                 "e:\\github\\foc\\MyFoc\\Core\\Src",
                 "e:\\github\\foc\\MyFoc\\Drivers\\STM32G4xx_HAL_Driver\\Src",
                 "e:\\github\\foc\\MyFoc\\Code\\UserBsp\\st7789v"
-=======
-                "e:\\github\\MyFoc\\Core\\Inc",
-                "e:\\github\\MyFoc\\Drivers\\STM32G4xx_HAL_Driver\\Inc",
-                "e:\\github\\MyFoc\\Drivers\\STM32G4xx_HAL_Driver\\Inc\\Legacy",
-                "e:\\github\\MyFoc\\Drivers\\CMSIS\\Device\\ST\\STM32G4xx\\Include",
-                "e:\\github\\MyFoc\\Drivers\\CMSIS\\Include",
-                "e:\\github\\MyFoc\\Code",
-                "e:\\github\\MyFoc\\Code\\UserApp",
-                "e:\\github\\MyFoc\\Code\\UserBsp",
-                "e:\\github\\MyFoc\\Code\\UserBsp\\ws2812",
-                "e:\\github\\MyFoc\\Code\\UserDrv",
-                "e:\\github\\MyFoc\\Code\\UserBsp\\RTT",
-                "F:\\keil\\mdk\\ARM\\ARMCC\\include",
-                "F:\\keil\\mdk\\ARM\\ARMCC\\include\\rw",
-                "e:\\github\\MyFoc\\MDK-ARM",
-                "e:\\github\\MyFoc\\Core\\Src",
-                "e:\\github\\MyFoc\\Drivers\\STM32G4xx_HAL_Driver\\Src",
-                "e:\\github\\MyFoc\\Code\\UserBsp\\st7789v"
->>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
             ],
             "defines": [
                 "USE_HAL_DRIVER",

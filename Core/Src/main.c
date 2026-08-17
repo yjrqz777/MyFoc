@@ -145,11 +145,7 @@ int main(void)
   // BspAdcPreOffset();
   UsrDebugRttInit();
   // HAL_Delay(500u);
-<<<<<<< HEAD
   BspAdcPreOffset();
-=======
-  // BspAdcPreOffset();
->>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
   HAL_Delay(100u);
   /* Send the initial-state color before motor startup can block the task loop. */
   BspWs2812Init();
