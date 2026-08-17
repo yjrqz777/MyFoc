@@ -68,31 +68,53 @@ HAL_StatusTypeDef BspPwmStartPowerOutputs(void)
     /* Always enable the bridge from a zero-voltage command. */
     BspPwmSetCompare(PwmZero, PwmZero, PwmZero);
 
-    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
+    if (TIM_CHANNEL_STATE_GET(&htim1, TIM_CHANNEL_1) != HAL_TIM_CHANNEL_STATE_BUSY)
     {
-        return HAL_ERROR;
-    }
-    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
-
-    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2) != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
-    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2) != HAL_OK)
-    {
-        return HAL_ERROR;
+        if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
+        {
+            return HAL_ERROR;
+        }
     }
 
-    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3) != HAL_OK)
+    if (TIM_CHANNEL_N_STATE_GET(&htim1, TIM_CHANNEL_1) != HAL_TIM_CHANNEL_STATE_BUSY)
     {
-        return HAL_ERROR;
+        if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
+        {
+            return HAL_ERROR;
+        }
     }
-    if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3) != HAL_OK)
+
+
+    if (TIM_CHANNEL_STATE_GET(&htim1, TIM_CHANNEL_2) != HAL_TIM_CHANNEL_STATE_BUSY)
     {
-        return HAL_ERROR;
+        if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2) != HAL_OK)
+        {
+            return HAL_ERROR;
+        }
+    }
+
+    if (TIM_CHANNEL_N_STATE_GET(&htim1, TIM_CHANNEL_2) != HAL_TIM_CHANNEL_STATE_BUSY)
+    {
+        if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2) != HAL_OK)
+        {
+            return HAL_ERROR;
+        }
+    }
+
+    if (TIM_CHANNEL_STATE_GET(&htim1, TIM_CHANNEL_3) != HAL_TIM_CHANNEL_STATE_BUSY)
+    {
+        if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3) != HAL_OK)
+        {
+            return HAL_ERROR;
+        }
+    }
+
+    if (TIM_CHANNEL_N_STATE_GET(&htim1, TIM_CHANNEL_3) != HAL_TIM_CHANNEL_STATE_BUSY)
+    {
+        if (HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3) != HAL_OK)
+        {
+            return HAL_ERROR;
+        }
     }
 
     return HAL_OK;

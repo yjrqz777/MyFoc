@@ -1,16 +1,63 @@
 /***************************************************************************************************
  * Author: yjrqz777 3210551161@qq.com
  * Date: 2025-05-08 20:07:45
- * LastEditTime: 2026-07-08 21:50:21
- * LastEditors: yjrqz777 3210551161@qq.com
+ * LastEditTime: 2026-08-06 09:22:50
+ * LastEditors: duanzhixuan duanzhixuan@topband.com.cn
  * Description: 
- * FilePath: \Myfoc2\Code\UserBsp\st7789v\st7789v.c
+ * FilePath: \MyFoc\Code\UserBsp\st7789v\st7789v.c
  * @YJRQZ777
 ***************************************************************************************************/
 
 #include "st7789v/st7789v.h"
 #include "st7789v/font.h"
+#define LCD_DMA_FONT_SIZE_Y       (24u)
+#define LCD_DMA_FONT_SIZE_X       (LCD_DMA_FONT_SIZE_Y / 2u)
+#define LCD_DMA_MAX_DIGITS        (8u)
+#define LCD_DMA_BUFFER_BYTES      (LCD_DMA_MAX_DIGITS * LCD_DMA_FONT_SIZE_X * LCD_DMA_FONT_SIZE_Y * 2u)
 
+static uint8_t au8LcdDmaBuffer[LCD_DMA_BUFFER_BYTES];
+static volatile uint8_t u8LcdDmaBusy = 0u;
+
+static void LCD_DmaWritePixel(uint16_t u16Color, uint32_t *pu32Index)
+{
+    au8LcdDmaBuffer[*pu32Index] = (uint8_t)(u16Color >> 8u);
+    (*pu32Index)++;
+    au8LcdDmaBuffer[*pu32Index] = (uint8_t)u16Color;
+    (*pu32Index)++;
+}
+
+static void LCD_DmaRenderString(const uint8_t *pu8Characters, uint8_t u8Length,
+                                 uint16_t u16Foreground, uint16_t u16Background,
+                                 uint32_t *pu32Index)
+{
+    uint8_t u8Byte;
+    uint8_t u8Character;
+    uint8_t u8Column;
+    uint8_t u8DigitIndex;
+    uint8_t u8Row;
+    uint8_t u8BytesPerRow;
+
+    u8BytesPerRow = (uint8_t)((LCD_DMA_FONT_SIZE_X + 7u) / 8u);
+    for (u8Row = 0u; u8Row < LCD_DMA_FONT_SIZE_Y; u8Row++)
+    {
+        for (u8DigitIndex = 0u; u8DigitIndex < u8Length; u8DigitIndex++)
+        {
+            u8Character = pu8Characters[u8DigitIndex];
+            if ((u8Character < (uint8_t)' ') || (u8Character > (uint8_t)'~'))
+            {
+                u8Character = (uint8_t)' ';
+            }
+            u8Character -= (uint8_t)' ';
+
+            for (u8Column = 0u; u8Column < LCD_DMA_FONT_SIZE_X; u8Column++)
+            {
+                u8Byte = ascii_2412[u8Character][(uint16_t)u8Row * u8BytesPerRow + u8Column / 8u];
+                LCD_DmaWritePixel((u8Byte & (1u << (u8Column % 8u))) != 0u ?
+                                  u16Foreground : u16Background, pu32Index);
+            }
+        }
+    }
+}
 /**
  * @brief  SPI 发送字节（阻塞模式）
  * @param[in] TxData  待发送的数据
@@ -963,4 +1010,183 @@ void LCD_ShowPicture(uint16_t x,uint16_t y,uint16_t length,uint16_t width,const 
 			k++;
 		}
 	}			
+}
+
+
+HAL_StatusTypeDef LCD_ShowIntNumDma(uint16_t x, uint16_t y, uint32_t num, uint8_t len,
+                                    uint16_t fc, uint16_t bc, uint8_t sizey)
+{
+    uint8_t au8Characters[LCD_DMA_MAX_DIGITS];
+    uint8_t u8Digit;
+    uint8_t u8ShowDigit = 0u;
+    uint8_t u8Index;
+    uint32_t u32BufferIndex = 0u;
+    HAL_StatusTypeDef eStatus;
+
+    if ((sizey != LCD_DMA_FONT_SIZE_Y) || (len == 0u) || (len > LCD_DMA_MAX_DIGITS) ||
+        ((uint32_t)x + (uint32_t)len * LCD_DMA_FONT_SIZE_X > LCD_W) ||
+        ((uint32_t)y + LCD_DMA_FONT_SIZE_Y > LCD_H) || (u8LcdDmaBusy != 0u) ||
+        (HAL_SPI_GetState(&hspi3) != HAL_SPI_STATE_READY))
+    {
+        return HAL_BUSY;
+    }
+
+    for (u8Index = 0u; u8Index < len; u8Index++)
+    {
+        u8Digit = (uint8_t)((num / mypow(10u, (uint8_t)(len - u8Index - 1u))) % 10u);
+        if ((u8ShowDigit == 0u) && (u8Index < (len - 1u)) && (u8Digit == 0u))
+        {
+            au8Characters[u8Index] = (uint8_t)' ';
+        }
+        else
+        {
+            u8ShowDigit = 1u;
+            au8Characters[u8Index] = (uint8_t)('0' + u8Digit);
+        }
+    }
+    LCD_DmaRenderString(au8Characters, len, fc, bc, &u32BufferIndex);
+    LCD_Address_Set(x, y, (uint16_t)(x + len * LCD_DMA_FONT_SIZE_X - 1u),
+                    (uint16_t)(y + LCD_DMA_FONT_SIZE_Y - 1u));
+    LCD_DC(DATA);
+    u8LcdDmaBusy = 1u;
+    eStatus = HAL_SPI_Transmit_DMA(&hspi3, au8LcdDmaBuffer, (uint16_t)u32BufferIndex);
+    if (eStatus != HAL_OK)
+    {
+        u8LcdDmaBusy = 0u;
+    }
+    return eStatus;
+}
+
+/**
+ * @brief  DMA 方式显示浮点数（指定小数位数）
+ * @param[in] x,y         显示左上角坐标
+ * @param[in] fValue      待显示的浮点数值（支持负数）
+ * @param[in] u8Length     总字符宽度（含小数点、符号位）
+ * @param[in] u8Decimals   小数位数
+ * @param[in] fc           前景色
+ * @param[in] bc           背景色
+ * @param[in] sizey        字号（仅支持 24）
+ * @retval HAL_OK          DMA 传输已启动
+ * @retval HAL_BUSY        DMA 忙或参数非法
+ * @note   右对齐显示，前导零以空格替换；负号紧贴首位有效数字左侧。
+ *         调用方需保证 u8Length 足以容纳符号位，否则符号可能被截断。
+ */
+HAL_StatusTypeDef LCD_ShowFloatNumDma(uint16_t x, uint16_t y, float fValue,
+                                       uint8_t u8Length, uint8_t u8Decimals,
+                                       uint16_t fc, uint16_t bc, uint8_t sizey)
+{
+    uint8_t au8Characters[LCD_DMA_MAX_DIGITS];
+    uint8_t au8Digits[LCD_DMA_MAX_DIGITS];
+    uint8_t u8Index;
+    uint8_t u8Digit;
+    uint8_t u8ShowDigit = 0u;
+    uint8_t u8DotPos;
+    uint8_t u8IntLen;
+    uint8_t u8Pos;
+    uint8_t u8Neg = 0u;
+    uint8_t u8TotalDigits;
+    uint32_t u32Scaled;
+    uint32_t u32Scale = 1u;
+    uint32_t u32BufferIndex = 0u;
+    HAL_StatusTypeDef eStatus;
+
+    if ((sizey != LCD_DMA_FONT_SIZE_Y) || (u8Length == 0u) || (u8Length > LCD_DMA_MAX_DIGITS) ||
+        (u8Decimals == 0u) || ((uint8_t)(u8Decimals + 1u) >= u8Length) ||
+        ((uint32_t)x + (uint32_t)u8Length * LCD_DMA_FONT_SIZE_X > LCD_W) ||
+        ((uint32_t)y + LCD_DMA_FONT_SIZE_Y > LCD_H) || (u8LcdDmaBusy != 0u) ||
+        (HAL_SPI_GetState(&hspi3) != HAL_SPI_STATE_READY))
+    {
+        return HAL_BUSY;
+    }
+
+    if (fValue < 0.0f)
+    {
+        u8Neg = 1u;
+        fValue = -fValue;
+    }
+
+    for (u8Index = 0u; u8Index < u8Decimals; u8Index++)
+    {
+        u32Scale *= 10u;
+    }
+    u32Scaled = (uint32_t)(fValue * (float)u32Scale + 0.5f);
+
+    u8DotPos = (uint8_t)(u8Length - u8Decimals - 1u);
+    u8IntLen = u8DotPos;
+    u8TotalDigits = (uint8_t)(u8IntLen + u8Decimals);
+
+    /* 逐位提取（LSB 在前） */
+    for (u8Index = 0u; u8Index < u8TotalDigits; u8Index++)
+    {
+        au8Digits[u8Index] = (uint8_t)(u32Scaled % 10u);
+        u32Scaled /= 10u;
+    }
+
+    /* 从左到右填充字符 */
+    u8ShowDigit = 0u;
+    for (u8Pos = 0u; u8Pos < u8Length; u8Pos++)
+    {
+        if (u8Pos == u8DotPos)
+        {
+            au8Characters[u8Pos] = (uint8_t)'.';
+        }
+        else if (u8Pos < u8DotPos)
+        {
+            /* 整数部分：MSB 在 au8Digits[u8TotalDigits-1] */
+            u8Digit = au8Digits[(uint8_t)(u8TotalDigits - 1u - u8Pos)];
+            if ((u8ShowDigit == 0u) && (u8Digit == 0u) && (u8Pos < (uint8_t)(u8IntLen - 1u)))
+            {
+                if (u8Neg != 0u)
+                {
+                    au8Characters[u8Pos] = (uint8_t)'-';
+                    u8Neg = 0u;
+                    u8ShowDigit = 1u;
+                }
+                else
+                {
+                    au8Characters[u8Pos] = (uint8_t)' ';
+                }
+            }
+            else
+            {
+                u8ShowDigit = 1u;
+                au8Characters[u8Pos] = (uint8_t)('0' + u8Digit);
+            }
+        }
+        else
+        {
+            /* 小数部分：始终显示 */
+            u8Digit = au8Digits[(uint8_t)(u8Length - 1u - u8Pos)];
+            au8Characters[u8Pos] = (uint8_t)('0' + u8Digit);
+            u8ShowDigit = 1u;
+        }
+    }
+
+    LCD_DmaRenderString(au8Characters, u8Length, fc, bc, &u32BufferIndex);
+    LCD_Address_Set(x, y, (uint16_t)(x + u8Length * LCD_DMA_FONT_SIZE_X - 1u),
+                    (uint16_t)(y + LCD_DMA_FONT_SIZE_Y - 1u));
+    LCD_DC(DATA);
+    u8LcdDmaBusy = 1u;
+    eStatus = HAL_SPI_Transmit_DMA(&hspi3, au8LcdDmaBuffer, (uint16_t)u32BufferIndex);
+    if (eStatus != HAL_OK)
+    {
+        u8LcdDmaBusy = 0u;
+    }
+    return eStatus;
+}
+
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *phspi)
+{
+    if (phspi == &hspi3)
+    {
+        u8LcdDmaBusy = 0u;
+    }
+}
+
+void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *phspi)
+{
+    if (phspi == &hspi3)
+    {
+        u8LcdDmaBusy = 0u;
+    }
 }

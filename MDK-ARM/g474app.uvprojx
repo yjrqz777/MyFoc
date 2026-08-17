@@ -728,9 +728,24 @@
               <FilePath>..\Code\UserApp\user_foc.c</FilePath>
             </File>
             <File>
+              <FileName>user_foc_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Code\UserApp\user_foc_math.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_foc_pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Code\UserApp\user_foc_pid.c</FilePath>
+            </File>
+            <File>
               <FileName>user_motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Code\UserApp\user_motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_motor_hall_vf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Code\UserApp\user_motor_hall_vf.c</FilePath>
             </File>
             <File>
               <FileName>user_display.c</FileName>
@@ -773,9 +788,19 @@
               <FilePath>..\Code\UserBsp\bsp_pwm.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_pwm_foc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Code\UserBsp\bsp_pwm_foc.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp_hall.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Code\UserBsp\bsp_hall.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_mt6816ct_acd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Code\UserBsp\bsp_mt6816ct_acd.c</FilePath>
             </File>
             <File>
               <FileName>bsp_lcd.c</FileName>

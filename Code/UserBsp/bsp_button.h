@@ -1,10 +1,10 @@
 /***************************************************************************************************
  * Author: yjrqz777 3210551161@qq.com
  * Date: 2026-01-06 19:59:07
- * LastEditTime: 2026-07-08 21:22:54
- * LastEditors: yjrqz777 3210551161@qq.com
+ * LastEditTime: 2026-08-06 17:58:10
+ * LastEditors: duanzhixuan duanzhixuan@topband.com.cn
  * Description: 
- * FilePath: \Myfoc2\Code\UserBsp\bsp_button.h
+ * FilePath: \MyFoc\Code\UserBsp\bsp_button.h
  * @YJRQZ777
 ***************************************************************************************************/
 
@@ -16,10 +16,10 @@
 
 // Configuration constants - can be modified according to your needs
 #define TICKS_INTERVAL          5    // ms - timer interrupt interval
-#define DEBOUNCE_TICKS          3    // MAX 7 (0 ~ 7) - debounce filter depth
-#define SHORT_TICKS             (300 / TICKS_INTERVAL)   // short press threshold
+#define DEBOUNCE_TICKS          2    // MAX 7 (0 ~ 7) - debounce filter depth
+#define SHORT_TICKS             (100 / TICKS_INTERVAL)   // short press threshold
 #define LONG_TICKS              (1000 / TICKS_INTERVAL)  // long press threshold
-#define PRESS_REPEAT_MAX_NUM    15   // maximum repeat counter value
+#define PRESS_REPEAT_MAX_NUM    2   // maximum repeat counter value
 
 // Forward declaration
 typedef struct _Button Button;

@@ -15,6 +15,14 @@
 #define USER_BUTTON_ACTIVE_LEVEL 0u   /**< 按键按下时的有效电平（低电平有效） */
 
 extern void UserStatusSwitch(Button *btn);
+extern void UserCurrentLoopKpInc(Button *btn);
+extern void UserCurrentLoopKpDec(Button *btn);
+extern void UserCurrentLoopKiInc(Button *btn);
+extern void UserCurrentLoopKiDec(Button *btn);
+extern void UserSpeedLoopKpInc(Button *btn);
+extern void UserSpeedLoopKpDec(Button *btn);
+extern void UserSpeedLoopKiInc(Button *btn);
+extern void UserSpeedLoopKiDec(Button *btn);
 
 
 /** @brief 4 个按键的 Button 结构体实例 */
@@ -114,20 +122,25 @@ void buttons_init(void)
 
     button_init(&btn1, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 1u);
     button_init(&btn2, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 2u);
-    // button_init(&btn3, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 3u);
-    // button_init(&btn4, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 4u);
+    button_init(&btn3, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 3u);
+    button_init(&btn4, read_button_gpio, USER_BUTTON_ACTIVE_LEVEL, 4u);
 
     // button_attach_all_events(&btn1);
-    button_attach(&btn1, BTN_SINGLE_CLICK, UserStatusSwitch);
-    // button_attach(&btn1, BTN_SINGLE_CLICK, UserStatusSwitch);
+    button_attach(&btn1, BTN_LONG_PRESS_START, UserStatusSwitch);
+
+    /* KEY1~KEY4 单击：速度环 PID 调参 */
+    button_attach(&btn1, BTN_SINGLE_CLICK, UserSpeedLoopKpInc);
+    button_attach(&btn2, BTN_SINGLE_CLICK, UserSpeedLoopKpDec);
+    button_attach(&btn3, BTN_SINGLE_CLICK, UserSpeedLoopKiInc);
+    button_attach(&btn4, BTN_SINGLE_CLICK, UserSpeedLoopKiDec);
     // button_attach_all_events(&btn2);
     // button_attach_all_events(&btn3);
     // button_attach_all_events(&btn4);
 
     button_start(&btn1);
     button_start(&btn2);
-    // button_start(&btn3);
-    // button_start(&btn4);
+    button_start(&btn3);
+    button_start(&btn4);
 
     button_inited = 1u;
 }
@@ -208,7 +221,7 @@ uint16_t PtTaskButton(void)
     while (1)
     {
         PT_WAIT_UNTIL(BUTTON_TIME_MS / OS_TICK_MS);
-        button_ticks();
+        // button_ticks();
     }
 
     PT_END();

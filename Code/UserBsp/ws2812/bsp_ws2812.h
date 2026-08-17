@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file    bsp_ws2812.h
  * @brief   WS2812 驱动：TIM2 CH1 PWM + Circular DMA + 双半区小缓冲区。
  *

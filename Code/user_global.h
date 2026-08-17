@@ -17,6 +17,40 @@
 
 #include "SEGGER_RTT.h"
 
+#define M_PI (3.14159265f)
+#define M_2PI (2.0f * M_PI)
+#define BIT(n)  (1U << (n)) /* 单个位掩码*/
+#define MASK_RANGE(h, l)  (((1U << ((h) - (l) + 1)) - 1) << (l)) /* 范围掩码：bit x 到 bit y（包含两端）*/
+
+/*==============================================================================
+ * Q 格式定点数互转宏
+ *============================================================================*/
+/* Q10：电流、电压、占空比、Clarke/Park 变换，1.0 = 1024 */
+#define FLOAT_TO_Q10(f)      ((int32_t)((f) * 1024.0f + 0.5f))   /* 浮点 → Q10 */
+#define Q10_TO_FLOAT(s)      ((float)(s) / 1024.0f)              /* Q10 → 浮点 */
+#define Q10_ONE               (1024)                              /* Q10 格式 1.0 */
+#define Q10_TO_Q15(s)        ((s) << 5)                           /* Q10 → Q15 */
+#define Q15_TO_Q10(s)        ((s) >> 5)                           /* Q15 → Q10 */
+#define Q10_TO_Q16(s)        ((s) << 6)                           /* Q10 → Q16 */
+#define Q16_TO_Q10(s)        ((s) >> 6)                           /* Q16 → Q10 */
+
+/* Q15：滤波系数（0~1 小数），1.0 = 32768 */
+#define FLOAT_TO_Q15(f)      ((int32_t)((f) * 32768.0f + 0.5f))  /* 浮点 → Q15 */
+#define Q15_TO_FLOAT(s)      ((float)(s) / 32768.0f)             /* Q15 → 浮点 */
+#define Q15_ONE               (32768)                             /* Q15 格式 1.0 */
+
+/* Q16：PI 增益系数与累加器，1.0 = 65536 */
+#define FLOAT_TO_Q16(f)      ((int32_t)((f) * 65536.0f + 0.5f))  /* 浮点 → Q16 */
+#define Q16_TO_FLOAT(s)      ((float)(s) / 65536.0f)             /* Q16 → 浮点 */
+#define Q16_ONE               (65536)                             /* Q16 格式 1.0 */
+
+/* 角度索引 ↔ 弧度：0~6283 对应 0~2π（查表 sin/cos 用） */
+#define RAD_TO_ANGLE_IDX(r)  ((uint16_t)((r) * 1000.0f + 0.5f))  /* rad → 0~6283 */
+#define ANGLE_IDX_TO_RAD(a)  ((float)(a) / 1000.0f)              /* 0~6283 → rad */
+
+
+
+
 // #include "Task.h"
 #if defined(__CC_ARM)
 #define USER_MOTOR_CCMRAM     __attribute__((section(".ccmram"), zero_init))

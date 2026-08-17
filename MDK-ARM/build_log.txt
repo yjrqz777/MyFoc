@@ -1,35 +1,93 @@
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'F:\keil\mdk\ARM\ARMCC\Bin'
 Build target 'g474app'
-compiling adc.c...
-compiling tim.c...
-compiling main.c...
-compiling user_system.c...
-..\Code\UserApp\user_system.c(170): warning:  #111-D: statement is unreachable
-      PT_END();
-..\Code\UserApp\user_system.c(97): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
-      PT_BEGIN()
-..\Code\UserApp\user_system.c(97): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
-      PT_BEGIN()
-..\Code\UserApp\user_system.c: 3 warnings, 0 errors
-compiling user_foc.c...
-compiling bsp_pwm.c...
+compiling user_button_fun.c...
 compiling user_motor.c...
-..\Code\UserApp\user_motor.c(109): warning:  #177-D: function "UserMotor_RampFloat"  was declared but never referenced
-  static float UserMotor_RampFloat(float current, float target, float step)
-..\Code\UserApp\user_motor.c(135): warning:  #177-D: function "UserMotor_SetOpenLoopVoltageVector"  was declared but never referenced
-  static void UserMotor_SetOpenLoopVoltageVector(float theta, float voltage)
-..\Code\UserApp\user_motor.c: 2 warnings, 0 errors
+..\Code\UserApp\user_motor.c(317): error:  #20: identifier "BSP_MT6816CT_RESOLUTION" is undefined
+      if (s32Delta > (int32_t)(BSP_MT6816CT_RESOLUTION / 2u))
+..\Code\UserApp\user_motor.c(326): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      f32InstantSpeed = ((float)s32Delta * M_2PI *   /* 计算瞬时电角速度 */
+..\Code\UserApp\user_motor.c(329): error:  #20: identifier "BSP_MT6816CT_RESOLUTION" is undefined
+                        (float)BSP_MT6816CT_RESOLUTION;
+..\Code\UserApp\user_motor.c: 1 warning, 2 errors
 compiling bsp_adc.c...
-compiling user_display.c...
-..\Code\UserApp\user_display.c(181): warning:  #111-D: statement is unreachable
+..\Code\UserBsp\bsp_adc.c(487): warning:  #177-D: variable "Raw"  was declared but never referenced
+      uint16_t Raw;
+..\Code\UserBsp\bsp_adc.c(37): warning:  #177-D: variable "u32Adc1PhaseChannelMap"  was declared but never referenced
+  static const uint32_t u32Adc1PhaseChannelMap[BSP_ADC_INJECTED_CHANNELS] = {
+..\Code\UserBsp\bsp_adc.c(80): warning:  #550-D: variable "u8Adc2Calibrated"  was set but never used
+  static uint8_t u8Adc2Calibrated = 0u;
+..\Code\UserBsp\bsp_adc.c(110): warning:  #177-D: function "BspAdc1ReadPhaseChannel"  was declared but never referenced
+  static HAL_StatusTypeDef BspAdc1ReadPhaseChannel(uint32_t u32AdcChannel, uint16_t * pu16Raw)
+..\Code\UserBsp\bsp_adc.c: 4 warnings, 0 errors
+compiling bsp_pwm.c...
+compiling user_time.c...
+..\Code\UserApp\user_time.c(68): warning:  #111-D: statement is unreachable
       PT_END();
-..\Code\UserApp\user_display.c(155): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
+..\Code\UserApp\user_time.c(57): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
       PT_BEGIN()
-..\Code\UserApp\user_display.c(155): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
+..\Code\UserApp\user_time.c(57): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_time.c: 3 warnings, 0 errors
+compiling user_motor_hall_vf.c...
+..\Code\UserApp\user_motor_hall_vf.c(24): warning:  #47-D: incompatible redefinition of macro "M_2PI"  (declared at line 21 of "../Code/user_global.h")
+  #define M_2PI                    (6.28318531f)
+..\Code\UserApp\user_motor_hall_vf.c: 1 warning, 0 errors
+compiling bsp_pwm_foc.c...
+compiling main.c...
+../Core/Src/main.c(157): warning:  #177-D: variable "MotorStatus"  was declared but never referenced
+    HAL_StatusTypeDef MotorStatus;
+../Core/Src/main.c(247): warning:  #223-D: function "button_ticks" declared implicitly
+            button_ticks();
+../Core/Src/main.c: 2 warnings, 0 errors
+compiling user_foc.c...
+compiling user_system.c...
+..\Code\UserApp\user_system.c(84): warning:  #177-D: variable "u32AngleCdeg"  was declared but never referenced
+      uint32_t u32AngleCdeg;
+..\Code\UserApp\user_system.c(85): warning:  #177-D: variable "s32SpeedRefDeci"  was declared but never referenced
+      int32_t s32SpeedRefDeci;
+..\Code\UserApp\user_system.c(86): warning:  #177-D: variable "s32SpeedMeasDeci"  was declared but never referenced
+      int32_t s32SpeedMeasDeci;
+..\Code\UserApp\user_system.c(87): warning:  #177-D: variable "s32IqMilliAmp"  was declared but never referenced
+      int32_t s32IqMilliAmp;
+..\Code\UserApp\user_system.c(224): warning:  #111-D: statement is unreachable
+      PT_END();
+..\Code\UserApp\user_system.c(139): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_system.c(139): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_system.c(137): warning:  #177-D: variable "u8Mt6816PollDivider"  was declared but never referenced
+      static uint8_t u8Mt6816PollDivider = 0u;
+..\Code\UserApp\user_system.c(51): warning:  #177-D: function "UsrSystemCurrentToDecimal3"  was declared but never referenced
+  static tCurrentDecimal3Def UsrSystemCurrentToDecimal3(float f32Current)
+..\Code\UserApp\user_system.c: 9 warnings, 0 errors
+compiling user_button.c...
+..\Code\UserApp\user_button.c(227): warning:  #111-D: statement is unreachable
+      PT_END();
+..\Code\UserApp\user_button.c(216): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_button.c(216): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_button.c: 3 warnings, 0 errors
+compiling user_display.c...
+..\Code\UserApp\user_display.c(236): warning:  #111-D: statement is unreachable
+      PT_END();
+..\Code\UserApp\user_display.c(209): warning:  #550-D: variable "PT_YIELD_FLAG"  was set but never used
+      PT_BEGIN()
+..\Code\UserApp\user_display.c(209): warning:  #550-D: variable "u32WiatTime_save"  was set but never used
       PT_BEGIN()
 ..\Code\UserApp\user_display.c: 3 warnings, 0 errors
-linking...
-Program Size: Code=31320 RO-data=19516 RW-data=288 ZI-data=5332  
-FromELF: creating hex file...
-"g474app\g474app.axf" - 0 Error(s), 8 Warning(s).
+compiling bsp_hall.c...
+compiling bsp_mt6816ct_acd.c...
+..\Code\UserBsp\bsp_mt6816ct_acd.c(36): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      while (f32Angle >= M_2PI)   /* 大于等于2π时循环减�?2π */
+..\Code\UserBsp\bsp_mt6816ct_acd.c(38): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          f32Angle -= M_2PI;
+..\Code\UserBsp\bsp_mt6816ct_acd.c(42): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          f32Angle += M_2PI;
+..\Code\UserBsp\bsp_mt6816ct_acd.c(260): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      return ((float)u16RawAngle * M_2PI) / (float)MASK_RANGE(13,0);
+..\Code\UserBsp\bsp_mt6816ct_acd.c: 4 warnings, 0 errors
+compiling bsp_lcd.c...
+"g474app\g474app.axf" - 2 Error(s), 30 Warning(s).
+Target not created.
 Build Time Elapsed:  00:00:28

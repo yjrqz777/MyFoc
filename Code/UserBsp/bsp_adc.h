@@ -31,23 +31,14 @@ extern "C" {
 
 /* ---- ADC (doc §4, §23) ---- */
 #define CS_ADC_CLOCK_HZ            (42500000u)   /* ADC 时钟 (Hz)，170 MHz / 4 = 42.5 MHz */
-#define CS_ADC_SAMPLE_TICKS        (50u)         /* ADC 采样保持时间对应的 TIM1 计数数 (12.5 cycles @ 42.5 MHz = 50 ticks) */
-#define CS_ADC_TRIGGER_CCR         (50u)         /* ADC 触发点 CCR4，谷点后延时 (CNT=0 向上计数到此值时触发) */
+#define CS_ADC_SAMPLE_TICKS        (300u)         /* ADC 采样保持时间对应的 TIM1 计数数 (12.5 cycles @ 42.5 MHz = 50 ticks) */
+#define CS_ADC_TRIGGER_CCR         (250u)         /* ADC 触发点 CCR4，谷点后延时 (CNT=0 向上计数到此值时触发) */
 
 /* ---- 消隐 / 安全裕量 (doc §5) ---- */
 #define CS_BLANK_TICKS             (150u)        /* 总消隐时间对应的 TIM1 计数数 (死区 + 驱动延迟 + MOS开关 + 振铃 + 运放建立) */
 #define CS_CCR_MIN                 (CS_ADC_TRIGGER_CCR + CS_ADC_SAMPLE_TICKS + CS_BLANK_TICKS) /* CCR 下限 = CCR4 + 采样保持 + 消隐，保证采样窗口有效 */
 
-/* ---- 偏置校准 (doc §11~§15, §23) ---- */
-#define CS_CAL_SETTLE_TIME_MS      (20u)         /* 模拟链路稳定等待时间 (ms) */
-#define CS_CAL_DISCARD_COUNT       (128u)        /* 丢弃启动阶段样本数 */
-#define CS_CAL_SAMPLE_COUNT        (1024u)       /* 累计偏置样本数 (2 的幂，便于移位除法) */
-#define CS_CAL_MAX_SPAN            (64u)         /* 单通道校准噪声跨度上限 (LSB)，独立于偏置范围和前后半段漂移检查 */
-#define CS_CAL_OFFSET_MIN          (819u)        /* 偏置下限 (20% * 4095) */
-#define CS_CAL_OFFSET_MAX          (3276u)       /* 偏置上限 (80% * 4095) */
-#define CS_CAL_DRIFT_LIMIT         (8u)          /* 前后半段均值漂移最大值 (LSB) */
-#define CS_CAL_MAX_RETRY           (3u)          /* 校准失败最大重试次数 */
-
+/* ---- 偏置校准 (由 BspAdcPreOffset 阻塞式完成) ---- */
 /* ---- 通道数 ---- */
 #define BSP_ADC_INJECTED_CHANNELS  (3u)          /* ADC1 注入通道数 (Ia, Ib, Ic) */
 #define BSP_ADC2_REGULAR_CHANNELS  (5u)          /* ADC2 常规通道数 (SHA, SHB, SHC, POT, VBUS) */
@@ -55,24 +46,21 @@ extern "C" {
 /* ---- 启动前普通轮询零偏采样 ---- */
 #define BSP_ADC_PRE_OFFSET_SAMPLE_COUNT    (1024u) /* 启动前普通轮询零偏采样次数 */
 #define BSP_ADC_PRE_OFFSET_POLL_TIMEOUT_MS (2u)    /* 启动前普通轮询单次转换超时 (ms) */
+#define BSP_ADC_PRE_OFFSET_MIN             (819u)  /* 偏置下限 (20% * 4095) */
+#define BSP_ADC_PRE_OFFSET_MAX             (3276u) /* 偏置上限 (80% * 4095) */
 
 #if (BSP_ADC_PRE_OFFSET_SAMPLE_COUNT == 0u)
 #error "BSP_ADC_PRE_OFFSET_SAMPLE_COUNT must be greater than 0"
 #endif
 
 /* ===================================================================== *
- *  校准状态机 (doc §9)
- * ===================================================================== */
+*  校准状态 (仅 IDLE / READY，由 BspAdcPreOffset 设置)
+* ===================================================================== */
 
 typedef enum
 {
-    E_BSP_ADC_CAL_IDLE = 0,        /**< 空闲，未开始校准 */
-    E_BSP_ADC_CAL_SETTLE,          /**< 等待模拟链路稳定 */
-    E_BSP_ADC_CAL_DISCARD,         /**< 丢弃启动阶段样本 */
-    E_BSP_ADC_CAL_ACCUMULATE,      /**< 累计偏置样本 */
-    E_BSP_ADC_CAL_CALCULATE,       /**< 等待主循环计算偏置 */
-    E_BSP_ADC_CAL_READY,           /**< 校准完成，可进入 FOC */
-    E_BSP_ADC_CAL_ERROR            /**< 校准失败，禁止启动电机 */
+    E_BSP_ADC_CAL_IDLE = 0,        /**< 空闲，未校准 */
+    E_BSP_ADC_CAL_READY            /**< 校准完成，可进入 FOC */
 } eBspAdcCalStateDef;
 
 /* ---- ADC2 通道枚举 ---- */
@@ -85,52 +73,30 @@ typedef enum
     E_BSP_ADC2_VBUS,      /**< PC5: 母线电压 */
 } eBspAdc2ChannelDef;
 
-/* ---- 校准调试信息 (doc §22.15) ---- */
-typedef struct tBspAdcCalDebugDef
-{
-    uint16_t u16MinRaw[BSP_ADC_INJECTED_CHANNELS];  /**< 校准期间各通道最小值 */
-    uint16_t u16MaxRaw[BSP_ADC_INJECTED_CHANNELS];  /**< 校准期间各通道最大值 */
-    uint16_t u16Span[BSP_ADC_INJECTED_CHANNELS];    /**< 噪声跨度 = max - min */
-    uint16_t u16Offset[BSP_ADC_INJECTED_CHANNELS];  /**< 计算得到的偏置 */
-    int16_t s16Drift[BSP_ADC_INJECTED_CHANNELS];    /**< 前后半段均值差 */
-    uint8_t u8RetryCount;                           /**< 已重试次数 */
-    eBspAdcCalStateDef eState;                      /**< 当前状态 */
-} tBspAdcCalDebugDef;
-
 /* ===================================================================== *
- *  接口函数 (doc §19)
+ *  接口函数
  * ===================================================================== */
 
 /**
- * @brief  初始化采样模块并启动 ADC1 注入组（含内部自校准）
- * @retval HAL_OK       启动成功
- * @retval HAL_ERROR    ADC 自校准失败
- * @retval HAL_BUSY     外设忙
- * @note   清除校准状态，设置偏置为默认值 2048。之后需调用 BspAdcCalibrationStart() 开始校准。
+ * @brief  启动 ADC1 注入组中断采样
+ * @note   偏置已由 BspAdcPreOffset 在调用前完成，此处仅启动中断。
  */
 HAL_StatusTypeDef BspAdcStartInjected(void);
 void BspAdcPreOffset(void);
 
 /**
- * @brief  启动偏置校准状态机
- * @note   复位累计值、min/max、前后半段累计值，进入 SETTLE 状态。
- *         调用前必须确保：TIM1_CH4 触发已运行、三相命令为零电压且电机无实际相电流；允许功率 PWM 以三相相同占空比运行。
- */
-void BspAdcCalibrationStart(void);
-
-/**
- * @brief  偏置校准状态机处理（由主循环调用）
- * @note   负责：稳定等待计时、偏置平均值计算、范围/跨度/漂移检查、失败重试、状态切换。
- *         中断中仅做累计，除法和检查在此函数中执行 (doc §13)。
- */
-void BspAdcProcess(void);
-
-/**
  * @brief  查询偏置校准是否完成
- * @retval 1  校准成功 (E_BSP_ADC_CAL_READY)
- * @retval 0  尚未完成或失败
+ * @retval 1  校准完成 (E_BSP_ADC_CAL_READY)
+ * @retval 0  尚未完成
  */
 uint8_t BspAdcIsCurrentOffsetReady(void);
+
+/**
+ * @brief  查询预采样偏置是否有效
+ * @retval 1  所有通道偏置在有效范围内
+ * @retval 0  任一通道偏置超出范围
+ */
+uint8_t BspAdcIsPreOffsetValid(void);
 
 /**
  * @brief  查询当前校准状态
@@ -179,10 +145,7 @@ float BspAdcGetIa(void);
 float BspAdcGetIb(void);
 float BspAdcGetIc(void);
 
-/* ---- 校准调试信息 ---- */
-void BspAdcGetCalDebug(tBspAdcCalDebugDef * ptInfo);
-
-/* ---- ADC2 接口（保持不变）---- */
+/* ---- ADC2 接口 ---- */
 HAL_StatusTypeDef BspAdc2UpdateAll(void);
 uint16_t BspAdc2GetRaw(eBspAdc2ChannelDef eChannel);
 float BspAdc2GetVoltage(eBspAdc2ChannelDef eChannel);

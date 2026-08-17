@@ -141,8 +141,8 @@ static void FaultPrintRegs(const char *name, uint32_t fault_pc, uint32_t exc_ret
     }
 
     /* 解析 HFSR */
-    if (hfsr & 0x40000000u) SEGGER_RTT_WriteString(0, "[FORCED] 可配置故障升级为硬故障\r\n");
-    if (hfsr & 0x80000000u) SEGGER_RTT_WriteString(0, "[DEBUGEVT] 调试事件\r\n");
+    if (hfsr & 0x40000000u) SEGGER_RTT_WriteString(0, "[FORCED] Configurable failure escalates to a hard failure\r\n");
+    if (hfsr & 0x80000000u) SEGGER_RTT_WriteString(0, "[DEBUGEVT] Debug Event\r\n");
 
     SEGGER_RTT_WriteString(0, "=== ");
     SEGGER_RTT_WriteString(0, name);
@@ -407,14 +407,12 @@ void TIM7_DAC_IRQHandler(void)
   */
 void TIM1_CC_IRQHandler(void)
 {
-  /*
   if ((__HAL_TIM_GET_FLAG(&htim1, TIM_FLAG_CC4) != RESET) &&
       (__HAL_TIM_GET_IT_SOURCE(&htim1, TIM_IT_CC4) != RESET) &&
       ((TIM1->CR1 & TIM_CR1_DIR) == 0u))
   {
     HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_10);
   }
-  */
 
   HAL_TIM_IRQHandler(&htim1);
 }

@@ -9,7 +9,8 @@
     "Code/UserBsp/bsp_adc.h": "UTF-8",
     "Code/UserBsp/bsp_adc.c": "UTF-8",
     "Code/UserApp/user_foc.c": "UTF-8",
-    "Code/UserApp/user_foc.h": "UTF-8"
+    "Code/UserApp/user_foc.h": "UTF-8",
+    "Code/config.h": "utf8bom"
   },
   "folders": {}
 }

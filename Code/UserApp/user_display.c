@@ -25,14 +25,14 @@
 tDisplayDataDef tDisplayData;
 
 #define DISPLAY_WS2812_LEVEL (25u)
+#define DISPLAY_VBUS_R_TOP_OHM      (13600.0f)  /* R93 + R94: 6.8 kΩ + 6.8 kΩ */
+#define DISPLAY_VBUS_R_BOTTOM_OHM   (2000.0f)   /* R95 */
+#define DISPLAY_VBUS_DIVIDER_RATIO  ((DISPLAY_VBUS_R_TOP_OHM + DISPLAY_VBUS_R_BOTTOM_OHM) / DISPLAY_VBUS_R_BOTTOM_OHM)
 
 static uint8_t u8PowerOnInitDone = 0u;
+static uint8_t u8RunningScreenInitialized = 0u;
 
-static void UsrDisplaySetWs2812Color(uint8_t u8Red, uint8_t u8Green, uint8_t u8Blue)
-{
-    /* Refresh periodically so the short WS2812 frame remains observable. */
-    (void)BspWs2812WriteColor(u8Red, u8Green, u8Blue);
-}
+
 
 /**
  * @brief  初始化显示模块
@@ -51,6 +51,7 @@ void UsrDisplayInit(void)
  */
 static void UsrDisplayInitState(void)
 {
+    u8RunningScreenInitialized = 0u;
     static uint8_t u8InitDone = 0u;
 
     tDisplayData.u8Color[0] = DISPLAY_WS2812_LEVEL;
@@ -65,15 +66,74 @@ static void UsrDisplayInitState(void)
 }
 
 /**
+ * @brief  HSV 转 RGB
+ * @param  u16Hue 色相 0..359
+ * @param  u8Sat  饱和度 0..255
+ * @param  u8Val  亮度 0..255
+ * @param  pu8Rgb 输出 RGB 数组，索引 [R, G, B]
+ */
+static void UsrDisplayHsvToRgb(uint16_t u16Hue, uint8_t u8Sat, uint8_t u8Val, uint8_t *pu8Rgb)
+{
+    uint8_t u8Region, u8Remainder, u8P, u8Q, u8T;
+
+    if (u8Sat == 0u)
+    {
+        pu8Rgb[0] = u8Val;
+        pu8Rgb[1] = u8Val;
+        pu8Rgb[2] = u8Val;
+        return;
+    }
+
+    u8Region    = (uint8_t)(u16Hue / 60u);
+    u8Remainder = (uint8_t)(u16Hue % 60u);
+    u8P = (uint8_t)(((uint16_t)u8Val * (255u - u8Sat)) / 255u);
+    u8Q = (uint8_t)(((uint16_t)u8Val * (255u - (uint16_t)u8Sat * u8Remainder / 60u)) / 255u);
+    u8T = (uint8_t)(((uint16_t)u8Val * (255u - (uint16_t)u8Sat * (60u - u8Remainder) / 60u)) / 255u);
+
+    switch (u8Region)
+    {
+        case 0u:  pu8Rgb[0] = u8Val; pu8Rgb[1] = u8T; pu8Rgb[2] = u8P; break;
+        case 1u:  pu8Rgb[0] = u8Q; pu8Rgb[1] = u8Val; pu8Rgb[2] = u8P; break;
+        case 2u:  pu8Rgb[0] = u8P; pu8Rgb[1] = u8Val; pu8Rgb[2] = u8T; break;
+        case 3u:  pu8Rgb[0] = u8P; pu8Rgb[1] = u8Q; pu8Rgb[2] = u8Val; break;
+        case 4u:  pu8Rgb[0] = u8T; pu8Rgb[1] = u8P; pu8Rgb[2] = u8Val; break;
+        default:  pu8Rgb[0] = u8Val; pu8Rgb[1] = u8P; pu8Rgb[2] = u8Q; break;
+    }
+}
+
+/**
  * @brief  上电状态下的显示处理
- * @note   设置 WS2812 为红色，
+ * @note   WS2812 彩虹呼吸效果：
+ *         - 彩虹周期约 3.6s（每 10ms 色相 +1）
+ *         - 呼吸周期 2s（三角波亮度）
  *         在 LCD 上显示作者信息（仅首次执行）
  */
 static void UsrDisplayPowerOnState(void)
 {
-    tDisplayData.u8Color[0] = DISPLAY_WS2812_LEVEL;
-    tDisplayData.u8Color[1] = 0u;
-    tDisplayData.u8Color[2] = 0u;
+    u8RunningScreenInitialized = 0u;
+    static uint16_t u16Hue = 0u;
+    static uint16_t u16BreathTick = 0u;
+    uint8_t u8Brightness;
+    uint8_t au8Rgb[3];
+
+    /* 彩虹：每 10ms 色相 +1，360 个 tick = 3.6s 转一圈 */
+    u16Hue = (u16Hue + 1u) % 360u;
+
+    /* 呼吸：2s 周期三角波，亮度在 0..255 之间变化 */
+    u16BreathTick = (u16BreathTick + 1u) % 200u;
+    if (u16BreathTick < 100u)
+    {
+        u8Brightness = (uint8_t)((u16BreathTick * 255u) / 99u);
+    }
+    else
+    {
+        u8Brightness = (uint8_t)(((199u - u16BreathTick) * 255u) / 99u);
+    }
+
+    UsrDisplayHsvToRgb(u16Hue, 255u, u8Brightness/100, au8Rgb);
+    tDisplayData.u8Color[0] = au8Rgb[0];
+    tDisplayData.u8Color[1] = au8Rgb[1];
+    tDisplayData.u8Color[2] = au8Rgb[2];
 
     if (u8PowerOnInitDone == 0u)
     {
@@ -93,46 +153,40 @@ static void UsrDisplayPowerOnState(void)
 static void UsrDisplayRunningState(void)
 {
     static uint8_t u8TimeCount = 0u;
-    static uint16_t u16TimeCount = 0u;
-    uint8_t HallState;
     tDqCurrentDef DqCurrent;
-    uint16_t IqReferenceMilliAmp;
-    uint16_t IqTargetMilliAmp;
 
     u8PowerOnInitDone = 0u;
-    HallState = BspHallGetState();
-    DqCurrent = UsrFocGetDqCurrent();
-    (void)HallState;
-    (void)DqCurrent;
-
+    if (u8RunningScreenInitialized == 0u)
+    {
+        LCD_Fill(0u, 0u, LCD_W, LCD_H, WHITE);
+        u8RunningScreenInitialized = 1u;
+    }
     tDisplayData.u8Color[0] = 0u;
     tDisplayData.u8Color[1] = DISPLAY_WS2812_LEVEL;
     tDisplayData.u8Color[2] = 0u;
+
     u8TimeCount++;
-    if (u8TimeCount < 100u / USR_DISPLAY_TASK_INTERVAL_MS)
+    if (u8TimeCount < (100u / USR_DISPLAY_TASK_INTERVAL_MS))
     {
         return;
     }
     u8TimeCount = 0u;
 
-    /* 左列：电位器 ADC + Iq 参考值 */
-    BspLcdShowUInt(0u, 48u, BspAdc2GetRaw(E_BSP_ADC2_POT), 4u);
-    IqReferenceMilliAmp = (uint16_t)(UsrMotorGetIqRef() * 1000.0f);
-    IqTargetMilliAmp = (uint16_t)(UsrMotorGetIqRefTarget() * 1000.0f);
-    BspLcdShowUInt(0u, 72u, IqReferenceMilliAmp, 4u);
-    BspLcdShowUInt(0u, 96u, IqTargetMilliAmp, 4u);
-
-    /* 中列：按键状态 + 运行计数器 */
-    BspLcdShowUInt(96u, 0u, UsrButtonGetPressed(2u), 1u);
-    BspLcdShowUInt(120u, 0u, u16TimeCount++, 6u);
+    DqCurrent = UsrFocGetDqCurrent();
+    BspLcdBeginRefresh((uint8_t)E_SYS_STATE_RUNNING);
+    /* Kp/Ki 蓝色显示在首行，速度环浮点参数 */
+    BspLcdAddFloat(0u, 48u, UsrMotorGetSpeed(), 8u, BLACK);
+    BspLcdAddFloat(0u, 72u, UsrMotorGetSpeedRef(), 8u, BLACK);
+    // BspLcdAddFloat(0u, 96u, UsrMotorGetIqRef(), 8u, BLACK);
+    BspLcdAddFloat(96u, 48u, DqCurrent.f32Q, 8u, BLACK);
+    BspLcdAddUInt(96u, 72u, UsrMotorIsOverCurrentFault(), 1u, UsrMotorIsOverCurrentFault() != 0u ? RED : BLACK);
+    /* Vbus: ADC 输入电压按 R93+R94/R95 实际分压比换算为实际电压 */
+    BspLcdAddFloat(96u, 96u,
+                   BspAdc2GetVoltage(E_BSP_ADC2_VBUS) * DISPLAY_VBUS_DIVIDER_RATIO, 8u, RED);
 }
-
-/**
- * @brief  关闭状态下的显示处理
- * @note   当前为空操作，预留用于关闭显示或进入低功耗模式
- */
 static void UsrDisplayOffState(void)
 {
+    u8RunningScreenInitialized = 0u;
 }
 
 /**
@@ -146,8 +200,8 @@ uint16_t UsrDisplayTask(void)
     tDisplayFunctionDataDef DisplayFunction[E_SYS_STATE_MAX] = {
         {E_SYS_STATE_INIT, UsrDisplayInitState},
         {E_SYS_STATE_POWER_ON, UsrDisplayPowerOnState},
-        {E_SYS_STATE_RUNNING, UsrDisplayRunningState},
         {E_SYS_STATE_OFF, UsrDisplayOffState},
+        {E_SYS_STATE_RUNNING, UsrDisplayRunningState},
     };
 
     PT_BEGIN()
@@ -170,10 +224,12 @@ uint16_t UsrDisplayTask(void)
                 break;
             }
         }
+        BspLcdService((uint8_t)tSysData.eState);
         // SEGGER_RTT_printf(0, "%d,%d,%d\r\n", tSysData.eState,tSysData.u32OpenTimes, tSysData.u32PowerOnTimes);
-        UsrDisplaySetWs2812Color(tDisplayData.u8Color[0],
+        BspWs2812SetColor(tDisplayData.u8Color[0],
                                  tDisplayData.u8Color[1],
                                  tDisplayData.u8Color[2]);
+        BspWs2812Show();              // 输出到灯
     }
     PT_END();
 }

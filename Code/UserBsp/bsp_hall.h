@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file    bsp_hall.h
  * @brief   Hall 传感器底层驱动头文件
  *******************************************************************************
@@ -16,6 +16,9 @@ extern "C" {
 
 #include "user_global.h"
 
+/** @brief Hall 快速环频率 (Hz)，用于角度插值 */
+#define BSP_HALL_CONTROL_FREQ_HZ    (20000u)
+
 /** @brief Hall 传感器三引脚电平（u8A/u8B/u8C 对应 Hall A/B/C） */
 typedef struct tBspHallPinsDef
 {
@@ -30,6 +33,62 @@ uint8_t BspHallReadB(void);
 uint8_t BspHallReadC(void);
 uint8_t BspHallGetState(void);
 uint8_t BspHallIsValidState(uint8_t u8State);
+
+/* ---- Hall 角度跟踪（插值法）---- */
+
+/**
+ * @brief  初始化 Hall 角度跟踪状态
+ * @note   在电机 ALIGN 开始时调用，清零角度和速度，记录当前 Hall 状态为基准。
+ */
+void BspHallAngleInit(void);
+
+/**
+ * @brief  Hall 角度跟踪更新（在 20kHz 快速环中调用）
+ * @note   检测 Hall 状态跳变，更新转速估计，插值输出连续电角度。
+ */
+void BspHallAngleUpdate(void);
+
+/**
+ * @brief  获取插值后的电角度
+ * @return 电角度 (rad)，范围 [0, 2π)
+ */
+float BspHallGetElectricalAngle(void);
+
+/**
+ * @brief  获取电角速度
+ * @return 电角速度 (rad/s)，正为正转，负为反转
+ */
+float BspHallGetElectricalSpeed(void);
+
+/**
+ * @brief  查询角度跟踪是否有效
+ * @retval 1  已检测到至少 2 次 Hall 跳变，角度和速度可用
+ * @retval 0  尚未有效
+ */
+uint8_t BspHallIsAngleValid(void);
+
+/* ---- Hall 角度偏移标定 ---- */
+
+/**
+ * @brief  用参考角度（开环 theta）标定 Hall 角度偏移
+ * @param[in] f32ReferenceAngle  参考电角度 (rad)，如开环 theta
+ * @note   在开环电压模式下调用，计算 Hall 角度与参考角度的偏差并低通滤波。
+ *         标定完成后 FOC 使用 BspHallGetElectricalAngle() + offset 做角度补偿。
+ */
+void BspHallCalibrateOffsetUpdate(float f32ReferenceAngle);
+
+/**
+ * @brief  查询角度偏移标定是否完成
+ * @retval 1  已采集足够样本
+ * @retval 0  尚未完成
+ */
+uint8_t BspHallIsOffsetCalibrated(void);
+
+/**
+ * @brief  获取标定的角度偏移
+ * @return 偏移量 (rad)，范围 [-π, π)
+ */
+float BspHallGetOffset(void);
 
 #ifdef __cplusplus
 }

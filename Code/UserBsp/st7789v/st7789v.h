@@ -30,7 +30,7 @@
 #define HIGH_OFFSET   20
 
 /** @brief 显示方向：0/1=竖屏(135×240)，2/3=横屏(240×135) */
-#define USE_HORIZONTAL 2
+#define USE_HORIZONTAL 3
 
 #if USE_HORIZONTAL==0||USE_HORIZONTAL==1
 #define LCD_W  135
@@ -90,7 +90,12 @@ void LCD_ShowString(uint16_t x, uint16_t y, const uint8_t *p, uint16_t fc, uint1
 /* 数字显示 */
 uint32_t mypow(uint8_t m, uint8_t n);
 void LCD_ShowIntNum(uint16_t x, uint16_t y, uint16_t num, uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey);
+HAL_StatusTypeDef LCD_ShowIntNumDma(uint16_t x, uint16_t y, uint32_t num, uint8_t len,
+                                    uint16_t fc, uint16_t bc, uint8_t sizey);
 void LCD_ShowFloatNum1(uint16_t x, uint16_t y, float num, uint8_t len, uint16_t fc, uint16_t bc, uint8_t sizey);
+HAL_StatusTypeDef LCD_ShowFloatNumDma(uint16_t x, uint16_t y, float fValue,
+                                       uint8_t u8Length, uint8_t u8Decimals,
+                                       uint16_t fc, uint16_t bc, uint8_t sizey);
 
 /* 图片 / 自定义尺寸汉字 */
 void LCD_ShowPicture(uint16_t x, uint16_t y, uint16_t length, uint16_t width, const uint8_t pic[]);

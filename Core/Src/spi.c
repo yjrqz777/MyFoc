@@ -46,7 +46,8 @@ void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_HIGH;
   hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
+  /* MT6816CT SPI debug/bring-up: 170 MHz / 32 = 5.3125 MHz. */
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -160,8 +161,8 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     hdma_spi3_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
     hdma_spi3_tx.Init.PeriphInc = DMA_PINC_DISABLE;
     hdma_spi3_tx.Init.MemInc = DMA_MINC_ENABLE;
-    hdma_spi3_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-    hdma_spi3_tx.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    hdma_spi3_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_spi3_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
     hdma_spi3_tx.Init.Mode = DMA_NORMAL;
     hdma_spi3_tx.Init.Priority = DMA_PRIORITY_MEDIUM;
     if (HAL_DMA_Init(&hdma_spi3_tx) != HAL_OK)

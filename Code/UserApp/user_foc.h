@@ -1,13 +1,3 @@
-/**
- * @file    user_foc.h
- * @brief   FOC 电流闭环控制头文件
- *******************************************************************************
- * @note    声明 FOC 核心数据结构和对外接口。
- *          FOC 流程：Clarke → Park → PI 调节 → 逆 Park → 逆 Clarke
- *          控制周期 20kHz（50us），由 ADC1 注入转换完成中断驱动。
- *******************************************************************************
- */
-
 #ifndef __USER_FOC_H__
 #define __USER_FOC_H__
 
@@ -17,67 +7,82 @@ extern "C" {
 
 #include "user_global.h"
 
-/** @brief 三相调制电压，范围与 BspPwmSetVoltageAbc 一致（-100 ~ 100） */
-typedef struct tThreePhaseVoltageDef
-{
-    float f32Ua;
-    float f32Ub;
-    float f32Uc;
-} tThreePhaseVoltageDef;
+#define USER_FOC_DUTY_Q10_MAX (1024u)
 
-/** @brief dq 轴电流，单位 A */
+
+#define USER_FOC_PI_KP_Q16                (-20000)   /* 电流环PI比例系数(Q16) */
+#define USER_FOC_PI_KI_Q16                (-100)      /* 电流环PI积分系数(Q16) */
+#define USER_FOC_PI_KD_Q16                (0)       /* 电流环PI微分系数(Q16)，未启用 */
+#define USER_FOC_PI_OUTPUT_MAX            (1000)     /* PI输出电压上限(Q10) */
+#define USER_FOC_PI_OUTPUT_MIN            (-1000)    /* PI输出电压下限(Q10) */
+#define USER_FOC_CURRENT_LOOP_KP_STEP_Q16 (500)     /* 电流环Kp按键调整步进(Q16) */
+#define USER_FOC_CURRENT_LOOP_KI_STEP_Q16 (10)      /* 电流环Ki按键调整步进(Q16) */
+
+
+#define USER_FOC_MODULATION_LIMIT_Q10     (591)     /* SVPWM调制比限幅(Q10) */
+
+#define USER_FOC_CURRENT_FILTER_ALPHA_Q15 (2000)    /* 电流采样一阶滤波系数(Q15)，截止~95Hz，滞后~1.6ms */
+#define USER_FOC_DUTY_FILTER_ALPHA_Q15    (3564)    /* 占空比一阶滤波系数(Q15) — 恢复原始值 */
+
+#define USER_FOC_FILTER_Q_SHIFT           (15)      /* 滤波状态定点Q格式移位 */
+
+
+
+#define USER_FOC_CURRENT_AMPS_PER_CODE    (3.3f / 4096.0f / 0.010f / 30.0f)   /* 电流码值→安培换算系数(A/LSB) */
+
+typedef struct tThreePhaseDutyDef
+{
+    uint16_t u16A;
+    uint16_t u16B;
+    uint16_t u16C;
+} tThreePhaseDutyDef;
+
 typedef struct tDqCurrentDef
 {
     float f32D;
     float f32Q;
 } tDqCurrentDef;
 
-/** @brief 单次电流环输入 */
-typedef struct tFocCurrentLoopInputDef
+typedef struct tFocInputDef
 {
     float f32Ia;
     float f32Ib;
     float f32Ic;
     float f32Theta;
-    float f32IdReference;
-    float f32IqReference;
-} tFocCurrentLoopInputDef;
+    float f32IdRef;
+    float f32IqRef;
+} tFocInputDef;
 
-/** @brief 单次电流环输出 */
-typedef struct tFocCurrentLoopOutputDef
+typedef struct tFocOutputDef
 {
-    tThreePhaseVoltageDef tVoltage;
+    tThreePhaseDutyDef tDuty;
     tDqCurrentDef tCurrent;
-} tFocCurrentLoopOutputDef;
+} tFocOutputDef;
 
-/**
- * @brief 复位 FOC 动态状态和电流参考值
- * @note  应在启动 ADC 注入转换前调用，避免与快速环中断并发
- */
+/* Keil Logic Analyzer 电流环观测数据，单位均为 A。 */
+typedef struct tUserFocScopeDef
+{
+    float f32IqRef;
+    float f32IqFbk;
+    float f32IdRef;
+    float f32IdFbk;
+} tUserFocScopeDef;
+
 void UsrFocReset(void);
-
-/**
- * @brief 执行一次 FOC 电流闭环
- * @param[in] ptInput 三相电流、电角度和 dq 电流参考值
- * @param[out] ptOutput 三相调制电压和实际 dq 电流，可传 NULL
- * @note 由 TIM1 CH4 触发的 ADC1 注入转换完成中断调用，标称频率 20 kHz
- */
-void UsrFocRunCurrentLoop(const tFocCurrentLoopInputDef * ptInput, tFocCurrentLoopOutputDef * ptOutput);
-
-/** @brief 兼容接口：使用已设置的参考值执行一次电流环 */
-void UsrFocCurrentLoop(float f32Ia, float f32Ib, float f32Ic, float f32Theta);
-
-/** @brief 设置兼容接口使用的 dq 电流参考值 */
-void UsrFocSetCurrentReference(float f32IdReference, float f32IqReference);
-
-/** @brief 获取最近一次闭环计算的三相调制电压 */
-tThreePhaseVoltageDef UsrFocGetThreePhaseVoltage(void);
-
-/** @brief 获取最近一次闭环计算的 dq 轴电流 */
+void UsrFocCurrentLoop(const tFocInputDef *ptInput,
+                          tFocOutputDef *ptOutput);
 tDqCurrentDef UsrFocGetDqCurrent(void);
+
+/* 电流环 Kp/Ki 运行时调参接口（Q16 定点） */
+void UsrFocAdjustCurrentLoopKp(int32_t s32DeltaQ16);
+void UsrFocAdjustCurrentLoopKi(int32_t s32DeltaQ16);
+int32_t UsrFocGetCurrentLoopKpQ16(void);
+int32_t UsrFocGetCurrentLoopKiQ16(void);
+
+extern volatile tUserFocScopeDef g_tUserFocScope;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __USER_FOC_H__ */
+#endif
