@@ -50,6 +50,7 @@ uint8_t BspHallIsValidState(uint8_t u8State)
 }
 
 /* ===================================================================== *
+<<<<<<< HEAD
  * Hall angle tracking with interpolation.
  * ===================================================================== */
 
@@ -86,6 +87,28 @@ static volatile int8_t s8Direction = 0;
 static volatile float f32Offset = 0.0f;
 static volatile uint32_t u32OffsetSamples = 0u;
 static volatile uint8_t u8OffsetDone = 0u;
+=======
+ *  Hall 角度跟踪（插值法）
+ * ===================================================================== */
+
+#define HALL_PI                 (3.14159265f)
+#define HALL_TWO_PI             (2.0f * HALL_PI)
+#define HALL_SECTOR_ANGLE       (HALL_PI / 3.0f)   /* 60° = π/3 rad */
+#define HALL_SPEED_FILTER_ALPHA (0.15f)
+
+/** @brief 正转时每个状态的后继状态：1→2→3→4→5→6→1 */
+static const uint8_t u8ForwardNext[8] = {0u, 2u, 3u, 4u, 5u, 6u, 1u, 0u};
+
+/* ---- 角度跟踪状态变量 ---- */
+static volatile float f32Angle = 0.0f;          /**< 插值电角度 (rad) */
+static volatile float f32Speed = 0.0f;          /**< 电角速度 (rad/s) */
+static volatile float f32AngleAtEdge = 0.0f;    /**< 上次跳变时的角度基准 (rad) */
+static volatile uint32_t u32CycleCounter = 0u;  /**< 快速环周期计数 */
+static volatile uint32_t u32LastEdgeCycle = 0u;  /**< 上次跳变时的周期计数 */
+static volatile uint8_t u8LastState = 0u;       /**< 上次 Hall 状态 */
+static volatile uint8_t u8TransitionCount = 0u;  /**< 跳变次数（≥2 表示有效） */
+static volatile int8_t s8Direction = 0;         /**< 方向：+1=正转, -1=反转, 0=未知 */
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
 
 void BspHallAngleInit(void)
 {
@@ -96,12 +119,16 @@ void BspHallAngleInit(void)
     u32LastEdgeCycle = 0u;
     u8LastState = BspHallGetState();
     u8TransitionCount = 0u;
+<<<<<<< HEAD
     u8AngleValid = 0u;
     u8Stopped = 0u;
     s8Direction = 0;
     f32Offset = 0.0f;
     u32OffsetSamples = 0u;
     u8OffsetDone = 0u;
+=======
+    s8Direction = 0;
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
 }
 
 void BspHallAngleUpdate(void)
@@ -114,6 +141,7 @@ void BspHallAngleUpdate(void)
     u32CycleCounter++;
     State = BspHallGetState();
 
+<<<<<<< HEAD
     /* Ignore transient invalid Hall samples. Do not overwrite the last valid
      * state with 000/111 or a double-read mismatch around a switching edge. */
     if (BspHallIsValidState(State) != 0u)
@@ -127,6 +155,15 @@ void BspHallAngleUpdate(void)
             CycleDelta = u32CycleCounter - u32LastEdgeCycle;
             u8Stopped = 0u;
 
+=======
+    if (State != u8LastState)
+    {
+        if (BspHallIsValidState(State) && BspHallIsValidState(u8LastState))
+        {
+            CycleDelta = u32CycleCounter - u32LastEdgeCycle;
+
+            /* 方向检测 */
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
             if (u8ForwardNext[u8LastState] == State)
             {
                 s8Direction = 1;
@@ -137,6 +174,7 @@ void BspHallAngleUpdate(void)
             }
             else
             {
+<<<<<<< HEAD
                 /* Illegal jump. Resync to this valid state and wait for the next edge. */
                 u8LastState = State;
                 u32LastEdgeCycle = u32CycleCounter;
@@ -160,6 +198,17 @@ void BspHallAngleUpdate(void)
                 f32AngleAtEdge = UnwrappedAngle + HALL_PLL_KP * StepError;
             }
 
+=======
+                /* 非法跳变（跳过了一个扇区），忽略 */
+                u8LastState = State;
+                return;
+            }
+
+            /* 累加角度基准 */
+            f32AngleAtEdge += (float)s8Direction * HALL_SECTOR_ANGLE;
+
+            /* 测速 */
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
             if (CycleDelta > 0u)
             {
                 InstantSpeed = HALL_SECTOR_ANGLE *
@@ -179,6 +228,7 @@ void BspHallAngleUpdate(void)
 
             u32LastEdgeCycle = u32CycleCounter;
             u8TransitionCount++;
+<<<<<<< HEAD
             if (u8TransitionCount >= 2u)
             {
                 u8AngleValid = 1u;
@@ -201,11 +251,23 @@ void BspHallAngleUpdate(void)
     }
 
     if ((u8AngleValid != 0u) && (u8Stopped == 0u))
+=======
+        }
+        u8LastState = State;
+    }
+
+    /* 角度插值 */
+    if (u8TransitionCount >= 2u)
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
     {
         DeltaTime = (float)(u32CycleCounter - u32LastEdgeCycle) /
                     (float)BSP_HALL_CONTROL_FREQ_HZ;
         f32Angle = f32AngleAtEdge + f32Speed * DeltaTime;
 
+<<<<<<< HEAD
+=======
+        /* 归一化到 [0, 2π) */
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
         while (f32Angle >= HALL_TWO_PI)
         {
             f32Angle -= HALL_TWO_PI;
@@ -224,16 +286,21 @@ float BspHallGetElectricalAngle(void)
 
 float BspHallGetElectricalSpeed(void)
 {
+<<<<<<< HEAD
     if (u8AngleValid == 0u)
     {
         return 0.0f;
     }
 
     return HALL_SPEED_REPORT_SIGN * f32Speed;
+=======
+    return f32Speed;
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
 }
 
 uint8_t BspHallIsAngleValid(void)
 {
+<<<<<<< HEAD
     return u8AngleValid;
 }
 
@@ -280,4 +347,7 @@ uint8_t BspHallIsOffsetCalibrated(void)
 float BspHallGetOffset(void)
 {
     return f32Offset;
+=======
+    return (u8TransitionCount >= 2u) ? 1u : 0u;
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
 }

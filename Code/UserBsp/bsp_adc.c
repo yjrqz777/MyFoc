@@ -216,6 +216,7 @@ HAL_StatusTypeDef BspAdcStartInjected(void)
     /* 偏置已由 BspAdcPreOffset 完成，此处仅启动注入中断 */
     u8SampleValid = 0u;               /* 采样有效标志清零 */
 
+<<<<<<< HEAD
     return HAL_ADCEx_InjectedStart_IT(&hadc1);   /* 以中断方式启动注入组转换 */
 }
 
@@ -228,6 +229,147 @@ HAL_StatusTypeDef BspAdcStartInjected(void)
 * @返 回 值: 1 - 可执行FOC；0 - 采样无效
 * @其    他: 在中断中调用，禁止执行除法、浮点运算、复杂判断及日志打印。
 ***************************************************************************************************/
+=======
+    eCalState = E_BSP_ADC_CAL_IDLE;
+    u8CalRetryCount = 0u;
+    u8SampleValid = 0u;
+
+    for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
+    {
+        u16CurrentOffset[i] = 2048u;
+        s32CurrentCode[i] = 0;
+        u16InjectedRaw[i] = 0u;
+    }
+
+    // Status = HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+    // if (Status != HAL_OK)
+    // {
+    //     return Status;
+    // }
+
+    Status = HAL_ADCEx_InjectedStart_IT(&hadc1);
+    return Status;
+}
+
+/**
+ * @brief  启动偏置校准状态机
+ * @note   先将状态设为 IDLE（阻止 ISR 累计），再复位数据，最后进入 SETTLE。
+ *         调用前必须确保：TIM1_CH4 触发已运行、三相命令为零电压且电机无实际相电流；允许功率 PWM 以三相相同占空比运行。
+ */
+void BspAdcCalibrationStart(void)
+{
+    eCalState = E_BSP_ADC_CAL_IDLE;  /* 先停止 ISR 累计 */
+    BspAdcResetCalibrationData();
+    u32CalSettleStartTick = HAL_GetTick();
+    eCalState = E_BSP_ADC_CAL_SETTLE;
+}
+
+/**
+ * @brief  偏置校准状态机处理（由主循环调用）
+ * @note   SETTLE：计时到达后切换到 DISCARD。
+ *         CALCULATE：计算偏置平均值，检查范围/跨度/漂移，通过则 READY，
+ *         否则重试（最多 CS_CAL_MAX_RETRY 次），超限则 ERROR。
+ *         中断中不做除法或浮点运算 (doc §13)。
+ */
+void BspAdcProcess(void)
+{
+    switch (eCalState)
+    {
+        case E_BSP_ADC_CAL_SETTLE:
+            if ((HAL_GetTick() - u32CalSettleStartTick) >= CS_CAL_SETTLE_TIME_MS)
+            {
+                u16CalSampleCount = 0u;
+                eCalState = E_BSP_ADC_CAL_DISCARD;
+            }
+            break;
+
+        case E_BSP_ADC_CAL_CALCULATE:
+        {
+            uint8_t i;
+            uint8_t CheckFailed = 0u;
+
+            for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
+            {
+                uint32_t Total = (uint32_t)u64CalSumFirstHalf[i] +
+                                 (uint32_t)u64CalSumSecondHalf[i];
+                uint16_t Offset = (uint16_t)((Total + (CS_CAL_SAMPLE_COUNT / 2u)) /
+                                              CS_CAL_SAMPLE_COUNT);
+                uint16_t Span = (uint16_t)(u16CalMax[i] - u16CalMin[i]);
+                uint16_t FirstAverage = (uint16_t)(u64CalSumFirstHalf[i] /
+                                                 (CS_CAL_SAMPLE_COUNT / 2u));
+                uint16_t SecondAverage = (uint16_t)(u64CalSumSecondHalf[i] /
+                                                  (CS_CAL_SAMPLE_COUNT / 2u));
+                int16_t Drift = (int16_t)FirstAverage - (int16_t)SecondAverage;
+                if (Drift < 0)
+                {
+                    Drift = (int16_t)(-Drift);
+                }
+
+                /* 记录调试信息 */
+                u16CurrentOffset[i] = Offset;
+                u16CalSpan[i] = Span;
+                s16CalDrift[i] = Drift;
+
+                /* 范围检查 (doc §15.1) */
+                if ((Offset < CS_CAL_OFFSET_MIN) || (Offset > CS_CAL_OFFSET_MAX))
+                {
+                    SEGGER_RTT_WriteString(0, "Current offset out of range\r\n");
+                    SEGGER_RTT_printf(0, "Offset: %d,%d\r\n",i, Offset);
+                    CheckFailed = 1u;
+                }
+
+                /* 噪声跨度检查 (doc §15.2) */
+                if (Span > CS_CAL_MAX_SPAN)
+                {
+                    SEGGER_RTT_WriteString(0, "Current noise span too large\r\n");
+                    CheckFailed = 1u;
+                }
+
+                /* 均值漂移检查 (doc §15.3) */
+                if ((uint16_t)Drift > CS_CAL_DRIFT_LIMIT)
+                {
+                    SEGGER_RTT_WriteString(0, "Current average drift too large\r\n");
+                    CheckFailed = 1u;
+                }
+            }
+
+            if (CheckFailed == 0u)
+            {
+                eCalState = E_BSP_ADC_CAL_READY;
+            }
+            else
+            {
+                u8CalRetryCount++;
+                if (u8CalRetryCount >= CS_CAL_MAX_RETRY)
+                {
+                    eCalState = E_BSP_ADC_CAL_ERROR;
+                }
+                else
+                {
+                    /* 重试：重新等待稳定 */
+                    BspAdcResetCalibrationData();
+                    u32CalSettleStartTick = HAL_GetTick();
+                    eCalState = E_BSP_ADC_CAL_SETTLE;
+                }
+            }
+            break;
+        }
+
+        default:
+            /* IDLE / DISCARD / ACCUMULATE / READY / ERROR：主循环无需处理 */
+            break;
+    }
+}
+
+/**
+ * @brief  更新注入组采样缓冲（在 HAL_ADCEx_InjectedConvCpltCallback 中调用）
+ * @param[in] ptAdc  ADC 句柄指针
+ * @retval 1  可执行 FOC（仅 READY 状态）
+ * @retval 0  不执行 FOC
+ * @note   ISR 中仅做：读取原始值、累计、更新 min/max、计算有符号码、检查采样窗口。
+ *         禁止在中断中执行除法、浮点运算、复杂判断、日志打印 (doc §13)。
+ */
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
 uint8_t BspAdcUpdateInjected(ADC_HandleTypeDef *ptAdc)
 {
     uint8_t i;
@@ -241,11 +383,83 @@ uint8_t BspAdcUpdateInjected(ADC_HandleTypeDef *ptAdc)
     u16InjectedRaw[0] = (uint16_t)HAL_ADCEx_InjectedGetValue(ptAdc, ADC_INJECTED_RANK_1);
     u16InjectedRaw[1] = (uint16_t)HAL_ADCEx_InjectedGetValue(ptAdc, ADC_INJECTED_RANK_2);
     u16InjectedRaw[2] = (uint16_t)HAL_ADCEx_InjectedGetValue(ptAdc, ADC_INJECTED_RANK_3);
+<<<<<<< HEAD
 
     /* 计算有符号电流码 = 原始值 - 偏置 */
     for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
     {
         s32CurrentCode[i] = (int32_t)u16InjectedRaw[i] - (int32_t)u16CurrentOffset[i];
+=======
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_10);
+    switch (eCalState)
+    {
+        case E_BSP_ADC_CAL_DISCARD:
+            u16CalSampleCount++;
+            if (u16CalSampleCount >= CS_CAL_DISCARD_COUNT)
+            {
+                /* 进入累计阶段前复位累计数据 */
+                for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
+                {
+                    u64CalSumFirstHalf[i] = 0u;
+                    u64CalSumSecondHalf[i] = 0u;
+                    u16CalMin[i] = 0xFFFFu;
+                    u16CalMax[i] = 0u;
+                }
+                u16CalSampleCount = 0u;
+                eCalState = E_BSP_ADC_CAL_ACCUMULATE;
+            }
+            break;
+
+        case E_BSP_ADC_CAL_ACCUMULATE:
+        {
+            uint8_t IsFirstHalf = (u16CalSampleCount < (CS_CAL_SAMPLE_COUNT / 2u)) ? 1u : 0u;
+
+            for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
+            {
+                uint16_t Raw = u16InjectedRaw[i];
+                // SEGGER_RTT_printf(0, "Raw: %d,%d,%d\r\n", i, Raw, IsFirstHalf);
+                if (IsFirstHalf != 0u)
+                {
+                    u64CalSumFirstHalf[i] += Raw;
+                }
+                else
+                {
+                    u64CalSumSecondHalf[i] += Raw;
+                }
+
+                if (Raw < u16CalMin[i])
+                {
+                    u16CalMin[i] = Raw;
+                }
+                if (Raw > u16CalMax[i])
+                {
+                    u16CalMax[i] = Raw;
+                }
+            }
+
+            u16CalSampleCount++;
+            if (u16CalSampleCount >= CS_CAL_SAMPLE_COUNT)
+            {
+                eCalState = E_BSP_ADC_CAL_CALCULATE;
+            }
+            break;
+        }
+
+        case E_BSP_ADC_CAL_READY:
+            /* 正常 FOC 阶段：计算有符号电流码 (doc §16.2) */
+            for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
+            {
+                s32CurrentCode[i] = (int32_t)u16InjectedRaw[i] -
+                                     (int32_t)u16CurrentOffset[i];
+            }
+            /* 检查采样窗口有效性 (doc §5, §6) */
+            u8SampleValid = BspAdcCheckSampleValid();
+            return 1u;
+
+        default:
+            /* IDLE / SETTLE / CALCULATE / ERROR：不调用 FOC */
+            break;
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
     }
 
     /* 检查采样窗口有效性 */
@@ -489,13 +703,18 @@ void BspAdcPreOffset(void)
     uint32_t value_rank1 = 0;
     uint32_t value_rank2 = 0;
     uint32_t value_rank3 = 0;
+<<<<<<< HEAD
     ADC_InjectionConfTypeDef sConfigInjected = {0};      /* 注入组配置结构体 */
 
     /* 停止ADC1注入中断采样 */
+=======
+    ADC_InjectionConfTypeDef sConfigInjected = {0};
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
     Status = HAL_ADCEx_InjectedStop_IT(&hadc1);
     if (Status != HAL_OK)
     {
         SEGGER_RTT_printf(0, "ADC1 stop failed 1\r\n");
+<<<<<<< HEAD
         Error_Handler();
     }
     // BspPwmSetVoltageAbc(0.0f, 0.0f, 0.0f);   /* 输出0矢量（零电压） */
@@ -536,8 +755,53 @@ void BspAdcPreOffset(void)
     sConfigInjected.InjectedRank = ADC_INJECTED_RANK_3;
     if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
     {
+=======
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
         Error_Handler();
+
     }
+
+  /** Configure Injected Channel
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_1;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_1;
+  sConfigInjected.InjectedSamplingTime = ADC_SAMPLETIME_12CYCLES_5;
+  sConfigInjected.InjectedSingleDiff = ADC_SINGLE_ENDED;
+  sConfigInjected.InjectedOffsetNumber = ADC_OFFSET_NONE;
+  sConfigInjected.InjectedOffset = 0;
+  sConfigInjected.InjectedNbrOfConversion = 3;
+  sConfigInjected.InjectedDiscontinuousConvMode = DISABLE;
+  sConfigInjected.AutoInjectedConv = DISABLE;
+  sConfigInjected.QueueInjectedContext = DISABLE;
+  sConfigInjected.ExternalTrigInjecConv = ADC_INJECTED_SOFTWARE_START;
+  sConfigInjected.ExternalTrigInjecConvEdge = ADC_EXTERNALTRIGINJECCONV_EDGE_NONE;
+  sConfigInjected.InjecOversamplingMode = DISABLE;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Injected Channel
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_2;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_2;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Injected Channel
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_3;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_3;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+
+
+
 
     for (SampleIndex = 0u; SampleIndex < BSP_ADC_PRE_OFFSET_SAMPLE_COUNT; SampleIndex++)
     {
@@ -545,8 +809,14 @@ void BspAdcPreOffset(void)
         if (HAL_ADCEx_InjectedStart(&hadc1) != HAL_OK)
         {
             /* 启动失败处理 */
+<<<<<<< HEAD
             SEGGER_RTT_printf(0, "ADC1 start failed 2\r\n");
             Error_Handler();
+=======
+                        SEGGER_RTT_printf(0, "ADC1 start failed 2\r\n");
+            Error_Handler();
+
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
         }
 
         /* 2. 轮询等待转换完成，超时时间设为100ms */
@@ -560,12 +830,21 @@ void BspAdcPreOffset(void)
         else
         {
             /* 转换超时或出错处理 */
+<<<<<<< HEAD
             SEGGER_RTT_printf(0, "ADC1 poll failed 3\r\n");
             Error_Handler();
         }
         u64Sum[0] += value_rank1;   /* 累计A相原始值 */
         u64Sum[1] += value_rank2;   /* 累计B相原始值 */
         u64Sum[2] += value_rank3;   /* 累计C相原始值 */
+=======
+                        SEGGER_RTT_printf(0, "ADC1 poll failed 3\r\n");
+            Error_Handler();
+        }
+        u64Sum[0] += value_rank1;
+        u64Sum[1] += value_rank2;
+        u64Sum[2] += value_rank3;
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
     }
 
     for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
@@ -575,6 +854,7 @@ void BspAdcPreOffset(void)
         s32CurrentCode[i] = 0;                     /* 电流码清零 */
     }
 
+<<<<<<< HEAD
     /* 偏置范围检查：任一通道超出 20%~80% 满量程则标记无效，不卡程序 */
     u8PreOffsetValid = 1u;
     for (i = 0u; i < BSP_ADC_INJECTED_CHANNELS; i++)
@@ -622,6 +902,46 @@ void BspAdcPreOffset(void)
     {
         Error_Handler();
     }
+=======
+
+    SEGGER_RTT_printf(0, "ADC1 pre-offset: %d %d %d\r\n", u16CurrentOffset[0],
+                      u16CurrentOffset[1], u16CurrentOffset[2]);
+    u8SampleValid = 0u;
+    eCalState = E_BSP_ADC_CAL_READY;
+
+
+  /* 恢复硬件触发：必须按 RANK_1 → RANK_2 → RANK_3 顺序重新配置全部 3 个 rank。
+   * HAL 的上下文队列机制要求 InjectedNbrOfConversion 次调用构成一个完整上下文，
+   * 缺少任一 rank 会使对应 JSQx 槽位保持为 0（即 ADC_CHANNEL_0），导致采样错误通道。 */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_1;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_1;
+  sConfigInjected.ExternalTrigInjecConv = ADC_EXTERNALTRIGINJEC_T1_TRGO2;
+  sConfigInjected.ExternalTrigInjecConvEdge = ADC_EXTERNALTRIGINJECCONV_EDGE_RISING;
+  sConfigInjected.InjecOversamplingMode = DISABLE;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Injected Channel
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_2;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_2;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Injected Channel
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_3;
+  sConfigInjected.InjectedRank = ADC_INJECTED_RANK_3;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+>>>>>>> 058b37e6baff2f129c03c070d1cf6898e167cf03
 
     // Status = HAL_ADCEx_InjectedStart_IT(&hadc1);
     // if (Status != HAL_OK)
