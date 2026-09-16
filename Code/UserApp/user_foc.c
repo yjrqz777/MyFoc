@@ -317,3 +317,17 @@ tDqCurrentDef UsrFocGetDqCurrent(void)
     Current.f32Q = UsrFocCurrCode2Float(tFoc.tCurrent.s32Q);
     return Current;
 }
+
+/**
+ * @brief   获取当前 alpha/beta 轴电流
+ * @return  alpha/beta 轴电流结构体(A)
+ * @note    供无感观测器使用，取自与本次 Park 变换相同的去共模 Clarke 电流。
+ */
+tAlphaBetaCurrentDef UsrFocGetAlphaBetaCurrent(void)
+{
+    tAlphaBetaCurrentDef Current;
+
+    Current.f32Alpha = UsrFocCurrCode2Float(tFoc.tCurrent.s32Alpha);
+    Current.f32Beta = UsrFocCurrCode2Float(tFoc.tCurrent.s32Beta);
+    return Current;
+}

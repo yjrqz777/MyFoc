@@ -737,6 +737,11 @@
               <FilePath>..\Code\UserApp\user_foc_pid.c</FilePath>
             </File>
             <File>
+              <FileName>user_smo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Code\UserApp\user_smo.c</FilePath>
+            </File>
+            <File>
               <FileName>user_motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Code\UserApp\user_motor.c</FilePath>

@@ -17,6 +17,7 @@ extern "C" {
 #define USER_MOTOR_FAST_LOOP_HZ                   (20000u)
 #define MOTOR_SPEED_LOOP_HZ                  (1000u)
 #define MOTOR_POLE_PAIRS                     (7u)
+#define USER_MOTOR_VBUS_DIVIDER_RATIO         (7.8f) /* PC5 母线电压分压比：(13.6k+2k)/2k */
 
 /* 速度环与电流参考 */
 #define USER_MOTOR_SPEED_REF_MAX                  (2200.0f)  /* 机械转速上限(rpm) */
@@ -56,6 +57,8 @@ uint8_t UsrMotorGetStartupMode(void);
 float UsrMotorGetSpeedRef(void);
 float UsrMotorGetSpeed(void);
 void UsrMotorSetSpeedTarget(float f32Target);
+/* 临时堵转电感测试：启动后自动执行，堵转法测 Ls 并经 RTT 输出(测完移除) */
+void UsrMotorArmLockedRotorTest(void);
 uint8_t UsrMotorIsOverCurrentFault(void);
 float UsrMotorGetFaultIa(void);
 float UsrMotorGetFaultIb(void);

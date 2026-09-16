@@ -43,6 +43,12 @@ typedef struct tDqCurrentDef
     float f32Q;
 } tDqCurrentDef;
 
+typedef struct tAlphaBetaCurrentDef
+{
+    float f32Alpha;
+    float f32Beta;
+} tAlphaBetaCurrentDef;
+
 typedef struct tFocInputDef
 {
     float f32Ia;
@@ -72,6 +78,7 @@ void UsrFocReset(void);
 void UsrFocCurrentLoop(const tFocInputDef *ptInput,
                           tFocOutputDef *ptOutput);
 tDqCurrentDef UsrFocGetDqCurrent(void);
+tAlphaBetaCurrentDef UsrFocGetAlphaBetaCurrent(void);
 
 /* 电流环 Kp/Ki 运行时调参接口（Q16 定点） */
 void UsrFocAdjustCurrentLoopKp(int32_t s32DeltaQ16);

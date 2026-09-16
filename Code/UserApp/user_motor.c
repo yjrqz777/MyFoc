@@ -27,6 +27,15 @@
 #include "user_motor_hall_vf.h"
 #include "user_foc.h"
 #include "user_foc_pid.h"
+#include "user_smo.h"
+
+/* ===== 临时堵转电感测试开关(堵转法测 Ls，测完移除) ===== */
+#define USER_MOTOR_LR_TEST_ENABLE   (1u)      /* 0=关闭(恢复正常跑电机) */
+#define USER_MOTOR_LR_TEST_DUTY1    (64u)     /* 第一档占空比偏移(Q10)，保持采样有效 */
+#define USER_MOTOR_LR_TEST_DUTY2    (128u)    /* 第二档占空比偏移(Q10) */
+#define USER_MOTOR_LR_TEST_SETTLE   (1u)      /* 施加电压后等待周期数 */
+#define USER_MOTOR_LR_TEST_SPAN     (3u)      /* 斜率测量跨度(周期数，3=150us) */
+#define USER_MOTOR_LR_TEST_ZERO     (150u)    /* 脉冲间零电压去磁周期数(≈7.5ms) */
 #include <math.h>
 
 
@@ -277,6 +286,7 @@ static void UsrMotorCalibrateEncoderOffset(void)
  */
 void UsrMotorSpeedLoop(void)
 {
+    UsrSmoSlowUpdate();
     // tMotor.tSpeed.f32Ref = UsrRampFloat(tMotor.tSpeed.f32Ref,
     //                                                tMotor.tSpeed.f32Target,
     //                                                USER_MOTOR_SPEED_REF_STEP);
@@ -323,6 +333,7 @@ void UsrMotorInit(void)
     UsrMotorResetStartup();                      /* 复位启动状态 */
     BspMt6816CtInit();                        /* 初始化编码器 */
     UsrFocReset();                               /* 复位FOC状态 */
+    UsrSmoInit();                                /* 初始化无感观测器影子运行状态 */
 }
 
 /**
@@ -369,6 +380,9 @@ HAL_StatusTypeDef UsrMotorStart(void)
     }
 
     /* 偏置校准已由 BspAdcPreOffset 在启动前完成 */
+#if (USER_MOTOR_LR_TEST_ENABLE != 0u)
+    UsrMotorArmLockedRotorTest();            /* 堵转测 Ls：启动后自动执行一次 */
+#endif
     SEGGER_RTT_WriteString(0, "Motor startup ready\r\n");
     return HAL_OK;
 }
@@ -416,6 +430,7 @@ static void UsrMotorRunAlign(void)
         tMotor.tStartup.eState = E_USR_MOTOR_STARTUP_FOC;   /* 切换到FOC闭环 */
         tMotor.tStartup.f32AlignmentVoltage = 0.0f;        /* 开环电压清零 */
         UsrFocReset();
+        UsrSmoReset();
     }
 }
 
@@ -428,21 +443,161 @@ static void UsrMotorRunAlign(void)
 static void UsrMotorRunFoc(void)
 {
     float elecAngle;
+    float f32BusVoltage;
+    tAlphaBetaCurrentDef tAlphaBetaCurrent;
     static float f32IdRef = 0.0f;
-    elecAngle = BspMt6816CtToElecAngle( BspMt6816CtGetRawCw(),
-                                        MOTOR_POLE_PAIRS, 
-                                        tMotor.tStartup.f32EncoderOffset);
+
+    /* 当前阶段仅影子运行：FOC 与速度环仍使用编码器反馈，SMO 不参与控制。 */
+    elecAngle = BspMt6816CtToElecAngle(BspMt6816CtGetRawCw(),
+                                       MOTOR_POLE_PAIRS,
+                                       tMotor.tStartup.f32EncoderOffset);
 
     tMotor.tCurrent.f32IqRef = UsrRampFloat(tMotor.tCurrent.f32IqRef,
                                             tMotor.tSpeed.f32IqTarget,
-                                            USER_MOTOR_IQ_REF_STEP);   /* 斜坡逼近速度环输出的Iq目标 */
-    
-    tMotor.tCurrent.tInput.f32IqRef = tMotor.tCurrent.f32IqRef;     /* Iq参考置零*/
-    tMotor.tCurrent.tInput.f32Theta = elecAngle;                    /* 直接用20kHz实测顺时针电角度 */
-    tMotor.tCurrent.tInput.f32IdRef = f32IdRef;                         /* Id参考置零*/
-    UsrFocCurrentLoop(&tMotor.tCurrent.tInput, &tMotor.tCurrent.tOutput);        /* 运行FOC电流环 */
-    BspPwmSetDutyQ10(tMotor.tCurrent.tOutput.tDuty.u16A, tMotor.tCurrent.tOutput.tDuty.u16B, tMotor.tCurrent.tOutput.tDuty.u16C);   /* 更新PWM占空比 */
+                                            USER_MOTOR_IQ_REF_STEP);
+    tMotor.tCurrent.tInput.f32IqRef = tMotor.tCurrent.f32IqRef;
+    tMotor.tCurrent.tInput.f32Theta = elecAngle;
+    tMotor.tCurrent.tInput.f32IdRef = f32IdRef;
+    UsrFocCurrentLoop(&tMotor.tCurrent.tInput, &tMotor.tCurrent.tOutput);
+
+    tAlphaBetaCurrent = UsrFocGetAlphaBetaCurrent();
+    f32BusVoltage = BspAdc2GetVoltage(E_BSP_ADC2_VBUS) * USER_MOTOR_VBUS_DIVIDER_RATIO;
+
+    UsrSmoSetEncoderReference(elecAngle, tMotor.tSpeed.f32ElecAngleSpeedFilter);
+    UsrSmoFastUpdate(tAlphaBetaCurrent.f32Alpha,
+                     tAlphaBetaCurrent.f32Beta,
+                     &tMotor.tCurrent.tOutput.tDuty,
+                     f32BusVoltage);
+
+    BspPwmSetDutyQ10(tMotor.tCurrent.tOutput.tDuty.u16A,
+                     tMotor.tCurrent.tOutput.tDuty.u16B,
+                     tMotor.tCurrent.tOutput.tDuty.u16C);
 }
+
+/* ===== 临时堵转电感测试(堵转法测 Ls，测完移除，开关见文件头) =====
+   电机启动后自动执行一次：分两档电压施加 A+/B- 固定矢量，各取两个电流点算斜率，
+   堵转时 BEMF=0，电压方程 v = Rs·i + Ls·di/dt 消去 Rs 得 Ls，经 RTT 输出。
+   使用前需堵转转子；测完输出零电压，随后按速度参考正常控制(参考为 0 则保持静止)。 */
+
+typedef struct tUsrLrTestDef
+{
+    uint8_t u8State;
+    uint8_t u8Ticks;
+    float f32BusVoltage;
+    float f32IStart;
+    float f32Slope1;
+    float f32Slope2;
+    float f32Ls;
+} tUsrLrTestDef;
+
+static tUsrLrTestDef tLrTest;
+
+#if (USER_MOTOR_LR_TEST_ENABLE != 0u)
+/**
+ * @brief   堵转电感测试状态机(20kHz 快环调用)
+ * @note    每档电压取两个电流点计算 di/dt，消去 Rs 后由 v=Ls·di/dt 求 Ls
+ */
+static void UsrMotorRunLockedRotorTest(void)
+{
+    const float f32SpanSec = (float)USER_MOTOR_LR_TEST_SPAN / (float)USER_MOTOR_FAST_LOOP_HZ;
+
+    switch (tLrTest.u8State)
+    {
+        case 1u:   /* 初始零电压去磁：让电流归零，保证初始斜率 R·i≈0 */
+            BspPwmSetVoltageAbc(0.0f, 0.0f, 0.0f);
+            tLrTest.f32BusVoltage = BspAdc2GetVoltage(E_BSP_ADC2_VBUS) * USER_MOTOR_VBUS_DIVIDER_RATIO;   /* 零负载下刷新母线电压 */
+            tLrTest.u8Ticks++;
+            if (tLrTest.u8Ticks >= USER_MOTOR_LR_TEST_ZERO)
+            {
+                tLrTest.u8Ticks = 0u;
+                tLrTest.u8State = 2u;
+            }
+            break;
+        case 2u:   /* 第一档电压，取初始斜率 */
+            BspPwmSetDutyQ10((uint16_t)(512u + USER_MOTOR_LR_TEST_DUTY1),
+                             (uint16_t)(512u - USER_MOTOR_LR_TEST_DUTY1), 512u);
+            tLrTest.u8Ticks++;
+            if (tLrTest.u8Ticks == USER_MOTOR_LR_TEST_SETTLE)
+            {
+                tLrTest.f32IStart = BspAdcGetIa();
+            }
+            else if (tLrTest.u8Ticks == (uint8_t)(USER_MOTOR_LR_TEST_SETTLE + USER_MOTOR_LR_TEST_SPAN))
+            {
+                tLrTest.f32Slope1 = (BspAdcGetIa() - tLrTest.f32IStart) / f32SpanSec;
+                tLrTest.u8Ticks = 0u;
+                tLrTest.u8State = 3u;
+            }
+            break;
+        case 3u:   /* 中间零电压去磁 */
+            BspPwmSetVoltageAbc(0.0f, 0.0f, 0.0f);
+            tLrTest.f32BusVoltage = BspAdc2GetVoltage(E_BSP_ADC2_VBUS) * USER_MOTOR_VBUS_DIVIDER_RATIO;   /* 零负载下刷新母线电压 */
+            tLrTest.u8Ticks++;
+            if (tLrTest.u8Ticks >= USER_MOTOR_LR_TEST_ZERO)
+            {
+                tLrTest.u8Ticks = 0u;
+                tLrTest.u8State = 4u;
+            }
+            break;
+        case 4u:   /* 第二档电压，取初始斜率 */
+            BspPwmSetDutyQ10((uint16_t)(512u + USER_MOTOR_LR_TEST_DUTY2),
+                             (uint16_t)(512u - USER_MOTOR_LR_TEST_DUTY2), 512u);
+            tLrTest.u8Ticks++;
+            if (tLrTest.u8Ticks == USER_MOTOR_LR_TEST_SETTLE)
+            {
+                tLrTest.f32IStart = BspAdcGetIa();
+            }
+            else if (tLrTest.u8Ticks == (uint8_t)(USER_MOTOR_LR_TEST_SETTLE + USER_MOTOR_LR_TEST_SPAN))
+            {
+                tLrTest.f32Slope2 = (BspAdcGetIa() - tLrTest.f32IStart) / f32SpanSec;
+                tLrTest.u8State = 5u;
+            }
+            break;
+        case 5u:   /* 计算并 RTT 输出 */
+        {
+            float f32V1;
+            float f32V2;
+            float f32Ls1;
+            float f32Ls2;
+            float f32LsDiff;
+
+            tLrTest.f32BusVoltage = BspAdc2GetVoltage(E_BSP_ADC2_VBUS) * USER_MOTOR_VBUS_DIVIDER_RATIO;   /* 零负载下刷新母线电压 */
+            f32V1 = 2.0f * (float)USER_MOTOR_LR_TEST_DUTY1 /
+                          (float)USER_FOC_DUTY_Q10_MAX * tLrTest.f32BusVoltage;
+            f32V2 = 2.0f * (float)USER_MOTOR_LR_TEST_DUTY2 /
+                          (float)USER_FOC_DUTY_Q10_MAX * tLrTest.f32BusVoltage;
+            f32Ls1 = f32V1 / (2.0f * tLrTest.f32Slope1);   /* 初始斜率 R·i≈0，单档独立可算 */
+            f32Ls2 = f32V2 / (2.0f * tLrTest.f32Slope2);
+            f32LsDiff = (f32V2 - f32V1) / (2.0f * (tLrTest.f32Slope2 - tLrTest.f32Slope1));
+
+            tLrTest.f32Ls = (f32LsDiff > 0.0f) ? f32LsDiff : ((f32Ls1 + f32Ls2) * 0.5f);
+            if (tLrTest.f32Ls < 0.0f)
+            {
+                tLrTest.f32Ls = 0.0f;
+            }
+            SEGGER_RTT_printf(0, "LR_TEST d1=%dA/s d2=%dA/s Ls1=%duH Ls2=%duH Ls=%duH\r\n",
+                              (int)tLrTest.f32Slope1, (int)tLrTest.f32Slope2,
+                              (int)(f32Ls1 * 1000000.0f), (int)(f32Ls2 * 1000000.0f),
+                              (int)(tLrTest.f32Ls * 1000000.0f));
+            BspPwmSetVoltageAbc(0.0f, 0.0f, 0.0f);
+            tLrTest.u8State = 0u;   /* 结束 */
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+/**
+ * @brief   挂载堵转电感测试(启动后自动执行一次)
+ * @note    需在堵转转子后启动电机；结果经 RTT 输出
+ */
+void UsrMotorArmLockedRotorTest(void)
+{
+    (void)BspAdc2UpdateAll();   /* 立即采样一次 ADC2(含 VBUS)，避免启动瞬间系统任务尚未采样 */
+    tLrTest.f32BusVoltage = BspAdc2GetVoltage(E_BSP_ADC2_VBUS) * USER_MOTOR_VBUS_DIVIDER_RATIO;
+    tLrTest.u8State = 1u;
+}
+#endif
 
 /**
  * @brief   电机快速环 20kHz 中断服务(ADC 注入转换完成中断调用)
@@ -468,6 +623,14 @@ USER_MOTOR_FAST_CODE void UsrMotorFastLoop(void)
     {
         return;                              /* 过流时停止输出 */
     }
+
+#if (USER_MOTOR_LR_TEST_ENABLE != 0u)
+    if (tLrTest.u8State != 0u)               /* 堵转测试：输出固定电压矢量并抓电流 */
+    {
+        UsrMotorRunLockedRotorTest();
+        return;
+    }
+#endif
 
     /* 20kHz 读取编码器，获得新鲜电角度，无需 PLL 插值 */
     if (BspMt6816CtUpdate() != HAL_OK)
